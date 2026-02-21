@@ -1,5 +1,3 @@
-# Learn with us
-
 # Learning outcomes
 
 - Online Course Platform

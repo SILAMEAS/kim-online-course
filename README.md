@@ -1,10 +1,15 @@
-# LearnHub - Online Course Platform
+# Learn with us
+
+# Learning outcomes
+
+- Online Course Platform
 
 A fully functional, production-ready online course platform built with React, Next.js 16, Redux Toolkit, and React Query. This comprehensive frontend application features complete authentication, course browsing, shopping cart, checkout, and student dashboards.
 
 ## Features
 
 ### ✨ Core Features
+
 - **Course Discovery**: Browse and search through 500+ courses with advanced filtering
 - **User Authentication**: Sign up, login, and secure user management
 - **Shopping Cart**: Add courses to cart with real-time updates
@@ -15,6 +20,7 @@ A fully functional, production-ready online course platform built with React, Ne
 - **Responsive Design**: Fully responsive across mobile, tablet, and desktop
 
 ### 🎯 Key Pages
+
 - **Home** (`/`) - Landing page with featured courses and stats
 - **Courses** (`/courses`) - Course listing with advanced filters
 - **Course Details** (`/courses/[id]`) - Detailed course info with reviews
@@ -29,6 +35,7 @@ A fully functional, production-ready online course platform built with React, Ne
 ## Tech Stack
 
 ### Frontend
+
 - **Framework**: Next.js 16.1.6 with App Router
 - **UI Library**: React 19.2.3
 - **State Management**: Redux Toolkit 1.9.7
@@ -115,6 +122,7 @@ lib/
 ## State Management
 
 ### Redux Store Architecture
+
 ```
 Redux Store
 ├── auth/                  # User authentication
@@ -140,6 +148,7 @@ Redux Store
 ```
 
 ### React Query
+
 - Manages async server state (courses, reviews)
 - Automatic caching with 5-minute stale time
 - Optimistic updates for reviews
@@ -148,6 +157,7 @@ Redux Store
 ## Data Flow
 
 ### Authentication Flow
+
 1. User submits login/registration form
 2. Form validates with Zod schema
 3. React Hook Form handles submission
@@ -156,6 +166,7 @@ Redux Store
 6. AuthProvider restores state on app start
 
 ### Course Discovery Flow
+
 1. Home page loads featured courses
 2. Redux store initializes with mock data
 3. User applies filters (category, level, price, rating, search)
@@ -164,6 +175,7 @@ Redux Store
 6. React Query fetches course reviews
 
 ### Shopping Flow
+
 1. User adds course to cart (Redux action)
 2. Cart updates in navbar and cart page
 3. User reviews cart items
@@ -175,17 +187,20 @@ Redux Store
 ## Design System
 
 ### Color Palette
+
 - **Primary**: `hsl(241, 84%, 45%)` - Professional Blue
 - **Accent**: `hsl(263, 80%, 50%)` - Vibrant Purple
 - **Background**: `hsl(0, 0%, 100%)` - White (Light mode)
 - **Foreground**: `hsl(0, 0%, 10%)` - Near Black
 
 ### Typography
+
 - **Heading Font**: Geist (San Francisco-style)
 - **Body Font**: Geist Sans
 - **Mono Font**: Geist Mono
 
 ### Responsive Breakpoints
+
 - Mobile: 320px+
 - Tablet: 768px+
 - Desktop: 1024px+
@@ -193,7 +208,8 @@ Redux Store
 ## Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - pnpm (recommended) or npm
 
 ### Installation
@@ -217,6 +233,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 ## Mock Data
 
 The application uses realistic mock data:
+
 - **8 Featured Courses** with complete details
 - **12 Course Reviews** from diverse students
 - **Mock Instructors** with avatars and backgrounds
@@ -226,6 +243,7 @@ The application uses realistic mock data:
 ## Key Features Explained
 
 ### Advanced Filtering
+
 - Search by course title, description, or category
 - Filter by difficulty level (Beginner, Intermediate, Advanced)
 - Price range slider ($0-$200)
@@ -233,19 +251,23 @@ The application uses realistic mock data:
 - Multiple filters work together
 
 ### Form Validation
+
 All forms use React Hook Form + Zod:
+
 - Login/Register: Email format, password strength
 - Checkout: Full address validation, phone number format
 - Review: Rating selection, title and comment requirements
 - Profile: Optional fields with URL validation
 
 ### Cart Management
+
 - Add/remove courses with instant updates
 - Real-time total and tax calculation
 - Persistent cart state
 - Quantity badge in navbar
 
 ### Responsive Design
+
 - Mobile-first approach
 - Hamburger menu on tablets
 - Grid layouts adapt from 1 to 4 columns
@@ -255,6 +277,7 @@ All forms use React Hook Form + Zod:
 ## Authentication
 
 ### Implementation
+
 - Mock authentication with localStorage
 - User data persists across sessions
 - AuthProvider restores auth state on app load
@@ -262,7 +285,9 @@ All forms use React Hook Form + Zod:
 - Logout clears Redux state and localStorage
 
 ### Demo Credentials
+
 Any email/password combination works in development:
+
 - Email: test@example.com
 - Password: password123
 
@@ -311,18 +336,21 @@ Any email/password combination works in development:
 ## Deployment
 
 ### Vercel (Recommended)
+
 ```bash
 npm i -g vercel
 vercel
 ```
 
 ### Docker
+
 ```bash
-docker build -t learnhub .
-docker run -p 3000:3000 learnhub
+docker build -t Learning outcomes .
+docker run -p 3000:3000 Learning outcomes
 ```
 
 ### Traditional Hosting
+
 ```bash
 npm run build
 npm run start
@@ -331,6 +359,7 @@ npm run start
 ## Contributing
 
 This is a demonstration project. To use as a template:
+
 1. Replace mock data with real API calls
 2. Implement backend authentication
 3. Add database persistence
@@ -348,4 +377,5 @@ For questions or issues, please refer to the documentation or create an issue in
 ---
 
 **Built with ❤️ using React, Next.js, and Tailwind CSS**
+
 # kim-online-course

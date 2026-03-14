@@ -18,11 +18,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { useLoginMutation } from "@/lib/api/apiSlice";
+// import Cookies from "js-cookie";
 
 export function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isLoading, setIsLoadingLocal] = useState(false);
+  const [login, resultLogin] = useLoginMutation();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -39,6 +42,8 @@ export function LoginForm() {
     try {
       // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      const res = await login(data).unwrap();
+      console.log("Login response:", res); // Debug log to check the response structure
 
       // Mock authentication - in production, this would call an API
       const mockUser: User = {
@@ -52,6 +57,21 @@ export function LoginForm() {
         certificates: [],
         created_at: new Date(),
       };
+
+      if (resultLogin.isSuccess && resultLogin.data) {
+        // Save tokens in cookies
+        // Cookies.set("accessToken", res.accessToken, {
+        //   expires: res.accessTokenExpiresIn / 86400, // convert seconds to days
+        //   secure: true,
+        //   sameSite: "strict",
+        // });
+
+        // Cookies.set("refreshToken", res.refreshToken, {
+        //   expires: res.refreshTokenExpiresIn / 86400, // convert seconds to days
+        //   secure: true,
+        //   sameSite: "strict",
+        // });
+      }
 
       // Save to Redux store
       dispatch(loginSuccess(mockUser));

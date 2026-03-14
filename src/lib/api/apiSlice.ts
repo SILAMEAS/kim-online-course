@@ -1,40 +1,61 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Course, Review, ReviewFormData } from '../types';
-import { MOCK_COURSES } from '../data/courses';
-import { getReviewsByCourse } from '../data/reviews';
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { Course, Review, ReviewFormData } from "../types";
+import { MOCK_COURSES } from "../data/courses";
+import { getReviewsByCourse } from "../data/reviews";
+import { customBaseQuery } from "./customBaseQuery";
+import { LoginFormData } from "./type/schema";
+import { LoginResponse } from "./type/response";
+import { ENV } from "@/config/env";
 
 // Simulated delay helper
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const apiSlice = createApi({
-  reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: '/' }), // We'll mock the actual fetching since we use mock data
-  tagTypes: ['Course', 'Review'],
+  reducerPath: "api",
+  baseQuery: customBaseQuery(ENV.API_URL), // Adjust baseUrl to your API
+  tagTypes: ["Course", "Review", "Auth"],
   endpoints: (builder) => ({
+    login: builder.mutation<LoginResponse, LoginFormData>({
+      query: (body) => ({
+        url: "/auths/sign-in",
+        method: "POST",
+        body,
+      }),
+    }),
     getCourses: builder.query<Course[], void>({
       queryFn: async () => {
         await delay(500);
         return { data: MOCK_COURSES };
       },
-      providesTags: ['Course'],
+      providesTags: ["Course"],
     }),
     getCourse: builder.query<Course, string>({
       queryFn: async (id) => {
         await delay(300);
-        const course = MOCK_COURSES.find(c => c.id === id);
-        if (!course) return { error: { status: 404, data: 'Course not found' } };
+        const course = MOCK_COURSES.find((c) => c.id === id);
+        if (!course)
+          return { error: { status: 404, data: "Course not found" } };
         return { data: course };
       },
-      providesTags: (_result, _error, id) => [{ type: 'Course', id }],
+      providesTags: (_result, _error, id) => [{ type: "Course", id }],
     }),
     getReviewsByCourse: builder.query<Review[], string>({
       queryFn: async (courseId) => {
         await delay(400);
         return { data: getReviewsByCourse(courseId) };
       },
-      providesTags: (_result, _error, courseId) => [{ type: 'Review', id: `LIST-${courseId}` }],
+      providesTags: (_result, _error, courseId) => [
+        { type: "Review", id: `LIST-${courseId}` },
+      ],
     }),
-    addReview: builder.mutation<Review, { courseId: string; reviewData: ReviewFormData; user: { id: string; name: string; avatar: string } }>({
+    addReview: builder.mutation<
+      Review,
+      {
+        courseId: string;
+        reviewData: ReviewFormData;
+        user: { id: string; name: string; avatar: string };
+      }
+    >({
       queryFn: async ({ courseId, reviewData, user }) => {
         await delay(600);
         const newReview: Review = {
@@ -52,7 +73,9 @@ export const apiSlice = createApi({
         };
         return { data: newReview };
       },
-      invalidatesTags: (_result, _error, { courseId }) => [{ type: 'Review', id: `LIST-${courseId}` }],
+      invalidatesTags: (_result, _error, { courseId }) => [
+        { type: "Review", id: `LIST-${courseId}` },
+      ],
     }),
     searchCourses: builder.query<Course[], string>({
       queryFn: async (query) => {
@@ -60,23 +83,37 @@ export const apiSlice = createApi({
         if (!query) return { data: MOCK_COURSES };
         const lowerQuery = query.toLowerCase();
         const filtered = MOCK_COURSES.filter(
-          course =>
+          (course) =>
             course.title.toLowerCase().includes(lowerQuery) ||
             course.description.toLowerCase().includes(lowerQuery) ||
-            course.category.toLowerCase().includes(lowerQuery)
+            course.category.toLowerCase().includes(lowerQuery),
         );
         return { data: filtered };
       },
     }),
-    filterCourses: builder.query<Course[], { category?: string | null; level?: string | null; minPrice?: number; maxPrice?: number; minRating?: number | null }>({
+    filterCourses: builder.query<
+      Course[],
+      {
+        category?: string | null;
+        level?: string | null;
+        minPrice?: number;
+        maxPrice?: number;
+        minRating?: number | null;
+      }
+    >({
       queryFn: async ({ category, level, minPrice, maxPrice, minRating }) => {
         await delay(300);
-        const filtered = MOCK_COURSES.filter(course => {
+        const filtered = MOCK_COURSES.filter((course) => {
           if (category && course.category !== category) return false;
           if (level && course.level !== level) return false;
           if (minPrice !== undefined && course.price < minPrice) return false;
           if (maxPrice !== undefined && course.price > maxPrice) return false;
-          if (minRating !== null && minRating !== undefined && course.rating < minRating) return false;
+          if (
+            minRating !== null &&
+            minRating !== undefined &&
+            course.rating < minRating
+          )
+            return false;
           return true;
         });
         return { data: filtered };
@@ -92,4 +129,5 @@ export const {
   useAddReviewMutation,
   useSearchCoursesQuery,
   useFilterCoursesQuery,
+  useLoginMutation
 } = apiSlice;

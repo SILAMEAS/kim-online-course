@@ -1,3 +1,5 @@
+import { EnumRole } from "./api/type/enum";
+
 export interface Instructor {
   id: string;
   name: string;
@@ -41,14 +43,14 @@ export interface Certificate {
   completion_percentage: number;
 }
 
-export interface User {
+export interface UserReponse {
   id: string;
   email: string;
   name: string;
   avatar: string;
   bio?: string;
   enrolled_courses: string[];
-  role: 'student' | 'instructor' | 'admin';
+  role: EnumRole;
   certificates: Certificate[];
   created_at: Date;
 }

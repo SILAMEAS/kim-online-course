@@ -1,11 +1,10 @@
-import { useState } from "react";
+import {  useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginFormData } from "@/lib/validations/schemas";
-import { loginSuccess, setLoading } from "@/lib/redux/slices/auth.slice";
-import { User } from "@/lib/types";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,8 +17,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { useLoginMutation } from "@/lib/api/apiSlice";
-// import Cookies from "js-cookie";
+import {  useLoginMutation } from "@/lib/api/apiSlice";
+import Cookies from "js-cookie";
+import { setLoading } from "@/lib/redux/slices/courses.slice";
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -38,57 +38,36 @@ export function LoginForm() {
   async function onSubmit(data: LoginFormData) {
     setIsLoadingLocal(true);
     dispatch(setLoading(true));
-
     try {
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const res = await login(data).unwrap();
-      console.log("Login response:", res); // Debug log to check the response structure
+      const loginData = await login(data).unwrap();
 
-      // Mock authentication - in production, this would call an API
-      const mockUser: User = {
-        id: "user-" + Date.now(),
-        email: data.email,
-        name: data.email.split("@")[0].replace(/[0-9]/g, " ").trim() || "User",
-        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.email}`,
-        bio: "Passionate learner",
-        enrolled_courses: [],
-        role: "student",
-        certificates: [],
-        created_at: new Date(),
-      };
-
-      if (resultLogin.isSuccess && resultLogin.data) {
-        // Save tokens in cookies
-        // Cookies.set("accessToken", res.accessToken, {
-        //   expires: res.accessTokenExpiresIn / 86400, // convert seconds to days
-        //   secure: true,
-        //   sameSite: "strict",
-        // });
-
-        // Cookies.set("refreshToken", res.refreshToken, {
-        //   expires: res.refreshTokenExpiresIn / 86400, // convert seconds to days
-        //   secure: true,
-        //   sameSite: "strict",
-        // });
-      }
-
-      // Save to Redux store
-      dispatch(loginSuccess(mockUser));
-
-      // Save to localStorage
-      localStorage.setItem("auth_user", JSON.stringify(mockUser));
-
-      toast.success("Logged in successfully!");
-      navigate("/dashboard");
+      // Save tokens in cookies
+      Cookies.set("accessToken", loginData.accessToken, {
+        expires: loginData.accessTokenExpiresIn / 86400,
+        secure: true,
+        sameSite: "strict",
+      });
+      Cookies.set("refreshToken", loginData.refreshToken, {
+        expires: loginData.refreshTokenExpiresIn / 86400,
+        secure: true,
+        sameSite: "strict",
+      });
     } catch (error) {
-      toast.error("Login failed. Please try again.");
+      toast.error("Login failed. Please check your credentials and try again.");
       console.error("Login error:", error);
     } finally {
       setIsLoadingLocal(false);
       dispatch(setLoading(false));
     }
   }
+
+  useEffect(() => {
+    if (resultLogin.data) {
+      console.log(" Login successful, fetching user data...");
+      toast.success("Logged in successfully!");
+      navigate("/dashboard");
+    }
+  }, [resultLogin.data]);
 
   return (
     <Form {...form}>

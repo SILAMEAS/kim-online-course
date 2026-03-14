@@ -1,6 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "@/lib/redux/slices/auth.slice";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
 import {
   DropdownMenu,
@@ -13,17 +12,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, User, BookMarked, Settings } from "lucide-react";
+import { useLogout } from "@/hooks/useLogout";
 
 export function ProfileMenu() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const currentUser = useSelector((state: RootState) => state.auth.currentUser);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    localStorage.removeItem("auth_user");
-    navigate("/");
-  };
+  const { handleLogout } = useLogout();
 
   if (!currentUser) return null;
 

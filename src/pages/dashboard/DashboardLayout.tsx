@@ -1,10 +1,14 @@
 import { useEffect } from "react";
-import { useNavigate, Link, Outlet } from "react-router-dom";
-import { useAppSelector } from "@/lib/redux/hooks";
+import {  Link, Outlet } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { BookMarked, User, Heart, LayoutDashboard } from "lucide-react";
+import { EnumRole } from "@/lib/api/type/enum";
+import { loginSuccess } from "@/lib/redux/slices/auth.slice";
+import { UserReponse } from "@/lib/types";
+import { useMeQuery } from "@/lib/api/apiSlice";
 
 const SIDEBAR_ITEMS = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -14,14 +18,29 @@ const SIDEBAR_ITEMS = [
 ];
 
 export default function DashboardLayout() {
-  const navigate = useNavigate();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const dispatch = useAppDispatch();
+  const me = useMeQuery();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
+    // Fetch user immediately
+    if ( me.currentData) {
+      const mockUser: UserReponse = {
+        id: me.currentData.id.toString(),
+        email: me.currentData.email,
+        name: `${me.currentData.firstName} ${me.currentData.lastName}`,
+        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${me.currentData.email}`,
+        bio: "Passionate learner",
+        enrolled_courses: [],
+        role: me.currentData.role as EnumRole,
+        certificates: [],
+        created_at: new Date(),
+      };
+      
+      dispatch(loginSuccess(mockUser));
+      localStorage.setItem("auth_user", JSON.stringify(mockUser));
     }
-  }, [isAuthenticated, navigate]);
+  }, [me.isFetching, me.currentData]);
 
   if (!isAuthenticated) {
     return null;

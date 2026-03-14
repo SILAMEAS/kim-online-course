@@ -4,8 +4,9 @@ import { MOCK_COURSES } from "../data/courses";
 import { getReviewsByCourse } from "../data/reviews";
 import { customBaseQuery } from "./customBaseQuery";
 import { LoginFormData } from "./type/schema";
-import { LoginResponse } from "./type/response";
+import { LoginResponse, ProfileResponse } from "./type/response";
 import { ENV } from "@/config/env";
+import { Method } from "./type/enum";
 
 // Simulated delay helper
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -15,10 +16,17 @@ export const apiSlice = createApi({
   baseQuery: customBaseQuery(ENV.API_URL), // Adjust baseUrl to your API
   tagTypes: ["Course", "Review", "Auth"],
   endpoints: (builder) => ({
+    me: builder.query<ProfileResponse, void>({
+      query: (body) => ({
+        url: "/auths/me",
+        method: Method.GET,
+        body,
+      }),
+    }),
     login: builder.mutation<LoginResponse, LoginFormData>({
       query: (body) => ({
         url: "/auths/sign-in",
-        method: "POST",
+        method: Method.POST,
         body,
       }),
     }),
@@ -129,5 +137,6 @@ export const {
   useAddReviewMutation,
   useSearchCoursesQuery,
   useFilterCoursesQuery,
-  useLoginMutation
+  useLoginMutation,
+  useMeQuery
 } = apiSlice;

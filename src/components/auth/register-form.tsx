@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterFormData } from "@/lib/validations/schemas";
 import { registerSuccess, setLoading } from "@/lib/redux/slices/auth.slice";
-import { User } from "@/lib/types";
+import { UserReponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { EnumRole } from "@/lib/api/type/enum";
 
 export function RegisterForm() {
   const navigate = useNavigate();
@@ -43,14 +44,14 @@ export function RegisterForm() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Mock authentication - in production, this would call an API
-      const mockUser: User = {
+      const mockUser: UserReponse = {
         id: "user-" + Date.now(),
         email: data.email,
         name: data.name,
         avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.email}`,
         bio: "Passionate learner",
         enrolled_courses: [],
-        role: "student",
+        role: EnumRole.STUDENT,
         certificates: [],
         created_at: new Date(),
       };

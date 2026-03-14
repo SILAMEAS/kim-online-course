@@ -1,4 +1,4 @@
-import { SORT } from "./enum";
+import { EnumRole, SORT } from "./enum";
 import { PaginationRequest } from "./request";
 export interface IProfileResponse {
     id:         number;
@@ -58,5 +58,15 @@ export interface RestaurantResponse {
 export interface LoginResponse {
     accessToken: string;
     refreshToken: string;
+    refreshTokenExpiresIn:number;
+    accessTokenExpiresIn:number;
 
+}
+
+export interface ProfileResponse {
+    id: number;
+    firstName:string,
+    lastName: string,
+    email: string,
+    role: EnumRole
 }

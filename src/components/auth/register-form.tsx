@@ -4,8 +4,7 @@ import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterFormData } from "@/lib/validations/schemas";
-import { registerSuccess, setLoading } from "@/lib/redux/slices/auth.slice";
-import { UserReponse } from "@/lib/types";
+import { setLoading } from "@/lib/redux/slices/auth.slice";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,17 +17,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { EnumRole } from "@/lib/api/type/enum";
+import { useSignUpMutation } from "@/lib/api/apiSlice";
 
 export function RegisterForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isLoading, setIsLoadingLocal] = useState(false);
+  const [signUp] = useSignUpMutation();
 
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -36,34 +37,14 @@ export function RegisterForm() {
   });
 
   async function onSubmit(data: RegisterFormData) {
-    setIsLoadingLocal(true);
-    dispatch(setLoading(true));
-
     try {
       // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Mock authentication - in production, this would call an API
-      const mockUser: UserReponse = {
-        id: "user-" + Date.now(),
-        email: data.email,
-        name: data.name,
-        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.email}`,
-        bio: "Passionate learner",
-        enrolled_courses: [],
-        role: EnumRole.STUDENT,
-        certificates: [],
-        created_at: new Date(),
-      };
-
-      // Save to Redux store
-      dispatch(registerSuccess(mockUser));
-
-      // Save to localStorage
-      localStorage.setItem("auth_user", JSON.stringify(mockUser));
-
-      toast.success("Account created successfully!");
-      navigate("/dashboard");
+      await signUp(data)
+        .unwrap()
+        .then(() => {
+          toast.success("Account created successfully!");
+          navigate("/login");
+        });
     } catch (error) {
       toast.error("Registration failed. Please try again.");
       console.error("Registration error:", error);
@@ -78,12 +59,26 @@ export function RegisterForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="name"
+          name="firstName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Full Name</FormLabel>
+              <FormLabel>First Name</FormLabel>
               <FormControl>
-                <Input placeholder="John Doe" disabled={isLoading} {...field} />
+                <Input placeholder="John" disabled={isLoading} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="lastName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Last Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Doe" disabled={isLoading} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

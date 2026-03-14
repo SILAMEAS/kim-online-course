@@ -1,3 +1,4 @@
+import { registerSchema } from "@/lib/validations/schemas";
 import z from "zod";
 
 export const loginSchema = z.object({
@@ -71,3 +72,4 @@ export type addressFormData = z.infer<typeof addressSchema>;
 export type categoryFormData = z.infer<typeof categorySchema>;
 export type foodFormData = z.infer<typeof foodSchema>;
 export type RestaurantFormData = z.infer<typeof restaurantSchema>;
+export type RegisterFormData = z.infer<typeof registerSchema>;

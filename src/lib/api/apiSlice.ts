@@ -6,6 +6,7 @@ import { baseQueryWithReauth } from "./customBaseQuery";
 import { LoginFormData } from "./type/schema";
 import { LoginResponse, ProfileResponse } from "./type/response";
 import { Method } from "./type/enum";
+import { RegisterFormData } from "../validations/schemas";
 // Simulated delay helper
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -20,6 +21,14 @@ export const apiSlice = createApi({
         url: "/auths/me",
         method: Method.GET,
         body,
+      }),
+    }),
+    signUp: builder.mutation<LoginResponse, RegisterFormData>({
+      query: (body) => ({
+        url: "/auths/sign-up",
+        method: Method.POST,
+        body,
+        skipAuth: true, // public endpoint, no token needed
       }),
     }),
     login: builder.mutation<LoginResponse, LoginFormData>({
@@ -37,6 +46,7 @@ export const apiSlice = createApi({
         body,
       }),
     }),
+    //  Other endpoints
     getCourses: builder.query<Course[], void>({
       queryFn: async () => {
         await delay(500);
@@ -44,7 +54,6 @@ export const apiSlice = createApi({
       },
       providesTags: ["Course"],
     }),
-    // Other endpoints...
     getCourse: builder.query<Course, string>({
       queryFn: async (id) => {
         await delay(300);
@@ -148,4 +157,5 @@ export const {
   useLoginMutation,
   useMeQuery,
   useRefrechTokenMutation,
+  useSignUpMutation
 } = apiSlice;

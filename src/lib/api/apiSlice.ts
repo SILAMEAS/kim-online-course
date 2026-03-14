@@ -2,20 +2,19 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { Course, Review, ReviewFormData } from "../types";
 import { MOCK_COURSES } from "../data/courses";
 import { getReviewsByCourse } from "../data/reviews";
-import { customBaseQuery } from "./customBaseQuery";
+import { baseQueryWithReauth } from "./customBaseQuery";
 import { LoginFormData } from "./type/schema";
 import { LoginResponse, ProfileResponse } from "./type/response";
-import { ENV } from "@/config/env";
 import { Method } from "./type/enum";
-
 // Simulated delay helper
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: customBaseQuery(ENV.API_URL), // Adjust baseUrl to your API
+  baseQuery: baseQueryWithReauth, // Adjust baseUrl to your API
   tagTypes: ["Course", "Review", "Auth"],
   endpoints: (builder) => ({
+    // Authentication endpoints
     me: builder.query<ProfileResponse, void>({
       query: (body) => ({
         url: "/auths/me",
@@ -28,6 +27,14 @@ export const apiSlice = createApi({
         url: "/auths/sign-in",
         method: Method.POST,
         body,
+        skipAuth: true, // public endpoint, no token needed
+      }),
+    }),
+    refrechToken: builder.mutation<LoginResponse, { refreshToken: string }>({
+      query: (body) => ({
+        url: "/auths/refresh-token",
+        method: Method.POST,
+        body,
       }),
     }),
     getCourses: builder.query<Course[], void>({
@@ -37,6 +44,7 @@ export const apiSlice = createApi({
       },
       providesTags: ["Course"],
     }),
+    // Other endpoints...
     getCourse: builder.query<Course, string>({
       queryFn: async (id) => {
         await delay(300);
@@ -138,5 +146,6 @@ export const {
   useSearchCoursesQuery,
   useFilterCoursesQuery,
   useLoginMutation,
-  useMeQuery
+  useMeQuery,
+  useRefrechTokenMutation,
 } = apiSlice;

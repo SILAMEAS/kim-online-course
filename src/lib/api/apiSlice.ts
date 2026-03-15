@@ -156,6 +156,5 @@ export const {
   useFilterCoursesQuery,
   useLoginMutation,
   useMeQuery,
-  useRefrechTokenMutation,
   useSignUpMutation
 } = apiSlice;

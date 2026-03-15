@@ -52,7 +52,7 @@ export interface UserReponse {
   enrolled_courses: string[];
   role: EnumRole;
   certificates: Certificate[];
-  created_at: Date;
+  created_at: string;
 }
 
 export interface CartItem {

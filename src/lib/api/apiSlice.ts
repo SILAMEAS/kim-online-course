@@ -1,12 +1,11 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { Course, Review, ReviewFormData } from "../types";
-import { MOCK_COURSES } from "../data/courses";
-import { getReviewsByCourse } from "../data/reviews";
-import { baseQueryWithReauth } from "./customBaseQuery";
-import { LoginFormData } from "./type/schema";
-import { LoginResponse, ProfileResponse } from "./type/response";
-import { Method } from "./type/enum";
-import { RegisterFormData } from "../validations/schemas";
+import {createApi} from "@reduxjs/toolkit/query/react";
+import {Course, LoginResponse, ProfileResponse, Review, ReviewFormData} from "../types";
+import {MOCK_COURSES} from "../data/courses";
+import {getReviewsByCourse} from "../data/reviews";
+import {baseQueryWithReauth} from "./customBaseQuery";
+
+import {Method} from "../enum.ts";
+import {LoginFormData, RegisterFormData} from "../validations/schemas";
 // Simulated delay helper
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -39,7 +38,7 @@ export const apiSlice = createApi({
         skipAuth: true, // public endpoint, no token needed
       }),
     }),
-    refrechToken: builder.mutation<LoginResponse, { refreshToken: string }>({
+    refreshToken: builder.mutation<LoginResponse, { refreshToken: string }>({
       query: (body) => ({
         url: "/auths/refresh-token",
         method: Method.POST,

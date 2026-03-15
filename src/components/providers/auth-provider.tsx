@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { restoreAuth } from '@/lib/redux/slices/auth.slice';
-import { UserReponse } from '@/lib/types';
+import {ReactNode, useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+import {restoreAuth} from '@/lib/redux/slices/auth.slice';
+import {UserReponse} from '@/lib/types';
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
   const dispatch = useDispatch();
 
   useEffect(() => {

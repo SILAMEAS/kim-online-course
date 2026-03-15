@@ -1,4 +1,4 @@
-import { EnumRole } from "./api/type/enum";
+import {EnumRole, SORT} from "./enum.ts";
 
 export interface Instructor {
   id: string;
@@ -119,4 +119,49 @@ export interface ReviewFormData {
   rating: number;
   title: string;
   comment: string;
+}
+
+/** Pagination  */
+
+export interface IPagination<T> {
+  contents: T[];
+  page: number;
+  pageSize?: number;
+  totalPages?: number;
+  total?: number;
+  hasNext?: boolean;
+  totalInvalid?: number;
+}
+
+export interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  refreshTokenExpiresIn:number;
+  accessTokenExpiresIn:number;
+
+}
+
+export interface ProfileResponse {
+  id: number;
+  firstName:string,
+  lastName: string,
+  email: string,
+  role: EnumRole
+}
+
+export interface PaginationRequest{
+
+  search?:string;
+  filterBy?:string;
+
+  pageSize:number;
+  sortBy:string;
+  pageNo:number;
+  sortOrder:SORT;
+
+  price?:number;
+  minPrice?:number;  // new field
+  maxPrice?:number;  // new field
+
+  foodType?:string;
 }

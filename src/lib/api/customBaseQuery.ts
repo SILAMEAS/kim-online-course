@@ -1,8 +1,8 @@
 // apiSlice.ts
-import { ENV } from "@/config/env";
-import { BaseQueryFn, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {ENV} from "@/config/env";
+import {BaseQueryFn, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
-import { LoginResponse } from "./type/response";
+import {LoginResponse} from "@/lib/types.ts";
 
 // --- Custom baseQuery that adds Authorization header if needed ---
 const customBaseQuery = (baseUrl: string,skipAuth:boolean) => {

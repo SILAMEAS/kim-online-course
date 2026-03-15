@@ -1,14 +1,14 @@
-import { useEffect, useMemo } from "react";
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
-import { setCourses } from "@/lib/redux/slices/courses.slice";
-import { MOCK_COURSES } from "@/lib/data/courses";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
-import { CourseFilters } from "@/components/course/course-filters";
-import { CourseCard } from "@/components/course/course-card";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Filter } from "lucide-react";
+import {useEffect, useMemo} from "react";
+import {useAppDispatch, useAppSelector} from "@/lib/redux/hooks";
+import {setCourses} from "@/lib/redux/slices/courses.slice";
+import {MOCK_COURSES} from "@/lib/data/courses";
+import {Navbar} from "@/components/layout/navbar";
+import {Footer} from "@/components/layout/footer";
+import {CourseFilters} from "@/components/course/course-filters";
+import {CourseCard} from "@/components/course/course-card";
+import {Button} from "@/components/ui/button";
+import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
+import {Filter} from "lucide-react";
 
 export default function CoursesPage() {
   const dispatch = useAppDispatch();

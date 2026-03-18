@@ -1,167 +1,198 @@
 import {EnumRole, SORT} from "./enum.ts";
 
 export interface Instructor {
-  id: string;
-  name: string;
-  avatar: string;
-  title: string;
-  bio?: string;
-  studentsCount?: number;
+    id: string;
+    name: string;
+    avatar: string;
+    title: string;
+    bio?: string;
+    studentsCount?: number;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    role?: EnumRole;
 }
 
 export interface Lesson {
-  id: string;
-  title: string;
-  duration: number; // in minutes
-  description: string;
-  video_url?: string;
+    id: string;
+    title: string;
+    duration: number; // in minutes
+    description: string;
+    video_url?: string;
 }
 
 export interface Course {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  level: 'Beginner' | 'Intermediate' | 'Advanced';
-  price: number;
-  rating: number;
-  reviews_count: number;
-  instructor: Instructor;
-  image: string;
-  duration: number; // in hours
-  students_count: number;
-  curriculum: Lesson[];
-  created_at: string;
-  updated_at: string;
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    level: 'Beginner' | 'Intermediate' | 'Advanced';
+    price: number;
+    rating: number;
+    reviews_count: number;
+    instructor: Instructor;
+    image: string;
+    duration: number; // in hours
+    students_count: number;
+    curriculum: Lesson[];
+    created_at: string;
+    updated_at: string;
 }
 
 export interface Certificate {
-  id: string;
-  course_id: string;
-  course_title: string;
-  issued_date: string;
-  completion_percentage: number;
+    id: string;
+    course_id: string;
+    course_title: string;
+    issued_date: string;
+    completion_percentage: number;
 }
 
 export interface UserReponse {
-  id: string;
-  email: string;
-  name: string;
-  avatar: string;
-  bio?: string;
-  enrolled_courses: string[];
-  role: EnumRole;
-  certificates: Certificate[];
-  created_at: string;
+    id: string;
+    email: string;
+    name: string;
+    avatar: string;
+    bio?: string;
+    enrolled_courses: string[];
+    role: EnumRole;
+    certificates: Certificate[];
+    created_at: string;
 }
 
 export interface CartItem {
-  id: string;
-  course_id: string;
-  course_title: string;
-  price: number;
-  image: string;
-  instructor_name: string;
+    id: string;
+    course_id: string;
+    course_title: string;
+    price: number;
+    image: string;
+    instructor_name: string;
 }
 
 export interface Cart {
-  items: CartItem[];
-  total: number;
-  quantity: number;
+    items: CartItem[];
+    total: number;
+    quantity: number;
 }
 
 export interface Review {
-  id: string;
-  course_id: string;
-  user_id: string;
-  user_name: string;
-  user_avatar: string;
-  rating: number;
-  title: string;
-  comment: string;
-  helpful_count: number;
-  created_at: string;
-  updated_at: string;
+    id: string;
+    course_id: string;
+    user_id: string;
+    user_name: string;
+    user_avatar: string;
+    rating: number;
+    title: string;
+    comment: string;
+    helpful_count: number;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface EnrollmentData {
-  course_id: string;
-  course_title: string;
-  instructor_name: string;
-  price: number;
+    course_id: string;
+    course_title: string;
+    instructor_name: string;
+    price: number;
 }
 
 export interface LoginCredentials {
-  email: string;
-  password: string;
+    email: string;
+    password: string;
 }
 
 export interface RegisterCredentials {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
 }
 
 export interface CheckoutFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    address: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
 }
 
 export interface ReviewFormData {
-  rating: number;
-  title: string;
-  comment: string;
+    rating: number;
+    title: string;
+    comment: string;
 }
 
 /** Pagination  */
 
 export interface IPagination<T> {
-  contents: T[];
-  page: number;
-  pageSize?: number;
-  totalPages?: number;
-  total?: number;
-  hasNext?: boolean;
-  totalInvalid?: number;
+    contents: T[];
+    page: number;
+    pageSize?: number;
+    totalPages?: number;
+    total?: number;
+    hasNext?: boolean;
+    totalInvalid?: number;
 }
 
 export interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-  refreshTokenExpiresIn:number;
-  accessTokenExpiresIn:number;
+    accessToken: string;
+    refreshToken: string;
+    refreshTokenExpiresIn: number;
+    accessTokenExpiresIn: number;
 
 }
 
 export interface ProfileResponse {
-  id: number;
-  firstName:string,
-  lastName: string,
-  email: string,
-  role: EnumRole
+    id: number;
+    firstName: string,
+    lastName: string,
+    email: string,
+    role: EnumRole
 }
 
-export interface PaginationRequest{
+export const DefaultPaginationRequest: PaginationRequest = {
+    limit: 10,
+    sortBy: 'id',
+    pageNo: 1,
+    sortOrder: SORT.DESC
+}
 
-  search?:string;
-  filterBy?:string;
+export interface PaginationRequest {
 
-  pageSize:number;
-  sortBy:string;
-  pageNo:number;
-  sortOrder:SORT;
+    search?: string;
+    filterBy?: string;
 
-  price?:number;
-  minPrice?:number;  // new field
-  maxPrice?:number;  // new field
+    limit: number;
+    sortBy: string;
+    pageNo: number;
+    sortOrder: SORT;
 
-  foodType?:string;
+}
+
+// export interface CourseResponse {
+//     id: number;
+//     title: string;
+//     description: string;
+//     price: number;
+//     imageUrl: string;
+//
+// }
+
+export interface CourseResponse {
+    id: number;
+    title: string;
+    description: string;
+    price: number;
+    rating: number;
+    reviews_count: number;
+    instructor: Instructor;
+    image: string;
+    duration: number;
+    imageUrl: string;
+    category: string;
+    level: 'Beginner' | 'Intermediate' | 'Advanced';
+    students_count: number;
 }

@@ -9,12 +9,16 @@ import {CourseCard} from "@/components/course/course-card";
 import {Button} from "@/components/ui/button";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
 import {Filter} from "lucide-react";
+import {useGetListCourseQuery} from "@/lib/api/apiSlice.ts";
+import {DefaultPaginationRequest} from "@/lib/types.ts";
 
 export default function CoursesPage() {
   const dispatch = useAppDispatch();
-  const courses = useAppSelector((state) => state.courses.items);
+  // const courses = useAppSelector((state) => state.courses.items);
   const filters = useAppSelector((state) => state.courses.filters);
-
+  const {currentData}=useGetListCourseQuery(DefaultPaginationRequest);
+  // console.log("CoursesPage",listCourseQuery?.data)
+const courses = currentData?.contents || [];
   // Load courses on mount
   useEffect(() => {
     if (courses.length === 0) {

@@ -6,8 +6,8 @@ export enum enumStatus{
 }
 
 export enum SORT{
-    ASC='asc',
-    DESC='desc'
+    ASC='ASC',
+    DESC='DESC'
 }
 
 export const Method={

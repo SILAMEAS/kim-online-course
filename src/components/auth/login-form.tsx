@@ -1,27 +1,22 @@
-import {  useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, LoginFormData } from "@/lib/validations/schemas";
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {LoginFormData, loginSchema} from "@/lib/validations/schemas";
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
-import {  useLoginMutation } from "@/lib/api/apiSlice";
+import {Button} from "@/components/ui/button";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
+import {Input} from "@/components/ui/input";
+import {toast} from "sonner";
+import {Loader2} from "lucide-react";
+import {useLoginMutation} from "@/lib/api/apiSlice";
 import Cookies from "js-cookie";
-import { setLoading } from "@/lib/redux/slices/courses.slice";
+import {setLoading} from "@/lib/redux/slices/courses.slice";
+import {useTranslation} from "react-i18next";
 
 export function LoginForm() {
+  const {t}=useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isLoading, setIsLoadingLocal] = useState(false);
@@ -77,7 +72,7 @@ export function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email Address</FormLabel>
+              <FormLabel>{t("form.form_email")}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -96,7 +91,7 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>{t("form.form_password")}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
@@ -112,7 +107,7 @@ export function LoginForm() {
 
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isLoading ? "Signing in..." : "Sign in"}
+          {isLoading ? t("form.form_password")+"..." : t("form.form_password")}
         </Button>
       </form>
     </Form>

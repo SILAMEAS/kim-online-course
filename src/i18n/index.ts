@@ -10,15 +10,11 @@ i18n
     .use(initReactI18next)
     .init({
         resources: {
-            en: {translation: en},
-            km: {translation: km}
+            en: { translation: en },
+            km: { translation: km }
         },
         fallbackLng: "en",
-        debug: true,
-
-        interpolation: {
-            escapeValue: false
-        }
+        interpolation: { escapeValue: false }
     });
 
 export default i18n;

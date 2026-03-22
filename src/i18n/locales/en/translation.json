@@ -1,4 +1,16 @@
 {
-  "welcome": "Welcome",
-  "login": "Login"
+  "loginPage": {
+    "welcome": "Welcome",
+    "login": "Login",
+    "welcome_to_learning_outcomes": "Welcome to Learning outcomes",
+    "join_our_website": "Join thousands of students and advance your skills with world-class courses from industry experts.",
+    "login_continue_learning": "Sign in to your account to continue learning",
+    "not_have_acc": "Don't have an account?"
+  },
+  "form": {
+    "form_email": "Email Address",
+    "form_password": "Password",
+    "sign_up": "Sign up",
+    "sign_in": "Sign in"
+  }
 }

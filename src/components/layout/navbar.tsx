@@ -8,6 +8,7 @@ import {BookOpen, Menu, ShoppingCart} from "lucide-react";
 import {ProfileMenu} from "@/components/auth/profile-menu";
 import {MobileNav} from "./mobile-nav";
 import TriggerTheme from "@/components/providers/theme/TriggerTheme.tsx";
+import TriggerLanguage from "@/components/providers/i18n/TriggerLanguage.tsx";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -63,6 +64,7 @@ export function Navbar() {
           </Link>
           {/* Theme */}
           <TriggerTheme/>
+          <TriggerLanguage/>
           {/* Auth Section */}
           {isAuthenticated ? (
             <ProfileMenu />

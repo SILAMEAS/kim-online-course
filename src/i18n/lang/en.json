@@ -11,6 +11,7 @@
     "form_email": "Email Address",
     "form_password": "Password",
     "sign_up": "Sign up",
-    "sign_in": "Sign in"
+    "sign_in": "Sign in",
+    "username": "User name"
   }
 }

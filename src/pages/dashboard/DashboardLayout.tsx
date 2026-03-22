@@ -1,19 +1,47 @@
-import {useEffect} from "react";
+import {ForwardRefExoticComponent, RefAttributes, useEffect} from "react";
 import {Link, Outlet} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "@/lib/redux/hooks";
 import {Navbar} from "@/components/layout/navbar";
 import {Footer} from "@/components/layout/footer";
 import {Button} from "@/components/ui/button";
-import {BookMarked, Heart, LayoutDashboard, User} from "lucide-react";
+import {BookMarked, Command, Heart, LayoutDashboard, LucideProps, User} from "lucide-react";
 import {loginSuccess} from "@/lib/redux/slices/auth.slice";
 import {UserReponse} from "@/lib/types";
 import {useMeQuery} from "@/lib/api/apiSlice";
+import {EnumRole} from "@/lib/enum.ts";
 
-const SIDEBAR_ITEMS = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/dashboard/my-courses", label: "My Courses", icon: BookMarked },
-  { to: "/dashboard/wishlist", label: "Wishlist", icon: Heart },
-  { to: "/dashboard/profile", label: "Profile", icon: User },
+const SIDEBAR_ITEMS: Array<{
+  to: string,
+  label: string,
+  icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>,
+  roles: Array<EnumRole>
+}> = [
+  {
+    to: "/dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    roles: [EnumRole.ADMIN, EnumRole.STUDENT, EnumRole.INSTRUCTOR]
+  },
+  {
+    to: "/dashboard/my-courses",
+    label: "My Courses",
+    icon: BookMarked,
+    roles: [EnumRole.ADMIN, EnumRole.STUDENT, EnumRole.INSTRUCTOR]
+  },
+  {
+    to: "/dashboard/wishlist",
+    label: "Wishlist",
+    icon: Heart,
+    roles: [EnumRole.ADMIN, EnumRole.STUDENT, EnumRole.INSTRUCTOR]
+  },
+  {
+    to: "/dashboard/profile",
+    label: "Profile",
+    icon: User,
+    roles: [EnumRole.ADMIN, EnumRole.STUDENT, EnumRole.INSTRUCTOR]
+  },
+  {to: "/dashboard/manage-course", label: "Manage Course", icon: Command, roles: [EnumRole.ADMIN]},
+  {to: "/dashboard/manage-video", label: "Manage Video", icon: Command, roles: [EnumRole.ADMIN]},
 ];
 
 export default function DashboardLayout() {
@@ -22,7 +50,6 @@ export default function DashboardLayout() {
   const me = useMeQuery(undefined,{ refetchOnReconnect:true,refetchOnMountOrArgChange:true});
 
   useEffect(() => {
-    console.log("DashboardLayout")
     // Fetch user immediately
     if ( me.currentData) {
       const mockUser: UserReponse = {
@@ -44,7 +71,6 @@ export default function DashboardLayout() {
   if (!isAuthenticated) {
     return null;
   }
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -56,7 +82,7 @@ export default function DashboardLayout() {
             <div className="md:col-span-1">
               <div className="bg-card border border-border rounded-lg p-4 sticky top-24">
                 <nav className="space-y-2">
-                  {SIDEBAR_ITEMS.map((item) => {
+                  {SIDEBAR_ITEMS.filter(item => item.roles.includes(me?.currentData?.role?.toLowerCase() as EnumRole)).map((item) => {
                     const Icon = item.icon;
                     return (
                       <Link key={item.to} to={item.to}>

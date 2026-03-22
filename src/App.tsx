@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Home from "./pages/Home";
 import CoursesPage from "./pages/Courses";
 import CourseDetailPage from "./pages/CourseDetail";
@@ -13,6 +13,8 @@ import DashboardOverview from "./pages/dashboard/DashboardOverview";
 import MyCoursesPage from "./pages/dashboard/MyCourses";
 import ProfilePage from "./pages/dashboard/Profile";
 import WishlistPage from "./pages/dashboard/Wishlist";
+import ManageCoursePage from "@/pages/dashboard/ManageCoursePage.tsx";
+import ManageVideoPage from "@/pages/dashboard/ManageVideoPage.tsx";
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
           <Route path="my-courses" element={<MyCoursesPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="wishlist" element={<WishlistPage />} />
+          <Route path="manage-course" element={<ManageCoursePage />} />
+          <Route path="manage-video" element={<ManageVideoPage />} />
         </Route>
       </Routes>
     </Router>

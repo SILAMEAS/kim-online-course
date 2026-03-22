@@ -82,7 +82,7 @@ export default function DashboardLayout() {
             <div className="md:col-span-1">
               <div className="bg-card border border-border rounded-lg p-4 sticky top-24">
                 <nav className="space-y-2">
-                  {SIDEBAR_ITEMS.filter(item => item.roles.includes(me?.currentData?.role?.toLowerCase() as EnumRole)).map((item) => {
+                  {SIDEBAR_ITEMS.filter(item => item.roles.includes(me?.currentData?.role as EnumRole)).map((item) => {
                     const Icon = item.icon;
                     return (
                       <Link key={item.to} to={item.to}>

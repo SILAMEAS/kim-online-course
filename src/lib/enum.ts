@@ -19,7 +19,7 @@ export const Method={
 }
 
 export enum EnumRole {
-    STUDENT = "student",
-    INSTRUCTOR = "instructor",
-    ADMIN = "admin"
+    STUDENT = "STUDENT",
+    INSTRUCTOR = "INSTRUCTOR",
+    ADMIN = "ADMIN"
 }

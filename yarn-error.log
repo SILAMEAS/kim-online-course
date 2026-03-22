@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\ASUS\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add @types/js-cookie
+  C:\Program Files\nodejs\node.exe C:\Users\ASUS\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
 
 PATH: 
-  C:\Users\ASUS\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\ASUS\bin;C:\Users\ASUS\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;C:\Users\ASUS\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\copilotCli;C:\Users\ASUS\AppData\Local\Programs\Microsoft VS Code;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk-17\bin;C:\Users\ASUS\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\ASUS\AppData\Local\Pub\Cache\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\dotnet;C:\Users\ASUS\AppData\Local\Programs\Python\Python313\Scripts;C:\Users\ASUS\AppData\Local\Programs\Python\Python313;C:\Users\ASUS\AppData\Local\Programs\Python\Launcher;C:\Users\ASUS\AppData\Local\Microsoft\WindowsApps;C:\Users\ASUS\AppData\Roaming\npm;C:\Users\ASUS\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ASUS\AppData\Local\JetBrains\Toolbox\scripts;C:\Program Files\Java\jdk-17\bin;C:\Users\ASUS\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\ASUS\Flutter\flutter\bin;C:\Users\ASUS\AppData\Local\Pub\Cache\bin;C:\Users\ASUS\AppData\Local\Microsoft\WindowsApps;D:\cursor\resources\app\bin;C:\Users\ASUS\.fly\bin;C:\Users\ASUS\AppData\Local\Programs\Antigravity\bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+  C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\ASUS\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk-17\bin;C:\Users\ASUS\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\ASUS\AppData\Local\Pub\Cache\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\dotnet;C:\Users\ASUS\AppData\Local\Programs\Python\Python313\Scripts;C:\Users\ASUS\AppData\Local\Programs\Python\Python313;C:\Users\ASUS\AppData\Local\Programs\Python\Launcher;C:\Users\ASUS\AppData\Local\Microsoft\WindowsApps;C:\Users\ASUS\AppData\Roaming\npm;C:\Users\ASUS\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ASUS\AppData\Local\JetBrains\Toolbox\scripts;C:\Program Files\Java\jdk-17\bin;C:\Users\ASUS\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\ASUS\Flutter\flutter\bin;C:\Users\ASUS\AppData\Local\Pub\Cache\bin;C:\Users\ASUS\AppData\Local\Microsoft\WindowsApps;D:\cursor\resources\app\bin;C:\Users\ASUS\.fly\bin;C:\Users\ASUS\AppData\Local\Programs\Antigravity\bin;D:\Coding_Life\Online-course\kim-online-course\node_modules\.bin
 
 Yarn version: 
   1.22.19
@@ -28,9 +28,8 @@ npm manifest:
       "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
     },
     "dependencies": {
+      "@fontsource-variable/geist": "^5.2.8",
       "@hookform/resolvers": "^3.9.1",
-      "@reduxjs/toolkit": "^1.9.7",
-      "@tanstack/react-query": "^5.28.0",
       "@radix-ui/react-accordion": "1.2.2",
       "@radix-ui/react-alert-dialog": "1.1.4",
       "@radix-ui/react-aspect-ratio": "1.1.1",
@@ -58,6 +57,8 @@ npm manifest:
       "@radix-ui/react-toggle": "1.1.1",
       "@radix-ui/react-toggle-group": "1.1.1",
       "@radix-ui/react-tooltip": "1.1.6",
+      "@reduxjs/toolkit": "^1.9.7",
+      "@tanstack/react-query": "^5.28.0",
       "autoprefixer": "^10.4.20",
       "class-variance-authority": "^0.7.1",
       "clsx": "^2.1.1",
@@ -65,7 +66,9 @@ npm manifest:
       "date-fns": "4.1.0",
       "embla-carousel-react": "8.5.1",
       "input-otp": "1.4.1",
+      "js-cookie": "^3.0.5",
       "lucide-react": "^0.544.0",
+      "radix-ui": "^1.4.3",
       "react": "19.2.3",
       "react-day-picker": "8.10.1",
       "react-dom": "19.2.3",
@@ -74,14 +77,17 @@ npm manifest:
       "react-resizable-panels": "^2.1.7",
       "react-router-dom": "^7.1.5",
       "recharts": "2.15.0",
+      "shadcn": "^4.1.0",
       "sonner": "^1.7.1",
-      "tailwind-merge": "^2.5.5",
+      "tailwind-merge": "^2.6.1",
       "tailwindcss-animate": "^1.0.7",
+      "tw-animate-css": "^1.4.0",
       "vaul": "^1.1.2",
       "zod": "^3.24.1"
     },
     "devDependencies": {
       "@tailwindcss/postcss": "^4.1.13",
+      "@types/js-cookie": "^3.0.6",
       "@types/node": "^22",
       "@types/react": "19.2.7",
       "@types/react-dom": "19.2.3",
@@ -1289,6 +1295,11 @@ Lockfile:
     resolved "https://registry.npmjs.org/@types/estree/-/estree-1.0.8.tgz"
     integrity sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==
   
+  "@types/js-cookie@^3.0.6":
+    version "3.0.6"
+    resolved "https://registry.npmjs.org/@types/js-cookie/-/js-cookie-3.0.6.tgz"
+    integrity sha512-wkw9yd1kEXOPnvEeEV1Go1MmxtBJL0RR79aOTAApecWFVu7w0NNXNqhcWgvw2YgZDYadliXkl14pa3WXw5jlCQ==
+  
   "@types/node@^18.0.0 || ^20.0.0 || >=22.0.0", "@types/node@^22":
     version "22.19.11"
     resolved "https://registry.npmjs.org/@types/node/-/node-22.19.11.tgz"
@@ -1791,6 +1802,11 @@ Lockfile:
     version "2.6.1"
     resolved "https://registry.npmjs.org/jiti/-/jiti-2.6.1.tgz"
     integrity sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==
+  
+  js-cookie@^3.0.5:
+    version "3.0.5"
+    resolved "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz"
+    integrity sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==
   
   "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
     version "4.0.0"

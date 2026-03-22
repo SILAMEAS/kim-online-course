@@ -1,4 +1,4 @@
-import { Course } from '../types';
+import {Course} from '../types';
 
 export const MOCK_COURSES: Course[] = [
   {
@@ -237,13 +237,17 @@ export const MOCK_COURSES: Course[] = [
 ];
 
 export const COURSE_CATEGORIES = [
-  'Web Development',
-  'Data Science',
-  'Design',
-  'Mobile Development',
-  'Cloud Computing',
-  'DevOps',
-  'Business',
+  "WEB_DEVELOPMENT",
+  "DATA_SCIENCE",
+  "DESIGN",
+  "MOBILE_DEVELOPMENT",
+  "CLOUD_COMPUTING",
+  "DEV_OPS",
+  "BUSINESS"
 ];
 
-export const COURSE_LEVELS = ['Beginner', 'Intermediate', 'Advanced'];
+export const COURSE_LEVELS = [
+  "BEGINNER",
+  "INTERMEDIATE",
+  "ADVANCE"
+];

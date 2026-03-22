@@ -1,12 +1,13 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { useAppSelector } from "@/lib/redux/hooks";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ShoppingCart, BookOpen } from "lucide-react";
-import { ProfileMenu } from "@/components/auth/profile-menu";
-import { MobileNav } from "./mobile-nav";
+import {Link} from "react-router-dom";
+import {useState} from "react";
+import {useAppSelector} from "@/lib/redux/hooks";
+import {Button} from "@/components/ui/button";
+import {Badge} from "@/components/ui/badge";
+import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
+import {BookOpen, Menu, ShoppingCart} from "lucide-react";
+import {ProfileMenu} from "@/components/auth/profile-menu";
+import {MobileNav} from "./mobile-nav";
+import TriggerTheme from "@/components/providers/theme/TriggerTheme.tsx";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -60,7 +61,8 @@ export function Navbar() {
               )}
             </Button>
           </Link>
-
+          {/* Theme */}
+          <TriggerTheme/>
           {/* Auth Section */}
           {isAuthenticated ? (
             <ProfileMenu />
@@ -76,7 +78,6 @@ export function Navbar() {
               </Link>
             </div>
           )}
-
           {/* Mobile Menu */}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>

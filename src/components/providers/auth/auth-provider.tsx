@@ -2,8 +2,8 @@
 
 import {ReactNode, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import {restoreAuth} from '@/lib/redux/slices/auth.slice';
-import {UserReponse} from '@/lib/types';
+import {restoreAuth} from '@/lib/redux/slices/auth.slice.ts';
+import {UserReponse} from '@/lib/types.ts';
 
 export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
   const dispatch = useDispatch();

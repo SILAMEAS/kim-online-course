@@ -14,6 +14,7 @@ import {useLoginMutation} from "@/lib/api/apiSlice";
 import Cookies from "js-cookie";
 import {setLoading} from "@/lib/redux/slices/courses.slice";
 import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 export function LoginForm() {
   const {t}=useTranslation();
@@ -72,7 +73,7 @@ export function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("form.form_email")}</FormLabel>
+              <FormLabel>{t(Localization("loginPage", "login"))}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -91,7 +92,7 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("form.form_password")}</FormLabel>
+              <FormLabel>{t(Localization("form", "form_password"))}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
@@ -107,7 +108,7 @@ export function LoginForm() {
 
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isLoading ? t("form.form_password")+"..." : t("form.form_password")}
+          {isLoading ? t(Localization("form", "sign_in")) + "..." : t(Localization("form", "sign_in"))}
         </Button>
       </form>
     </Form>

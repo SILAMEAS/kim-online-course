@@ -3,7 +3,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
 
@@ -25,8 +24,6 @@ const TriggerLanguage = () => {
                 <DropdownMenuItem onSelect={() =>i18n.changeLanguage("km")}>
                     ខ្មែរ
                 </DropdownMenuItem>
-
-                <DropdownMenuSeparator />
 
             </DropdownMenuContent>
         </DropdownMenu>

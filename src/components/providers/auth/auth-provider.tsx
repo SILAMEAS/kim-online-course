@@ -3,7 +3,8 @@
 import {ReactNode, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {restoreAuth} from '@/lib/redux/slices/auth.slice.ts';
-import {UserReponse} from '@/lib/types.ts';
+import {UserResponse} from "@/lib/types.ts";
+
 
 export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
       const savedUser = localStorage.getItem('auth_user');
       if (savedUser) {
         try {
-          const user = JSON.parse(savedUser) as UserReponse;
+          const user = JSON.parse(savedUser) as UserResponse;
           dispatch(restoreAuth(user));
         } catch (error) {
           console.error('Failed to restore auth:', error);

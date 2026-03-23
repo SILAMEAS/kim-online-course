@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UserReponse } from '../../types';
+import {UserResponse} from "@/lib/types.ts";
+
 
 interface AuthState {
-  currentUser: UserReponse | null;
+  currentUser: UserResponse | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -22,7 +23,7 @@ const authSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
-    loginSuccess: (state, action: PayloadAction<UserReponse>) => {
+    loginSuccess: (state, action: PayloadAction<UserResponse>) => {
       state.currentUser = action.payload;
       state.isAuthenticated = true;
       state.isLoading = false;
@@ -32,7 +33,7 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-    registerSuccess: (state, action: PayloadAction<UserReponse>) => {
+    registerSuccess: (state, action: PayloadAction<UserResponse>) => {
       state.currentUser = action.payload;
       state.isAuthenticated = true;
       state.isLoading = false;
@@ -52,7 +53,7 @@ const authSlice = createSlice({
         state.currentUser.enrolled_courses.push(action.payload);
       }
     },
-    restoreAuth: (state, action: PayloadAction<UserReponse>) => {
+    restoreAuth: (state, action: PayloadAction<UserResponse>) => {
       state.currentUser = action.payload;
       state.isAuthenticated = true;
     },

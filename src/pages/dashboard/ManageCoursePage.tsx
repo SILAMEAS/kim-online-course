@@ -9,6 +9,8 @@ import {Textarea} from "@/components/ui/textarea.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useForm} from "react-hook-form";
 import {toast} from "sonner";
+import {useCreateCourseMutation, useGetListTeachersQuery} from "@/lib/api/apiSlice.ts";
+import {DefaultPaginationRequest} from "@/lib/types.ts";
 
 /* ================= ENUMS ================= */
 
@@ -60,7 +62,7 @@ const statusLabels: Record<CourseStatus, string> = {
 
 /* ================= FORM TYPE ================= */
 
-type CreateCourseFormData = {
+export type CreateCourseFormData = {
     title: string;
     description: string;
     price: number;
@@ -75,6 +77,9 @@ type CreateCourseFormData = {
 
 export default function ManageCoursePage() {
     const navigate = useNavigate();
+    const listTeachersQuery = useGetListTeachersQuery(DefaultPaginationRequest);
+    const [addCourse] = useCreateCourseMutation();
+    const teachers = listTeachersQuery.currentData?.contents || [];
 
     const form = useForm<CreateCourseFormData>({
         defaultValues: {
@@ -106,14 +111,7 @@ export default function ManageCoursePage() {
                 formData.append("file", data.file[0]);
             }
 
-            const res = await fetch("/api/courses", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (!res.ok) {
-                throw new Error("API Error");
-            }
+            await addCourse(formData).unwrap();
 
             toast.success("Course created successfully!");
             form.reset();
@@ -132,6 +130,20 @@ export default function ManageCoursePage() {
     }, []);
 
     /* ================= UI ================= */
+
+    const handleSelectTeachers = () => {
+        if (listTeachersQuery?.isLoading) {
+            return <option disabled>Loading...</option>
+        }
+        if (teachers.length === 0) {
+            return <option disabled>No teachers found</option>
+        }
+        return teachers.map((t) => (
+            <option key={t.id} value={t.id}>
+                {t.firstName} {t.lastName}
+            </option>
+        ))
+    }
 
     return (
         <div className="space-y-8">
@@ -153,13 +165,13 @@ export default function ManageCoursePage() {
                         <FormField
                             control={form.control}
                             name="title"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Course Title</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
@@ -168,13 +180,13 @@ export default function ManageCoursePage() {
                         <FormField
                             control={form.control}
                             name="description"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Description</FormLabel>
                                     <FormControl>
                                         <Textarea className="min-h-32" {...field} />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
@@ -183,7 +195,7 @@ export default function ManageCoursePage() {
                         <FormField
                             control={form.control}
                             name="price"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Price ($)</FormLabel>
                                     <FormControl>
@@ -194,7 +206,7 @@ export default function ManageCoursePage() {
                                             }
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
@@ -203,11 +215,12 @@ export default function ManageCoursePage() {
                         <FormField
                             control={form.control}
                             name="status"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Status</FormLabel>
                                     <FormControl>
-                                        <select {...field}  className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+                                        <select {...field}
+                                                className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
                                             <option value="">Select status</option>
                                             {Object.values(CourseStatus).map((s) => (
                                                 <option key={s} value={s}>
@@ -216,7 +229,7 @@ export default function ManageCoursePage() {
                                             ))}
                                         </select>
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
@@ -225,11 +238,12 @@ export default function ManageCoursePage() {
                         <FormField
                             control={form.control}
                             name="level"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Level</FormLabel>
                                     <FormControl>
-                                        <select {...field}  className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+                                        <select {...field}
+                                                className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
                                             <option value="">Select level</option>
                                             {Object.values(LevelStatus).map((l) => (
                                                 <option key={l} value={l}>
@@ -238,7 +252,7 @@ export default function ManageCoursePage() {
                                             ))}
                                         </select>
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
@@ -247,11 +261,12 @@ export default function ManageCoursePage() {
                         <FormField
                             control={form.control}
                             name="category"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Category</FormLabel>
                                     <FormControl>
-                                        <select {...field}  className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+                                        <select {...field}
+                                                className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
                                             <option value="">Select category</option>
                                             {Object.values(CategoryStatus).map((c) => (
                                                 <option key={c} value={c}>
@@ -260,27 +275,32 @@ export default function ManageCoursePage() {
                                             ))}
                                         </select>
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
 
-                        {/* Instructor ID */}
+                        {/* Instructor */}
                         <FormField
                             control={form.control}
                             name="instructorId"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Instructor ID</FormLabel>
+                                    <FormLabel>Instructor</FormLabel>
                                     <FormControl>
-                                        <Input
-                                            type="number"
+                                        <select
+                                            {...field}
+                                            className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                                            value={field.value ?? ""}
                                             onChange={(e) =>
                                                 field.onChange(Number(e.target.value))
                                             }
-                                        />
+                                        >
+                                            <option value="">Select teacher</option>
+                                            {handleSelectTeachers()}
+                                        </select>
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
@@ -289,7 +309,7 @@ export default function ManageCoursePage() {
                         <FormField
                             control={form.control}
                             name="file"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Thumbnail</FormLabel>
                                     <FormControl>
@@ -300,7 +320,7 @@ export default function ManageCoursePage() {
                                             }
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />

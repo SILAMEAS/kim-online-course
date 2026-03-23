@@ -47,10 +47,12 @@ export interface Certificate {
     completion_percentage: number;
 }
 
-export interface UserReponse {
+export interface UserResponse {
     id: string;
     email: string;
     name: string;
+    firstName: string;
+    lastName: string;
     avatar: string;
     bio?: string;
     enrolled_courses: string[];

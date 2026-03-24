@@ -14,6 +14,7 @@ import {
 } from "@/lib/api/api.generated.ts";
 import {CreateCourseApiArgSchema} from "@/lib/validations/schemas.ts";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {useState} from "react";
 
 
 /* ================= LABELS ================= */
@@ -67,6 +68,8 @@ export const statusLabels = {
 /* ================= COMPONENT ================= */
 
 export default function AdminCourse() {
+    const [preview, setPreview] = useState<string | null>(null);
+
     const listTeachersQuery = useListTeachersQuery(DefaultPaginationRequest);
     const [addCourse] = useCreateCourseMutation();
     const teachers = listTeachersQuery.currentData?.contents || [];
@@ -108,6 +111,8 @@ export default function AdminCourse() {
 
             toast.success("Course created successfully!");
             form.reset();
+            setPreview(null); // ✅ reset preview
+
         } catch (error) {
             toast.error("failed to create course. Please try again :"+(error as any)?.data?.message);
         }
@@ -304,18 +309,39 @@ export default function AdminCourse() {
                                     <FormControl>
                                         <Input
                                             type="file"
+                                            accept="image/*"
                                             onChange={(e) => {
-                                                const file = e.target.files?.[0]; // ✅ IMPORTANT FIX
-                                                console.log('file', file)
+                                                const file =
+                                                    e.target.files?.[0];
+                                                if (!file) return;
+
                                                 field.onChange(file);
-                                            }
-                                            }
+
+                                                const reader =
+                                                    new FileReader();
+                                                reader.onloadend = () => {
+                                                    setPreview(
+                                                        reader.result as string
+                                                    );
+                                                };
+                                                reader.readAsDataURL(file);
+                                            }}
                                         />
+
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
                             )}
                         />
+                        {/* PREVIEW */}
+                        {preview && (
+                            <img
+                                src={preview}
+                                className="w-48 h-32 object-cover rounded-md border"
+                            />
+                        )}
+
+
 
                         <Button type="submit"
                                 disabled={form.formState.isSubmitting}>{`Create Course ${form.formState.isSubmitting ? "..." : ""}`}</Button>

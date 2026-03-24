@@ -315,7 +315,6 @@ export type SignUpApiResponse = /** status 200 Account created successfully */ {
   [key: string]: string;
 };
 export type SignUpApiArg = {
-  /** Sign up details for the student account */
   signUpRequest: SignUpRequest;
 };
 export type SignInApiResponse =
@@ -541,6 +540,7 @@ export type UpdateCourseRequest = {
 export type SignUpRequest = {
   email: string;
   password: string;
+  confirmPassword: string;
   firstName: string;
   lastName: string;
   file: Blob;

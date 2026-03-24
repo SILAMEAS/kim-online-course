@@ -4,7 +4,6 @@ import {Navbar} from "@/components/layout/navbar";
 import {Footer} from "@/components/layout/footer";
 import {Button} from "@/components/ui/button";
 import {BookMarked, Heart, LayoutDashboard, LucideProps, User} from "lucide-react";
-import {useAppSelector} from "@/lib/redux/hooks.ts";
 import {cn} from "@/lib/utils.ts";
 
 interface ISidebarItem {
@@ -47,27 +46,9 @@ const SIDEBAR_ITEMS: Array<ISidebarItem> = [
 
 ];
 
-// const SIDEBAR_ITEMS_ADMIN_PANEL: Array<ISidebarItem> = [
-//     {
-//         to: "/dashboard/admin-control",
-//         label: "Course",
-//         icon: LayoutDashboard,
-//     },
-//     {
-//         to: "/dashboard/my-courses",
-//         label: "My Courses",
-//         icon: BookMarked,
-//     }
-// ];
 
 export default function DashboardLayout() {
-    const {currentUser: me} = useAppSelector(state => state.auth);
-    // const routeIsIncludeAdminPanel = globalThis.location.pathname.includes("/admin-control");
 
-    if (!me) {
-        return null;
-    }
-    // const sidebarRender = routeIsIncludeAdminPanel ? SIDEBAR_ITEMS_ADMIN_PANEL : SIDEBAR_ITEMS;
     return (
         <div className="min-h-screen flex flex-col">
             <Navbar/>

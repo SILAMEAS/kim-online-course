@@ -8,37 +8,32 @@ import {Input} from "@/components/ui/input";
 import {toast} from "sonner";
 import {Loader2} from "lucide-react";
 import {SignUpApiArg, useSignUpMutation} from "@/lib/api/api.generated.ts";
-import {z} from "zod";
 
 export function RegisterForm() {
     const navigate = useNavigate();
     const [signUp, {isLoading}] = useSignUpMutation();
-    const form = useForm<SignUpApiArg>({
-        resolver: zodResolver(z.object({
-            signUpRequest: registerSchema
-        })),
+    const form = useForm<SignUpApiArg["signUpRequest"]>({
+        resolver: zodResolver(registerSchema),
         defaultValues: {
-            signUpRequest: {
-                email: "",
-                password: "",
-                lastName: "",
-                file: "",
-                firstName: "",
-                confirmPassword:""
-            }
+            email: "",
+            password: "",
+            lastName: "",
+            file: "",
+            firstName: "",
+            confirmPassword: ""
         },
     });
 
-    async function onSubmit(data: SignUpApiArg) {
+    async function onSubmit(data: SignUpApiArg["signUpRequest"]) {
         try {
             const formData = new FormData();
 
-            formData.append("email", data.signUpRequest.email);
-            formData.append("password", data.signUpRequest.password);
-            formData.append("firstName", data.signUpRequest.firstName);
-            formData.append("lastName", data.signUpRequest.lastName);
+            formData.append("email", data.email);
+            formData.append("password", data.password);
+            formData.append("firstName", data.firstName);
+            formData.append("lastName", data.lastName);
 
-            const file = data.signUpRequest.file;
+            const file = data.file;
 
             if (file instanceof File) {
                 formData.append("file", file);
@@ -66,7 +61,7 @@ export function RegisterForm() {
             })} className="space-y-6">
                 <FormField
                     control={form.control}
-                    name="signUpRequest.firstName"
+                    name="firstName"
                     render={({field}) => (
                         <FormItem>
                             <FormLabel>First Name</FormLabel>
@@ -80,7 +75,7 @@ export function RegisterForm() {
 
                 <FormField
                     control={form.control}
-                    name="signUpRequest.lastName"
+                    name="lastName"
                     render={({field}) => (
                         <FormItem>
                             <FormLabel>Last Name</FormLabel>
@@ -94,7 +89,7 @@ export function RegisterForm() {
 
                 <FormField
                     control={form.control}
-                    name="signUpRequest.email"
+                    name="email"
                     render={({field}) => (
                         <FormItem>
                             <FormLabel>Email Address</FormLabel>
@@ -113,7 +108,7 @@ export function RegisterForm() {
 
                 <FormField
                     control={form.control}
-                    name="signUpRequest.password"
+                    name="password"
                     render={({field}) => (
                         <FormItem>
                             <FormLabel>Password</FormLabel>
@@ -132,7 +127,7 @@ export function RegisterForm() {
 
                 <FormField
                     control={form.control}
-                    name="signUpRequest.confirmPassword"
+                    name="confirmPassword"
                     render={({field}) => (
                         <FormItem>
                             <FormLabel>Confirm Password</FormLabel>
@@ -151,7 +146,7 @@ export function RegisterForm() {
                 {/* File Upload */}
                 <FormField
                     control={form.control}
-                    name="signUpRequest.file"
+                    name="file"
                     render={({field}) => (
                         <FormItem>
                             <FormLabel>Profile</FormLabel>
@@ -160,7 +155,7 @@ export function RegisterForm() {
                                     type="file"
                                     onChange={(e) => {
                                         const file = e.target.files?.[0]; // ✅ IMPORTANT FIX
-                                        console.log('file',file)
+                                        console.log('file', file)
                                         field.onChange(file);
                                     }
                                     }

@@ -74,33 +74,29 @@ export type CreateCourseFormData = {
 /* ================= COMPONENT ================= */
 
 export default function AdminCourse() {
-    // const navigate = useNavigate();
     const listTeachersQuery = useListTeachersQuery(DefaultPaginationRequest);
     const [addCourse] = useCreateCourseMutation();
     const teachers = listTeachersQuery.currentData?.contents || [];
 
-    const form = useForm<CreateCourseApiArg>({
+    const form = useForm<CreateCourseApiArg["createCourseRequest"]>({
         resolver: zodResolver(CreateCourseApiArgSchema),
         defaultValues: {
-            createCourseRequest: {
-                title: "",
-                file: "",
-                category: "WEB_DEVELOPMENT",
-                description: "description of the course",
-                instructorId: 0,
-                level: "BEGINNER",
-                price: 0,
-                status: "PUBLISHED"
-            }
+            title: "Test",
+            file: "",
+            category: "WEB_DEVELOPMENT",
+            description: "description of the course",
+            instructorId: 3,
+            level: "BEGINNER",
+            price: 10,
+            status: "PUBLISHED"
         },
     });
 
     /* ================= SUBMIT ================= */
 
-    async function onSubmit(_data: CreateCourseApiArg) {
+    async function onSubmit(data: CreateCourseApiArg["createCourseRequest"]) {
         try {
             const formData = new FormData();
-            const data = _data?.createCourseRequest;
 
             formData.append("title", data.title);
             formData.append("description", data.description);
@@ -116,7 +112,7 @@ export default function AdminCourse() {
                 formData.append("file", file);
             }
             await addCourse({
-                createCourseRequest: formData as any
+                createCourseRequest: formData as unknown as CreateCourseApiArg["createCourseRequest"],
             }).unwrap();
 
             toast.success("Course created successfully!");
@@ -174,7 +170,7 @@ export default function AdminCourse() {
                         {/* Title */}
                         <FormField
                             control={form.control}
-                            name="createCourseRequest.title"
+                            name="title"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Course Title</FormLabel>
@@ -189,7 +185,7 @@ export default function AdminCourse() {
                         {/* Description */}
                         <FormField
                             control={form.control}
-                            name="createCourseRequest.description"
+                            name="description"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Description</FormLabel>
@@ -204,7 +200,7 @@ export default function AdminCourse() {
                         {/* Price */}
                         <FormField
                             control={form.control}
-                            name="createCourseRequest.price"
+                            name="price"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Price ($)</FormLabel>
@@ -224,7 +220,7 @@ export default function AdminCourse() {
                         {/* Status */}
                         <FormField
                             control={form.control}
-                            name="createCourseRequest.status"
+                            name="status"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Status</FormLabel>
@@ -247,7 +243,7 @@ export default function AdminCourse() {
                         {/* Level */}
                         <FormField
                             control={form.control}
-                            name="createCourseRequest.level"
+                            name="level"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Level</FormLabel>
@@ -270,7 +266,7 @@ export default function AdminCourse() {
                         {/* Category */}
                         <FormField
                             control={form.control}
-                            name="createCourseRequest.category"
+                            name="category"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Category</FormLabel>
@@ -293,7 +289,7 @@ export default function AdminCourse() {
                         {/* Instructor */}
                         <FormField
                             control={form.control}
-                            name="createCourseRequest.instructorId"
+                            name="instructorId"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Instructor</FormLabel>
@@ -318,7 +314,7 @@ export default function AdminCourse() {
                         {/* File Upload */}
                         <FormField
                             control={form.control}
-                            name="createCourseRequest.file"
+                            name="file"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Thumbnail</FormLabel>

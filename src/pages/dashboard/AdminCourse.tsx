@@ -6,12 +6,17 @@ import {Button} from "@/components/ui/button.tsx";
 import {useForm} from "react-hook-form";
 import {toast} from "sonner";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
-import {CreateCourseApiArg, useCreateCourseMutation, useListTeachersQuery} from "@/lib/api/api.generated.ts";
+import {
+    CreateCourseApiArg,
+    CreateCourseRequest,
+    useCreateCourseMutation,
+    useListTeachersQuery
+} from "@/lib/api/api.generated.ts";
 import {CreateCourseApiArgSchema} from "@/lib/validations/schemas.ts";
 import {zodResolver} from "@hookform/resolvers/zod";
 
-/* ================= ENUMS ================= */
 
+/* ================= LABELS ================= */
 enum CourseStatus {
     DRAFT = "DRAFT",
     PUBLISHED = "PUBLISHED",
@@ -34,7 +39,6 @@ enum CategoryStatus {
     BUSINESS = "BUSINESS",
 }
 
-/* ================= LABELS ================= */
 
 const categoryLabels: Record<CategoryStatus, string> = {
     WEB_DEVELOPMENT: "Web Development",
@@ -46,30 +50,19 @@ const categoryLabels: Record<CategoryStatus, string> = {
     BUSINESS: "Business",
 };
 
-const levelLabels: Record<LevelStatus, string> = {
+
+// 2. Safe label maps (fully type-checked)
+export const levelLabels = {
     BEGINNER: "Beginner",
     INTERMEDIATE: "Intermediate",
     ADVANCE: "Advance",
-};
+} satisfies Record<LevelStatus, string>;
 
-const statusLabels: Record<CourseStatus, string> = {
+export const statusLabels = {
     DRAFT: "Draft",
     PUBLISHED: "Published",
     PREPARE: "Prepare",
-};
-
-/* ================= FORM TYPE ================= */
-
-export type CreateCourseFormData = {
-    title: string;
-    description: string;
-    price: number;
-    status: CourseStatus;
-    level: LevelStatus;
-    instructorId: number;
-    category: CategoryStatus;
-    file: FileList;
-};
+} satisfies Record<CourseStatus, string>;
 
 /* ================= COMPONENT ================= */
 
@@ -94,7 +87,7 @@ export default function AdminCourse() {
 
     /* ================= SUBMIT ================= */
 
-    async function onSubmit(data: CreateCourseApiArg["createCourseRequest"]) {
+    async function onSubmit(data: CreateCourseRequest) {
         try {
             const formData = new FormData();
 
@@ -111,9 +104,7 @@ export default function AdminCourse() {
             if (file instanceof File) {
                 formData.append("file", file);
             }
-            await addCourse({
-                createCourseRequest: formData as unknown as CreateCourseApiArg["createCourseRequest"],
-            }).unwrap();
+            await addCourse(formData as any).unwrap();
 
             toast.success("Course created successfully!");
             form.reset();
@@ -123,13 +114,6 @@ export default function AdminCourse() {
         }
     }
 
-    /* ================= AUTH GUARD ================= */
-
-    // useEffect(() => {
-    //     if (store?.getState()?.auth?.currentUser?.role !== EnumRole.ADMIN) {
-    //         navigate("/");
-    //     }
-    // }, []);
 
     /* ================= UI ================= */
 

@@ -311,7 +311,7 @@ export type DeleteCourseByIdApiArg = {
   /** ID of the course */
   courseId: number;
 };
-export type SignUpApiResponse = /** status 200 Account created successfully */ {
+export type SignUpApiResponse = /** status 200 OK */ {
   [key: string]: string;
 };
 export type SignUpApiArg = {
@@ -378,8 +378,7 @@ export type ListAllCoursesApiArg = {
   sortBy?: string;
   sortOrder?: string;
 };
-export type CreateCourseApiResponse =
-  /** status 200 Course created successfully */ CourseResponse;
+export type CreateCourseApiResponse = /** status 200 OK */ CourseResponse;
 export type CreateCourseApiArg = {
   createCourseRequest: CreateCourseRequest;
 };

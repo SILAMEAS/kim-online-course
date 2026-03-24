@@ -6,7 +6,7 @@ import {useEffect} from "react";
 import {store} from "@/lib/redux/store.ts";
 import {EnumRole} from "@/lib/enum.ts";
 
-export default function ManageVideoPage() {
+export default function AdminVideo() {
   // Mock data - in a real app, this would come from Redux state
   const wishlistItems = [];
   useEffect(()=>{

@@ -75,7 +75,7 @@ export type CreateCourseFormData = {
 
 /* ================= COMPONENT ================= */
 
-export default function ManageCoursePage() {
+export default function AdminCourse() {
     const navigate = useNavigate();
     const listTeachersQuery = useGetListTeachersQuery(DefaultPaginationRequest);
     const [addCourse] = useCreateCourseMutation();

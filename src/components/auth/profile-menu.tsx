@@ -74,6 +74,15 @@ export function ProfileMenu() {
             Profile Settings
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+              to="/dashboard/admin-control"
+              className="flex items-center gap-2 cursor-pointer"
+          >
+            <Settings className="w-4 h-4" />
+            Admin Control Panel
+          </Link>
+        </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 

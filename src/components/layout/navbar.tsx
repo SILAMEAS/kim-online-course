@@ -9,11 +9,17 @@ import {ProfileMenu} from "@/components/auth/profile-menu";
 import {MobileNav} from "./mobile-nav";
 import TriggerTheme from "@/components/providers/theme/TriggerTheme.tsx";
 import TriggerLanguage from "@/components/providers/i18n/TriggerLanguage.tsx";
+import useRestoreUserByToken from "@/hooks/useRestoreUserByToken.tsx";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const {currentData,isLoading} = useRestoreUserByToken();
+
   const cartQuantity = useAppSelector((state) => state.cart.quantity);
+
+  if(isLoading){
+    return null;
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background border-b border-border">
@@ -66,7 +72,7 @@ export function Navbar() {
           <TriggerTheme/>
           <TriggerLanguage/>
           {/* Auth Section */}
-          {isAuthenticated ? (
+          {currentData ? (
             <ProfileMenu />
           ) : (
             <div className="flex gap-2">
@@ -89,7 +95,7 @@ export function Navbar() {
             </SheetTrigger>
             <SheetContent side="right">
               <MobileNav
-                isAuthenticated={isAuthenticated}
+                isAuthenticated={Boolean(currentData)}
                 onClose={() => setOpen(false)}
               />
             </SheetContent>

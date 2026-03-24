@@ -39,7 +39,7 @@ const useRestoreUserByToken = () => {
                 id: currentData.id.toString(),
                 email: currentData.email,
                 name: `${currentData.firstName} ${currentData.lastName}`,
-                avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentData.email}`,
+                avatar: currentData?.imageUrl ?? `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentData.email}`,
                 bio: "Passionate learner",
                 enrolled_courses: [],
                 role: currentData.role as EnumRole,

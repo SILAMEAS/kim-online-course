@@ -109,8 +109,7 @@ export default function AdminCourse() {
             toast.success("Course created successfully!");
             form.reset();
         } catch (error) {
-            console.error(error);
-            toast.error("Failed to create course.");
+            toast.error("failed to create course. Please try again :"+(error as any)?.data?.message);
         }
     }
 
@@ -301,7 +300,7 @@ export default function AdminCourse() {
                             name="file"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Thumbnail</FormLabel>
+                                    <FormLabel>Image</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="file"
@@ -318,7 +317,8 @@ export default function AdminCourse() {
                             )}
                         />
 
-                        <Button type="submit">Create Course</Button>
+                        <Button type="submit"
+                                disabled={form.formState.isSubmitting}>{`Create Course ${form.formState.isSubmitting ? "..." : ""}`}</Button>
 
                     </form>
                 </Form>

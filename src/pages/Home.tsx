@@ -8,13 +8,12 @@ import {Footer} from "@/components/layout/footer";
 import {Button} from "@/components/ui/button";
 import {CourseCard} from "@/components/course/course-card";
 import {ArrowRight, Star, Trophy, Users} from "lucide-react";
-import {useGetListCourseQuery} from "@/lib/api/apiSlice.ts";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
+import {useListAllCoursesQuery} from "@/lib/api/api.generated.ts";
 
 export default function Home() {
     const dispatch = useDispatch();
-    // const courses = useSelector((state: RootState) => state.courses.items);
-    const {currentData} = useGetListCourseQuery(DefaultPaginationRequest);
+    const {currentData} = useListAllCoursesQuery(DefaultPaginationRequest);
     // console.log("CoursesPage",listCourseQuery?.data)
     const courses = currentData?.contents || [];
     const featuredCourses = courses.slice(0, 6);

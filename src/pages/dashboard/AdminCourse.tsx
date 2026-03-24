@@ -9,8 +9,9 @@ import {Textarea} from "@/components/ui/textarea.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useForm} from "react-hook-form";
 import {toast} from "sonner";
-import {useCreateCourseMutation, useGetListTeachersQuery} from "@/lib/api/apiSlice.ts";
+import {useCreateCourseMutation} from "@/lib/api/apiSlice.ts";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
+import {useListTeachersQuery} from "@/lib/api/api.generated.ts";
 
 /* ================= ENUMS ================= */
 
@@ -77,7 +78,7 @@ export type CreateCourseFormData = {
 
 export default function AdminCourse() {
     const navigate = useNavigate();
-    const listTeachersQuery = useGetListTeachersQuery(DefaultPaginationRequest);
+    const listTeachersQuery = useListTeachersQuery(DefaultPaginationRequest);
     const [addCourse] = useCreateCourseMutation();
     const teachers = listTeachersQuery.currentData?.contents || [];
 

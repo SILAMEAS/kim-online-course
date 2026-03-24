@@ -1,9 +1,10 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
-import {CourseResponse, IPagination, LoginResponse, PaginationRequest, ProfileResponse, UserResponse} from "../types";
+import { IPagination, LoginResponse, PaginationRequest, ProfileResponse, UserResponse} from "../types";
 import {baseQueryWithReauth} from "./customBaseQuery";
 
 import {Method} from "../enum.ts";
 import {LoginFormData, RegisterFormData} from "../validations/schemas";
+import {CourseResponse} from "@/lib/api/api.generated.ts";
 
 export const apiSlice = createApi({
     reducerPath: "api",
@@ -42,13 +43,13 @@ export const apiSlice = createApi({
             }),
         }),
         //  Other endpoints
-        getListCourse: builder.query<IPagination<CourseResponse>, PaginationRequest>({
-            query: (params) => ({
-                url: "/api/courses",
-                method: Method.GET,
-                params
-            }),
-        }),
+        // getListCourse: builder.query<IPagination<CourseResponse>, PaginationRequest>({
+        //     query: (params) => ({
+        //         url: "/api/courses",
+        //         method: Method.GET,
+        //         params
+        //     }),
+        // }),
         createCourse: builder.mutation<CourseResponse, FormData>({
             query: (body) => ({
                 url: "/api/courses",
@@ -70,7 +71,7 @@ export const {
     useLoginMutation,
     useMeQuery,
     useSignUpMutation,
-    useGetListCourseQuery,
-    useGetListTeachersQuery,
+    // useGetListCourseQuery,
+    // useGetListTeachersQuery,
     useCreateCourseMutation
 } = apiSlice;

@@ -130,7 +130,10 @@ const injectedRtkApi = api.injectEndpoints({
         method: "POST",
       }),
     }),
-    getCourse: build.query<GetCourseApiResponse, GetCourseApiArg>({
+    listAllCourses: build.query<
+      ListAllCoursesApiResponse,
+      ListAllCoursesApiArg
+    >({
       query: (queryArg) => ({
         url: `/api/courses`,
         params: {
@@ -343,8 +346,8 @@ export type ListUsersApiResponse =
   /** status 200 Users retrieved successfully */ UserResponse;
 export type ListUsersApiArg = {
   search?: string;
-  page?: string;
-  limit?: string;
+  page?: number;
+  limit?: number;
   sortBy?: string;
   sortOrder?: string;
 };
@@ -367,12 +370,12 @@ export type SubmitPaymentApiArg = {
   /** ID of the course the student wants to enroll in */
   courseId: number;
 };
-export type GetCourseApiResponse =
-  /** status 200 Courses retrieved successfully */ CourseResponse;
-export type GetCourseApiArg = {
+export type ListAllCoursesApiResponse =
+  /** status 200 Courses retrieved successfully */ CoursePageResponse;
+export type ListAllCoursesApiArg = {
   search?: string;
-  page?: string;
-  limit?: string;
+  page?: number;
+  limit?: number;
   sortBy?: string;
   sortOrder?: string;
 };
@@ -385,8 +388,8 @@ export type GetVideosApiResponse =
   /** status 200 Videos retrieved successfully */ EntityResponseHandlerVideoListResponse;
 export type GetVideosApiArg = {
   search?: string;
-  page?: string;
-  limit?: string;
+  page?: number;
+  limit?: number;
   sortBy?: string;
   sortOrder?: string;
 };
@@ -402,8 +405,8 @@ export type GetVideosByCourseIdApiArg = {
   /** Course ID */
   courseId: number;
   search?: string;
-  page?: string;
-  limit?: string;
+  page?: number;
+  limit?: number;
   sortBy?: string;
   sortOrder?: string;
 };
@@ -417,8 +420,8 @@ export type ListTeachersApiResponse =
   /** status 200 OK */ EntityResponseHandlerUserResponse;
 export type ListTeachersApiArg = {
   search?: string;
-  page?: string;
-  limit?: string;
+  page?: number;
+  limit?: number;
   sortBy?: string;
   sortOrder?: string;
 };
@@ -426,8 +429,8 @@ export type GetAllPaymentsApiResponse =
   /** status 200 Payments retrieved successfully */ ListPaymentResponse;
 export type GetAllPaymentsApiArg = {
   search?: string;
-  page?: string;
-  limit?: string;
+  page?: number;
+  limit?: number;
   sortBy?: string;
   sortOrder?: string;
 };
@@ -435,8 +438,8 @@ export type GetAllApiResponse =
   /** status 200 Enrollments retrieved successfully */ EnrollmentResponse;
 export type GetAllApiArg = {
   search?: string;
-  page?: string;
-  limit?: string;
+  page?: number;
+  limit?: number;
   sortBy?: string;
   sortOrder?: string;
 };
@@ -446,8 +449,8 @@ export type GetAllByCourseApiArg = {
   /** ID of the course */
   courseId: number;
   search?: string;
-  page?: string;
-  limit?: string;
+  page?: number;
+  limit?: number;
   sortBy?: string;
   sortOrder?: string;
 };
@@ -590,6 +593,14 @@ export type PaymentResponse = {
   courseTitle?: string;
   user?: UserResponse;
 };
+export type CoursePageResponse = {
+  contents?: CourseResponse[];
+  page?: number;
+  limit?: number;
+  total?: number;
+  totalPage?: number;
+  hasNext?: boolean;
+};
 export type EntityResponseHandlerCourseResponse = {
   contents?: CourseResponse[];
   page?: number;
@@ -663,7 +674,7 @@ export const {
   useCreateUserMutation,
   useApproveMutation,
   useSubmitPaymentMutation,
-  useGetCourseQuery,
+  useListAllCoursesQuery,
   useCreateCourseMutation,
   useGetVideosQuery,
   useWatchVideoQuery,

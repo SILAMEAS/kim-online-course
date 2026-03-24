@@ -1,28 +1,24 @@
 import {Link} from "react-router-dom";
-import {CourseResponse} from "@/lib/types";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {Clock, Star, Users} from "lucide-react";
+import {CourseResponse} from "@/lib/api/api.generated.ts";
 
-interface CourseCardProps {
-    course: CourseResponse;
-}
 
-export function CourseCard({course}: Readonly<CourseCardProps>) {
+export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
     const levelColors = {
-        Beginner: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-        Intermediate:
+        BEGINNER: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+        INTERMEDIATE:
             "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
-        Advanced: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+        ADVANCE: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
     };
-
     return (
         <Link to={`/courses/${course.id}`}>
             <div
                 className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer h-full flex flex-col">
                 {/* Course Image */}
                 {
-                    course.imageUrl&&
+                    course.imageUrl &&
                     <div className="relative w-full h-48 bg-secondary overflow-hidden">
                         <img
                             src={course.imageUrl}
@@ -43,9 +39,12 @@ export function CourseCard({course}: Readonly<CourseCardProps>) {
                         <Badge variant="outline" className="text-xs">
                             {course.category}
                         </Badge>
-                        <Badge className={`text-xs ${levelColors[course.level]}`}>
-                            {course.level}
-                        </Badge>
+                        {
+                            course?.level &&
+                            <Badge className={`text-xs ${levelColors[course.level]}`}>
+                                {course.level}
+                            </Badge>
+                        }
                     </div>
 
                     {/* Title */}
@@ -83,12 +82,12 @@ export function CourseCard({course}: Readonly<CourseCardProps>) {
                         <div className="flex items-center gap-1">
                             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400"/>
                             <span>{course.rating}</span>
-                            <span className="text-xs">({course.reviews_count})</span>
+                            <span className="text-xs">({0})</span>
                         </div>
                         <div className="flex items-center gap-1">
                             <Users className="w-4 h-4"/>
                             <span className="text-xs">
-                {course?.students_count?.toLocaleString()??0}
+                {course?.studentsCount?.toLocaleString() ?? 0}
               </span>
                         </div>
                         <div className="flex items-center gap-1">

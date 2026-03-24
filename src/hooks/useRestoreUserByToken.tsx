@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect} from "react";
 import {useAppDispatch} from "@/lib/redux/hooks.ts";
 import Cookies from "js-cookie";
 import {UserResponse} from "@/lib/types.ts";
@@ -8,17 +8,32 @@ import {EnumRole} from "@/lib/enum.ts";
 
 const useRestoreUserByToken = () => {
     const dispatch = useAppDispatch();
-    const {currentData, isLoading, isFetching, isError, error} = useGetUserByJwtTokenQuery(undefined, {
-        refetchOnReconnect: true,
-        refetchOnMountOrArgChange: true
-    });
-    const token = Cookies.get("token");
-    console.log("useRestoreUserByToken", token)
+    const accessToken = Cookies.get("accessToken");
 
+    const {
+        currentData,
+        isLoading,
+        isFetching,
+        isError,
+        error,
+        refetch,
+    } = useGetUserByJwtTokenQuery(undefined, {
+        skip: !accessToken, // ✅ important: don't call API without token
+        refetchOnReconnect: true,
+        refetchOnMountOrArgChange: true,
+    });
+
+    // ✅ Refetch only when needed
     useEffect(() => {
-        // Fetch user immediately
+        if (accessToken && !currentData) {
+            refetch();
+        }
+    }, [accessToken, currentData, refetch]);
+
+    // ✅ Sync Redux only when data arrives
+    useEffect(() => {
         if (currentData) {
-            const mockUser: UserResponse = {
+            const user: UserResponse = {
                 firstName: currentData.firstName,
                 lastName: currentData.lastName,
                 id: currentData.id.toString(),
@@ -29,13 +44,14 @@ const useRestoreUserByToken = () => {
                 enrolled_courses: [],
                 role: currentData.role as EnumRole,
                 certificates: [],
-                created_at: new Date().toString()
+                created_at: new Date().toString(),
             };
 
-            dispatch(loginSuccess(mockUser));
+            dispatch(loginSuccess(user));
         }
-    }, [currentData]);
-    return {currentData, isLoading, isFetching, isError, error}
+    }, [currentData, dispatch]);
+
+    return {currentData, isLoading, isFetching, isError, error};
 };
 
 export default useRestoreUserByToken;

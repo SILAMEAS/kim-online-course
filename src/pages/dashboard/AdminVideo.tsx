@@ -1,48 +1,116 @@
-import {Heart} from "lucide-react";
-import {Button} from "@/components/ui/button";
+import {useState} from "react";
+import {useForm} from "react-hook-form";
 import {Card} from "@/components/ui/card";
-import {Link, redirect} from "react-router-dom";
-import {useEffect} from "react";
-import {store} from "@/lib/redux/store.ts";
-import {EnumRole} from "@/lib/enum.ts";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import {toast} from "sonner";
+
+import {UploadVideoApiArg, useUploadVideoMutation} from "@/lib/api/api.generated";
+
 
 export default function AdminVideo() {
-  // Mock data - in a real app, this would come from Redux state
-  const wishlistItems = [];
-  useEffect(()=>{
-      if(store?.getState()?.auth?.currentUser?.role!==EnumRole.ADMIN){
-          redirect("/")
-      }
-  },[])
+    const [preview, setPreview] = useState<string | null>(null);
 
-  return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-4xl font-bold mb-2">Manage Video Page</h1>
-        <p className="text-foreground/60">
-          Save courses you want to learn later
-        </p>
-      </div>
+    const [uploadVideo, {isLoading}] = useUploadVideoMutation();
 
-      {wishlistItems.length === 0 ? (
-        <Card className="p-12 border border-border text-center">
-          <Heart className="w-16 h-16 mx-auto text-foreground/30 mb-4" />
-          <h2 className="text-2xl font-semibold mb-2">
-            Your wishlist is empty
-          </h2>
-          <p className="text-foreground/60 mb-6">
-            Add courses to your wishlist to save them for later
-          </p>
-          <Link to="/courses">
-            <Button size="lg">Browse Courses</Button>
-          </Link>
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        reset,
+    } = useForm<UploadVideoApiArg>({
+        defaultValues: {
+            courseId: 5,
+            uploadVideoRequest: {
+                title: "TEST",
+                file: undefined,
+            }
+        },
+    });
+
+
+    async function onSubmit(data: UploadVideoApiArg) {
+        try {
+            const formData = new FormData();
+            formData.append("title", String(data.uploadVideoRequest.title));
+            const file = data.uploadVideoRequest.file;
+
+            if (file instanceof File) {
+                formData.append("file", file);
+            }
+
+
+            if (!data.uploadVideoRequest.file) {
+                toast.error("Please select a video file");
+                return;
+            }
+
+            await uploadVideo({
+                courseId: data.courseId,
+                uploadVideoRequest: formData as any
+            }).unwrap();
+
+            toast.success("Video uploaded successfully");
+
+            reset();
+            setPreview(null);
+        } catch (err) {
+            console.error(err);
+            toast.error(
+                "Upload failed: " + (err as any)?.data?.message
+            );
+        }
+    }
+
+    return (
+        <Card className="p-6 space-y-4">
+            <h2 className="text-xl font-bold">Upload Video</h2>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+
+                {/* COURSE ID */}
+                <Input
+                    type="number"
+                    placeholder="Course ID"
+                    {...register("courseId", {valueAsNumber: true})}
+                />
+
+                {/* TITLE */}
+                <Input
+                    type="text"
+                    placeholder="Video title"
+                    {...register("uploadVideoRequest.title")}
+                />
+
+                {/* FILE */}
+                <Input
+                    type="file"
+                    accept="video/*"
+                    onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+
+                        setValue("uploadVideoRequest.file", file);
+
+                        // preview video
+                        const url = URL.createObjectURL(file);
+                        setPreview(url);
+                    }}
+                />
+
+                {/* VIDEO PREVIEW */}
+                {preview && (
+                    <video
+                        src={preview}
+                        controls
+                        className="w-full rounded-md border"
+                    />
+                )}
+
+                <Button type="submit" disabled={isLoading}>
+                    {isLoading ? "Uploading..." : "Upload Video"}
+                </Button>
+            </form>
         </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Wishlist items would go here */}
-        </div>
-      )}
-    </div>
-  );
+    );
 }

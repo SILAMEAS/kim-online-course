@@ -90,10 +90,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/videos/upload/${queryArg.courseId}`,
         method: "POST",
-        body: queryArg.body,
-        params: {
-          title: queryArg.title,
-        },
+        body: queryArg.uploadVideoRequest,
       }),
     }),
     listUsers: build.query<ListUsersApiResponse, ListUsersApiArg>({
@@ -311,7 +308,7 @@ export type DeleteCourseByIdApiArg = {
   /** ID of the course */
   courseId: number;
 };
-export type SignUpApiResponse = /** status 200 OK */ {
+export type SignUpApiResponse = /** status 200 Account created successfully */ {
   [key: string]: string;
 };
 export type SignUpApiArg = {
@@ -332,14 +329,8 @@ export type RefreshTokenApiArg = {
 export type UploadVideoApiResponse =
   /** status 200 Video uploaded successfully */ string;
 export type UploadVideoApiArg = {
-  /** Course ID to upload the video into */
   courseId: number;
-  /** Title of the video */
-  title: string;
-  body: {
-    /** Video file to upload */
-    file: Blob;
-  };
+  uploadVideoRequest: UploadVideoRequest;
 };
 export type ListUsersApiResponse =
   /** status 200 Users retrieved successfully */ UserResponse;
@@ -378,7 +369,8 @@ export type ListAllCoursesApiArg = {
   sortBy?: string;
   sortOrder?: string;
 };
-export type CreateCourseApiResponse = /** status 200 OK */ CourseResponse;
+export type CreateCourseApiResponse =
+  /** status 200 Course created successfully */ CourseResponse;
 export type CreateCourseApiArg = {
   createCourseRequest: CreateCourseRequest;
 };
@@ -558,6 +550,10 @@ export type LoginResponse = {
 export type LoginRequest = {
   email: string;
   password: string;
+};
+export type UploadVideoRequest = {
+  title?: string;
+  file: Blob;
 };
 export type EntityResponseHandlerUserResponse = {
   contents?: UserResponse[];

@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {LoginForm} from "@/components/auth/login-form";
+import {LoginForm} from "@/components/auth/login-form.tsx";
 import {useTranslation} from "react-i18next";
 import {Localization} from "@/i18n/lang";
 

@@ -1,116 +1,161 @@
-import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {LoginFormData, loginSchema} from "@/lib/validations/schemas";
+import {loginSchema} from "@/lib/validations/schemas";
+import {z} from "zod";
 
 import {Button} from "@/components/ui/button";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {toast} from "sonner";
 import {Loader2} from "lucide-react";
-import {useLoginMutation} from "@/lib/api/apiSlice";
 import Cookies from "js-cookie";
 import {setLoading} from "@/lib/redux/slices/courses.slice";
 import {useTranslation} from "react-i18next";
 import {Localization} from "@/i18n/lang";
+import {SignInApiArg, useSignInMutation} from "@/lib/api/api.generated.ts";
 
 export function LoginForm() {
-  const {t}=useTranslation();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [isLoading, setIsLoadingLocal] = useState(false);
-  const [login, resultLogin] = useLoginMutation();
+    const {t} = useTranslation();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-  const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+    // ✅ Use RTK Query loading state (REMOVE local state)
+    const [login, {isLoading}] = useSignInMutation();
 
-  async function onSubmit(data: LoginFormData) {
-    setIsLoadingLocal(true);
-    dispatch(setLoading(true));
-    try {
-      const loginData = await login(data).unwrap();
+    // Fix: Wrap the flat loginSchema to match the nested "loginRequest" form structure
+    const formSchema = z.object({
+        loginRequest: loginSchema,
+    });
 
-      // Save tokens in cookies
-      Cookies.set("accessToken", loginData.accessToken, {
-        expires: loginData.accessTokenExpiresIn / 86400,
-        secure: true,
-        sameSite: "strict",
-      });
-      Cookies.set("refreshToken", loginData.refreshToken, {
-        expires: loginData.refreshTokenExpiresIn / 86400,
-        secure: true,
-        sameSite: "strict",
-      });
-    } catch (error) {
-      toast.error("Login failed. Please check your credentials and try again.");
-      console.error("Login error:", error);
-    } finally {
-      setIsLoadingLocal(false);
-      dispatch(setLoading(false));
+    const form = useForm<SignInApiArg>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            loginRequest: {
+                email: "",
+                password: ""
+            }
+        },
+    });
+
+    async function onSubmit(data: SignInApiArg) {
+        console.log("Submitting:", data);
+
+        // Optional: Only keep this if you have a global loading bar separate from the button
+        dispatch(setLoading(true));
+
+        try {
+            // ✅ Use unwrap result directly
+            const loginData = await login(data).unwrap();
+
+            console.log("Response:", loginData);
+
+            if (
+                loginData?.accessToken &&
+                loginData?.refreshToken &&
+                loginData?.accessTokenExpiresIn &&
+                loginData?.refreshTokenExpiresIn
+            ) {
+                Cookies.set("accessToken", loginData.accessToken, {
+                    expires: loginData.accessTokenExpiresIn / 86400,
+                    secure: true,
+                    sameSite: "strict",
+                });
+
+                Cookies.set("refreshToken", loginData.refreshToken, {
+                    expires: loginData.refreshTokenExpiresIn / 86400,
+                    secure: true,
+                    sameSite: "strict",
+                });
+            }
+
+            toast.success("Logged in successfully!");
+            navigate("/");
+
+        } catch (error) {
+            console.error("Login error:", error);
+            toast.error("Login failed. Please check your credentials.");
+        } finally {
+            dispatch(setLoading(false));
+        }
     }
-  }
 
-  useEffect(() => {
-    if (resultLogin.data) {
-      console.log(" Login successful, fetching user data...");
-      toast.success("Logged in successfully!");
-      navigate("/dashboard");
-    }
-  }, [resultLogin.data]);
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t(Localization("loginPage", "login"))}</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="you@example.com"
-                  disabled={isLoading}
-                  {...field}
+    return (
+        <Form {...form}>
+            <form
+                onSubmit={form.handleSubmit(onSubmit, (errors) => {
+                    // 🔍 Debugging: Log validation errors if submission fails
+                    console.error("Form Validation Failed:", errors);
+                    toast.error("Please check the form for errors.");
+                })}
+                className="space-y-6"
+            >
+                {/* Email */}
+                <FormField
+                    control={form.control}
+                    name="loginRequest.email"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel>
+                                {t(Localization("loginPage", "login"))}
+                            </FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="email"
+                                    placeholder="you@example.com"
+                                    disabled={isLoading}
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage/>
+                        </FormItem>
+                    )}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t(Localization("form", "form_password"))}</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="••••••••"
-                  disabled={isLoading}
-                  {...field}
+                {/* Password */}
+                <FormField
+                    control={form.control}
+                    name="loginRequest.password"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel>
+                                {t(Localization("form", "form_password"))}
+                            </FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="password"
+                                    placeholder="••••••••"
+                                    disabled={isLoading}
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage/>
+                        </FormItem>
+                    )}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isLoading ? t(Localization("form", "sign_in")) + "..." : t(Localization("form", "sign_in"))}
-        </Button>
-      </form>
-    </Form>
-  );
+                {/* Submit */}
+                <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isLoading}
+                >
+                    {isLoading && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+                    )}
+                    {isLoading
+                        ? t(Localization("form", "sign_in")) + "..."
+                        : t(Localization("form", "sign_in"))}
+                </Button>
+            </form>
+        </Form>
+    );
 }

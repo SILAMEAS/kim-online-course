@@ -15,7 +15,6 @@ import ProfilePage from "./pages/dashboard/Profile";
 import WishlistPage from "./pages/dashboard/Wishlist";
 import AdminCourse from "@/pages/dashboard/AdminCourse.tsx";
 import AdminVideo from "@/pages/dashboard/AdminVideo.tsx";
-import AdminControlLayout from "@/pages/dashboard/AdminControlLayout.tsx";
 import NotFoundPage from "@/pages/NotFoundPage.tsx";
 
 function App() {
@@ -38,13 +37,11 @@ function App() {
                     <Route path="my-courses" element={<MyCoursesPage/>}/>
                     <Route path="profile" element={<ProfilePage/>}/>
                     <Route path="wishlist" element={<WishlistPage/>}/>
-                    <Route path="admin-control" element={<AdminControlLayout/>}>
-                        <Route index element={<AdminCourse/>}/>
-                        <Route path="manage-video" element={<AdminVideo/>}/>
-                    </Route>
+                    <Route path="admin/course" element={<AdminCourse/>}/>
+                    <Route path="admin/video" element={<AdminVideo/>}/>
                 </Route>
                 {/* 🔥 Catch all route */}
-                <Route path="*" element={<NotFoundPage />} />
+                <Route path="*" element={<NotFoundPage/>}/>
             </Routes>
         </Router>
     );

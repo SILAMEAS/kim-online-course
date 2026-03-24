@@ -1,7 +1,3 @@
-import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
-import {store} from "@/lib/redux/store.ts";
-import {EnumRole} from "@/lib/enum.ts";
 import {Card} from "@/components/ui/card.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form.tsx";
 import {Input} from "@/components/ui/input.tsx";
@@ -9,9 +5,10 @@ import {Textarea} from "@/components/ui/textarea.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useForm} from "react-hook-form";
 import {toast} from "sonner";
-import {useCreateCourseMutation} from "@/lib/api/apiSlice.ts";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
-import {useListTeachersQuery} from "@/lib/api/api.generated.ts";
+import {CreateCourseApiArg, useCreateCourseMutation, useListTeachersQuery} from "@/lib/api/api.generated.ts";
+import {CreateCourseApiArgSchema} from "@/lib/validations/schemas.ts";
+import {zodResolver} from "@hookform/resolvers/zod";
 
 /* ================= ENUMS ================= */
 
@@ -77,28 +74,33 @@ export type CreateCourseFormData = {
 /* ================= COMPONENT ================= */
 
 export default function AdminCourse() {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const listTeachersQuery = useListTeachersQuery(DefaultPaginationRequest);
     const [addCourse] = useCreateCourseMutation();
     const teachers = listTeachersQuery.currentData?.contents || [];
 
-    const form = useForm<CreateCourseFormData>({
+    const form = useForm<CreateCourseApiArg>({
+        resolver: zodResolver(CreateCourseApiArgSchema),
         defaultValues: {
-            title: "",
-            description: "",
-            price: 0,
-            status: undefined,
-            level: undefined,
-            instructorId: 0,
-            category: undefined,
+            createCourseRequest: {
+                title: "",
+                file: "",
+                category: "WEB_DEVELOPMENT",
+                description: "description of the course",
+                instructorId: 0,
+                level: "BEGINNER",
+                price: 0,
+                status: "PUBLISHED"
+            }
         },
     });
 
     /* ================= SUBMIT ================= */
 
-    async function onSubmit(data: CreateCourseFormData) {
+    async function onSubmit(_data: CreateCourseApiArg) {
         try {
             const formData = new FormData();
+            const data = _data?.createCourseRequest;
 
             formData.append("title", data.title);
             formData.append("description", data.description);
@@ -108,11 +110,14 @@ export default function AdminCourse() {
             formData.append("instructorId", String(data.instructorId));
             formData.append("category", data.category);
 
-            if (data.file?.[0]) {
-                formData.append("file", data.file[0]);
-            }
+            const file = data.file;
 
-            await addCourse(formData).unwrap();
+            if (file instanceof File) {
+                formData.append("file", file);
+            }
+            await addCourse({
+                createCourseRequest: formData as any
+            }).unwrap();
 
             toast.success("Course created successfully!");
             form.reset();
@@ -124,11 +129,11 @@ export default function AdminCourse() {
 
     /* ================= AUTH GUARD ================= */
 
-    useEffect(() => {
-        if (store?.getState()?.auth?.currentUser?.role !== EnumRole.ADMIN) {
-            navigate("/");
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (store?.getState()?.auth?.currentUser?.role !== EnumRole.ADMIN) {
+    //         navigate("/");
+    //     }
+    // }, []);
 
     /* ================= UI ================= */
 
@@ -160,12 +165,16 @@ export default function AdminCourse() {
                 <h3 className="text-xl font-semibold mb-6">Create Course</h3>
 
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <form onSubmit={form.handleSubmit(onSubmit, (errors) => {
+                        // 🔍 Debugging: Log validation errors if submission fails
+                        console.error("Form Validation Failed:", errors);
+                        toast.error("Please check the form for errors.");
+                    })} className="space-y-6">
 
                         {/* Title */}
                         <FormField
                             control={form.control}
-                            name="title"
+                            name="createCourseRequest.title"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Course Title</FormLabel>
@@ -180,7 +189,7 @@ export default function AdminCourse() {
                         {/* Description */}
                         <FormField
                             control={form.control}
-                            name="description"
+                            name="createCourseRequest.description"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Description</FormLabel>
@@ -195,7 +204,7 @@ export default function AdminCourse() {
                         {/* Price */}
                         <FormField
                             control={form.control}
-                            name="price"
+                            name="createCourseRequest.price"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Price ($)</FormLabel>
@@ -215,7 +224,7 @@ export default function AdminCourse() {
                         {/* Status */}
                         <FormField
                             control={form.control}
-                            name="status"
+                            name="createCourseRequest.status"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Status</FormLabel>
@@ -238,7 +247,7 @@ export default function AdminCourse() {
                         {/* Level */}
                         <FormField
                             control={form.control}
-                            name="level"
+                            name="createCourseRequest.level"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Level</FormLabel>
@@ -261,7 +270,7 @@ export default function AdminCourse() {
                         {/* Category */}
                         <FormField
                             control={form.control}
-                            name="category"
+                            name="createCourseRequest.category"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Category</FormLabel>
@@ -284,7 +293,7 @@ export default function AdminCourse() {
                         {/* Instructor */}
                         <FormField
                             control={form.control}
-                            name="instructorId"
+                            name="createCourseRequest.instructorId"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Instructor</FormLabel>
@@ -309,15 +318,18 @@ export default function AdminCourse() {
                         {/* File Upload */}
                         <FormField
                             control={form.control}
-                            name="file"
+                            name="createCourseRequest.file"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Thumbnail</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="file"
-                                            onChange={(e) =>
-                                                field.onChange(e.target.files)
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0]; // ✅ IMPORTANT FIX
+                                                console.log('file', file)
+                                                field.onChange(file);
+                                            }
                                             }
                                         />
                                     </FormControl>

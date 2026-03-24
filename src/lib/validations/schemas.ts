@@ -47,6 +47,26 @@ export const profileUpdateSchema = z.object({
     avatar: z.string().url('Invalid avatar URL').optional(),
 });
 
+// Profile Update Schema
+export const CreateCourseApiArgSchema = z.object({
+    title: z.string().min(2, 'title is required').max(50),
+    category: z.enum([
+        "WEB_DEVELOPMENT"
+        , "DATA_SCIENCE"
+        , "DESIGN"
+        , "MOBILE_DEVELOPMENT"
+        , "CLOUD_COMPUTING"
+        , "DEV_OPS"
+        , "BUSINESS"]).optional(),
+    avatar: z.string().url('Invalid avatar URL').optional(),
+    file:z.any(),
+    description:z.string().max(500, 'Description must be less than 500 characters').optional(),
+    instructorId:z.number(),
+    level:z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]).optional(),
+    price:z.number(),
+    status:z.enum(["DRAFT", "PUBLISHED"]).optional(),
+});
+
 // Types
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;

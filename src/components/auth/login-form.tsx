@@ -6,14 +6,7 @@ import {loginSchema} from "@/lib/validations/schemas";
 import {z} from "zod";
 
 import {Button} from "@/components/ui/button";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {toast} from "sonner";
 import {Loader2} from "lucide-react";
@@ -22,6 +15,7 @@ import {setLoading} from "@/lib/redux/slices/courses.slice";
 import {useTranslation} from "react-i18next";
 import {Localization} from "@/i18n/lang";
 import {SignInApiArg, useSignInMutation} from "@/lib/api/api.generated.ts";
+import {EnumRole} from "@/lib/enum.ts";
 
 export function LoginForm() {
     const {t} = useTranslation();
@@ -47,7 +41,6 @@ export function LoginForm() {
     });
 
     async function onSubmit(data: SignInApiArg) {
-        console.log("Submitting:", data);
 
         // Optional: Only keep this if you have a global loading bar separate from the button
         dispatch(setLoading(true));
@@ -56,7 +49,6 @@ export function LoginForm() {
             // ✅ Use unwrap result directly
             const loginData = await login(data).unwrap();
 
-            console.log("Response:", loginData);
 
             if (
                 loginData?.accessToken &&
@@ -78,7 +70,12 @@ export function LoginForm() {
             }
 
             toast.success("Logged in successfully!");
-            navigate("/");
+            console.log("loginData",loginData?.role==EnumRole.ADMIN)
+            if(loginData?.role == EnumRole.ADMIN){
+                navigate("/admin")
+            }else {
+                navigate("/");
+            }
 
         } catch (error) {
             console.error("Login error:", error);
@@ -151,7 +148,7 @@ export function LoginForm() {
                     {isLoading && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
                     )}
-                    {`${t(Localization("form", "sign_in"))} ${isLoading&&"..."}`}
+                    {`${t(Localization("form", "sign_in"))} ${isLoading ? "...":""}`}
                 </Button>
             </form>
         </Form>

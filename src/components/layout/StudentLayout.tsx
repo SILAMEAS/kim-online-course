@@ -1,12 +1,11 @@
 import {ForwardRefExoticComponent, RefAttributes} from "react";
 import {Link, Outlet} from "react-router-dom";
-import {Navbar} from "@/components/layout/navbar";
-import {Footer} from "@/components/layout/footer";
-import {Button} from "@/components/ui/button";
+import {Button} from "@/components/ui/button.tsx";
 import {BookMarked, Heart, LayoutDashboard, LucideProps, User} from "lucide-react";
 import {cn} from "@/lib/utils.ts";
 import {EnumRole} from "@/lib/enum.ts";
 import {useAppSelector} from "@/lib/redux/hooks.ts";
+import CustomLayout from "@/components/layout/CustomLayout.tsx";
 
 interface ISidebarItem {
     to: string,
@@ -56,13 +55,11 @@ const SIDEBAR_ITEMS: Array<ISidebarItem> = [
 ];
 
 
-export default function DashboardLayout() {
+export default function StudentLayout() {
     const {currentUser} = useAppSelector(state => state.auth)
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <Navbar/>
-
+        <CustomLayout>
             <main className="flex-1">
                 <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -95,8 +92,6 @@ export default function DashboardLayout() {
                     </div>
                 </div>
             </main>
-
-            <Footer/>
-        </div>
+        </CustomLayout>
     );
 }

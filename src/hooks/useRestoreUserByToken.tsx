@@ -9,6 +9,7 @@ import {EnumRole} from "@/lib/enum.ts";
 const useRestoreUserByToken = () => {
     const dispatch = useAppDispatch();
     const accessToken = Cookies.get("accessToken");
+    const refreshToken = Cookies.get("refreshToken");
 
     const {
         currentData,
@@ -18,16 +19,17 @@ const useRestoreUserByToken = () => {
         error,
         refetch,
     } = useGetUserByJwtTokenQuery(undefined, {
+        skip: !(accessToken &&refreshToken),
         refetchOnReconnect: true,
         refetchOnMountOrArgChange: true,
     });
 
     // ✅ Refetch only when needed
     useEffect(() => {
-        if (accessToken && !currentData) {
+        if (accessToken && !currentData&&refreshToken) {
             refetch();
         }
-    }, [accessToken, currentData, refetch]);
+    }, [accessToken, currentData, refreshToken]);
 
     // ✅ Sync Redux only when data arrives
     useEffect(() => {

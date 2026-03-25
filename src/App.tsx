@@ -1,21 +1,23 @@
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Home from "./pages/Home";
 import CoursesPage from "./pages/Courses";
-import CourseDetailPage from "./pages/CourseDetail";
+import CourseDetailPage from "./pages/details/CourseDetail.tsx";
 import AuthLayout from "./components/layout/AuthLayout";
-import LoginPage from "./pages/form/Login.tsx";
-import RegisterPage from "./pages/form/Register.tsx";
+import LoginPage from "@/components/form/Login.tsx";
+import RegisterPage from "@/components/form/Register.tsx";
 import AboutPage from "./pages/About";
 import ContactPage from "./pages/Contact";
 import CartPage from "./pages/Cart";
-import DashboardLayout from "./pages/dashboard/DashboardLayout";
+import StudentLayout from "./components/layout/StudentLayout.tsx";
 import DashboardOverview from "./pages/dashboard/DashboardOverview";
 import MyCoursesPage from "./pages/dashboard/MyCourses";
 import ProfilePage from "./pages/dashboard/Profile";
 import WishlistPage from "./pages/dashboard/Wishlist";
-import AdminCourse from "@/pages/dashboard/AdminCourse.tsx";
-import AdminVideo from "@/pages/dashboard/AdminVideo.tsx";
+import AdminCourse from "@/pages/admin/AdminCourse.tsx";
+import AdminVideo from "@/pages/admin/AdminVideo.tsx";
 import NotFoundPage from "@/pages/NotFoundPage.tsx";
+import AdminLayout from "@/components/layout/AdminLayout.tsx";
+import AdminDashboardOverview from "@/pages/admin/AdminDashboardOverview.tsx";
 
 function App() {
     return (
@@ -32,13 +34,19 @@ function App() {
                     <Route path="/register" element={<RegisterPage/>}/>
                 </Route>
 
-                <Route path="/dashboard" element={<DashboardLayout/>}>
+                <Route path="/dashboard" element={<StudentLayout/>}>
                     <Route index element={<DashboardOverview/>}/>
                     <Route path="my-courses" element={<MyCoursesPage/>}/>
                     <Route path="profile" element={<ProfilePage/>}/>
                     <Route path="wishlist" element={<WishlistPage/>}/>
                     <Route path="admin/course" element={<AdminCourse/>}/>
                     <Route path="admin/video" element={<AdminVideo/>}/>
+                </Route>
+
+                <Route path="/admin" element={<AdminLayout/>}>
+                    <Route index element={<AdminDashboardOverview/>}/>
+                    <Route path="course" element={<AdminCourse/>}/>
+                    <Route path="video" element={<AdminVideo/>}/>
                 </Route>
                 {/* 🔥 Catch all route */}
                 <Route path="*" element={<NotFoundPage/>}/>

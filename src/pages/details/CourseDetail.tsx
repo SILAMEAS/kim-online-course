@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
-import { addToCart } from "@/lib/redux/slices/cart.slice";
-import { setSelectedCourse } from "@/lib/redux/slices/courses.slice";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks.ts";
+import { addToCart } from "@/lib/redux/slices/cart.slice.ts";
+import { setSelectedCourse } from "@/lib/redux/slices/courses.slice.ts";
 
-import { useGetReviewsByCourse } from "@/lib/api/queries";
-import { MOCK_COURSES } from "@/lib/data/courses";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { CourseCurriculum } from "@/components/course/course-curriculum";
-import { ReviewSection } from "@/components/course/review-section";
-import { AddReviewForm } from "@/components/course/add-review-form";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useGetReviewsByCourse } from "@/lib/api/queries.ts";
+import { MOCK_COURSES } from "@/lib/data/courses.ts";
+import { Navbar } from "@/components/layout/navbar.tsx";
+import { Footer } from "@/components/layout/footer.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
+import { CourseCurriculum } from "@/components/course/course-curriculum.tsx";
+import { ReviewSection } from "@/components/course/review-section.tsx";
+import { AddReviewForm } from "@/components/course/add-review-form.tsx";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
 import { Star, Users, Clock, BookMarked, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
 

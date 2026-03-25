@@ -1,11 +1,11 @@
 import {useState} from "react";
 import {useForm} from "react-hook-form";
-import {Card} from "@/components/ui/card";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
+import {Card} from "@/components/ui/card.tsx";
+import {Input} from "@/components/ui/input.tsx";
+import {Button} from "@/components/ui/button.tsx";
 import {toast} from "sonner";
 
-import {UploadVideoApiArg, useUploadVideoMutation} from "@/lib/api/api.generated";
+import {UploadVideoApiArg, useUploadVideoMutation} from "@/lib/api/api.generated.ts";
 
 
 export default function AdminVideo() {

@@ -7,6 +7,7 @@ import {ProfileMenu} from "@/components/auth/profile-menu.tsx";
 import {useEffect} from "react";
 import {EnumRole} from "@/lib/enum.ts";
 import useRestoreUserByToken from "@/hooks/useRestoreUserByToken.tsx";
+import ThemeLanguage from "@/components/commons/ThemeLanguage.tsx";
 
 const navItems = [
     {
@@ -76,12 +77,11 @@ export default function AdminLayout() {
                             {navItems.map((item) => {
                                 const Icon = item.icon;
                                 const isActive = pathname === item.href;
-
                                 return (
-                                    <Link key={item.href} href={item.href} className="w-full">
+                                    <Link key={item.href} href={item.href} className={cn("w-full")}>
                                         <Button
                                             variant={"outline"}
-                                            className={cn("w-full justify-start gap-3", isActive && "text-red-600")}
+                                            className={cn("w-full justify-start gap-3", isActive && "text-primary border-2 border-primary")}
                                         >
                                             <Icon className="h-5 w-5"/>
                                             {item.label}
@@ -104,6 +104,7 @@ export default function AdminLayout() {
             {/* Main Content */}
             <main className="flex-1 overflow-y-auto">
                 <div className={'flex flex-grow flex-row justify-self-end mr-4 mt-4'}>
+                    <ThemeLanguage className={"w-[100px]"}/>
                     <ProfileMenu/>
                 </div>
                 <div className="p-8">

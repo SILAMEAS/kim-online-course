@@ -13,11 +13,11 @@ import DashboardOverview from "./pages/dashboard/DashboardOverview";
 import MyCoursesPage from "./pages/dashboard/MyCourses";
 import ProfilePage from "./pages/dashboard/Profile";
 import WishlistPage from "./pages/dashboard/Wishlist";
-import AdminCourse from "@/pages/admin/AdminCourse.tsx";
-import AdminVideo from "@/pages/admin/AdminVideo.tsx";
+import AdminCourse from "@/pages/admins/AdminCourse.tsx";
+import AdminVideo from "@/pages/admins/AdminVideo.tsx";
 import NotFoundPage from "@/pages/NotFoundPage.tsx";
 import AdminLayout from "@/components/layout/AdminLayout.tsx";
-import AdminDashboardOverview from "@/pages/admin/AdminDashboardOverview.tsx";
+import AdminDashboardOverview from "@/pages/admins/AdminDashboardOverview.tsx";
 
 function App() {
     return (

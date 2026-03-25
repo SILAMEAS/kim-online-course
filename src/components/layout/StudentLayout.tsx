@@ -40,13 +40,13 @@ const SIDEBAR_ITEMS: Array<ISidebarItem> = [
         rolesAccess: [EnumRole.ADMIN, EnumRole.INSTRUCTOR, EnumRole.STUDENT]
     },
     {
-        to: "/dashboard/admin/course",
+        to: "/dashboard/admins/course",
         label: "Course",
         icon: LayoutDashboard,
         rolesAccess: [EnumRole.ADMIN]
     },
     {
-        to: "/dashboard/admin/video",
+        to: "/dashboard/admins/video",
         label: "Video",
         icon: LayoutDashboard,
         rolesAccess: [EnumRole.ADMIN]

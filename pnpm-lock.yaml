@@ -5672,7 +5672,7 @@ packages:
     dev: false
 
   /onetime@7.0.0:
-    resolution: {integrity: sha512-VXJjc87FScF88uafS3JllDgvAm+c/Slfz06lorj2uAY34rlUu0Nt+v8wreiImcrgAjjIHp1rXpTDlLOGw29WwQ==}
+    resolution: {integrity: sha512-VXJjc87FScF88uafS3JllDgvAm+v0/Slfz06lorj2uAY34rlUu0Nt+v8wreiImcrgAjjIHp1rXpTDlLOGw29WwQ==}
     engines: {node: '>=18'}
     dependencies:
       mimic-function: 5.0.1

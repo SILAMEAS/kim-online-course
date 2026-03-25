@@ -18,7 +18,6 @@ const useRestoreUserByToken = () => {
         error,
         refetch,
     } = useGetUserByJwtTokenQuery(undefined, {
-        skip: !accessToken, // ✅ important: don't call API without token
         refetchOnReconnect: true,
         refetchOnMountOrArgChange: true,
     });

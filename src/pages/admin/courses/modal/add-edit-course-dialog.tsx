@@ -79,11 +79,10 @@ export function AddEditCourseDialog({
                 category: selectedCourse.category,
                 price: selectedCourse.price,
                 status: selectedCourse.status,
-                description: selectedCourse.description
+                description: selectedCourse.description,
+                level: selectedCourse.level,
+                file: selectedCourse.imageUrl
             });
-            if (selectedCourse.imageUrl) {
-                setPreview(selectedCourse.imageUrl);
-            }
         }
     }, [selectedCourse, form]);
 
@@ -299,11 +298,11 @@ export function AddEditCourseDialog({
                             )}
                         />
                         {/* PREVIEW */}
-                        {preview && (
+                        {preview || form.watch("file") && (
                             <img
-                                src={preview}
+                                src={(preview ?? form.watch("file"))?.toString()}
                                 className="w-48 h-32 object-cover rounded-md border"
-                                alt={preview}/>
+                                alt={(preview ?? form.watch("file"))?.toString()}/>
                         )}
                         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                             {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}

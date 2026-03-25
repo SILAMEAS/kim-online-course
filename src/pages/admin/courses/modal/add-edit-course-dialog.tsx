@@ -59,16 +59,6 @@ export function AddEditCourseDialog({
 
     const form = useForm<CreateCourseRequest>({
         resolver: zodResolver(CreateCourseApiArgSchema),
-        defaultValues: {
-            title: "Test",
-            file: "",
-            category: "WEB_DEVELOPMENT",
-            description: "description of the course",
-            instructorId: 3,
-            level: "BEGINNER",
-            price: 10,
-            status: "PUBLISHED"
-        },
     });
 
     React.useEffect(() => {
@@ -83,6 +73,19 @@ export function AddEditCourseDialog({
                 level: selectedCourse.level,
                 file: selectedCourse.imageUrl
             });
+            selectedCourse.imageUrl && setPreview(selectedCourse.imageUrl)
+        } else {
+            form.reset({
+                title: "New Course",
+                file: "",
+                category: "WEB_DEVELOPMENT",
+                description: "new description of the course",
+                instructorId: undefined,
+                level: "BEGINNER",
+                price: 10,
+                status: "PUBLISHED",
+            });
+            setPreview(null)
         }
     }, [selectedCourse, form]);
 
@@ -131,8 +134,12 @@ export function AddEditCourseDialog({
         }
     }
 
+
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={() => {
+            onOpenChange(false);
+            form.reset();
+        }}>
             <DialogContent className="max-w-2xl ">
                 <DialogHeader>
                     <DialogTitle>{selectedCourse ? 'Edit Course' : 'Add New Course'}</DialogTitle>
@@ -298,11 +305,11 @@ export function AddEditCourseDialog({
                             )}
                         />
                         {/* PREVIEW */}
-                        {preview || form.watch("file") && (
+                        {preview && (
                             <img
-                                src={(preview ?? form.watch("file"))?.toString()}
+                                src={preview}
                                 className="w-48 h-32 object-cover rounded-md border"
-                                alt={(preview ?? form.watch("file"))?.toString()}/>
+                                alt={preview}/>
                         )}
                         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                             {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}

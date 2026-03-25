@@ -10,7 +10,8 @@ import {
     CourseResponse,
     CreateCourseRequest,
     useCreateCourseMutation,
-    useListTeachersQuery
+    useListTeachersQuery,
+    useUpdateCourseMutation
 } from "@/lib/api/api.generated.ts";
 import {useForm} from "react-hook-form";
 import {toast} from "sonner";
@@ -56,6 +57,7 @@ export function AddEditCourseDialog({
     const listTeachersQuery = useListTeachersQuery(DefaultPaginationRequest);
     const teachers = listTeachersQuery.currentData?.contents || [];
     const [addCourse] = useCreateCourseMutation();
+    const [updateCourse] = useUpdateCourseMutation();
 
     const form = useForm<CreateCourseRequest>({
         resolver: zodResolver(CreateCourseApiArgSchema),
@@ -76,7 +78,7 @@ export function AddEditCourseDialog({
             selectedCourse.imageUrl && setPreview(selectedCourse.imageUrl)
         } else {
             form.reset({
-                title: "New Course",
+                title: `New Course <${new Date(Date.now() + 1000 * 60 * 60).toISOString()?.slice(0, 19)}>`,
                 file: "",
                 category: "WEB_DEVELOPMENT",
                 description: "new description of the course",
@@ -107,6 +109,7 @@ export function AddEditCourseDialog({
 
     async function onSubmit(data: CreateCourseRequest) {
         try {
+            const isUpdate = selectedCourse !== null;
             const formData = new FormData();
 
             formData.append("title", data.title);
@@ -117,23 +120,29 @@ export function AddEditCourseDialog({
             formData.append("instructorId", String(data.instructorId));
             formData.append("category", data.category);
 
-            const file = data.file;
-
-            if (file instanceof File) {
-                formData.append("file", file);
+            // ✅ Only append file if user actually selects a new one
+            if (data.file instanceof File) {
+                formData.append("file", data.file);
             }
-            await addCourse(formData as any).unwrap();
 
-            toast.success("Course created successfully!");
+            if (isUpdate) {
+                await updateCourse({
+                    courseId: Number(selectedCourse?.id),
+                    updateCourseRequest: formData as any
+                }).unwrap();
+            } else {
+                await addCourse(formData as any).unwrap();
+            }
+
+            toast.success(`Course ${isUpdate ? "updated" : "created"} successfully!`);
             form.reset();
-            setPreview(null); // ✅ reset preview
+            setPreview(null);
             handleSuccess();
 
         } catch (error) {
-            toast.error("failed to create course. Please try again :" + (error as any)?.data?.message);
+            toast.error("Failed: " + (error as any)?.data?.message);
         }
     }
-
 
     return (
         <Dialog open={open} onOpenChange={() => {

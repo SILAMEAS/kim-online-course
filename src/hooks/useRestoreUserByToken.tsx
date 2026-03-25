@@ -10,7 +10,6 @@ const useRestoreUserByToken = () => {
     const dispatch = useAppDispatch();
     const accessToken = Cookies.get("accessToken");
     const refreshToken = Cookies.get("refreshToken");
-
     const {
         currentData,
         isLoading,
@@ -19,14 +18,13 @@ const useRestoreUserByToken = () => {
         error,
         refetch,
     } = useGetUserByJwtTokenQuery(undefined, {
-        skip: !(accessToken &&refreshToken),
         refetchOnReconnect: true,
         refetchOnMountOrArgChange: true,
     });
 
     // ✅ Refetch only when needed
     useEffect(() => {
-        if (accessToken && !currentData&&refreshToken) {
+        if (accessToken && !currentData && refreshToken) {
             refetch();
         }
     }, [accessToken, currentData, refreshToken]);

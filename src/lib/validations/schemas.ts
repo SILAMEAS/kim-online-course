@@ -59,12 +59,15 @@ export const CreateCourseApiArgSchema = z.object({
         , "DEV_OPS"
         , "BUSINESS"]).optional(),
     avatar: z.string().url('Invalid avatar URL').optional(),
-    file: z.instanceof(File).optional(),
-    description:z.string().max(500, 'Description must be less than 500 characters').optional(),
-    instructorId:z.number(),
-    level:z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]).optional(),
-    price:z.number(),
-    status:z.enum(["DRAFT", "PUBLISHED"]).optional(),
+    file: z.union([
+        z.instanceof(File),
+        z.string().url(),
+    ]).optional(),
+    description: z.string().max(500, 'Description must be less than 500 characters').optional(),
+    instructorId: z.number(),
+    level: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]).optional(),
+    price: z.number(),
+    status: z.enum(["DRAFT", "PUBLISHED"]).optional(),
 });
 
 // Types

@@ -30,12 +30,6 @@ export default function AdminCoursesPage() {
         }
     };
 
-    const handleDelete = () => {
-        if (selectedCourse) {
-            setDeleteOpen(false);
-            setSelectedCourse(null);
-        }
-    };
 
     const handleAdd = () => {
         setSelectedCourse(null);
@@ -116,7 +110,11 @@ export default function AdminCoursesPage() {
                 deleteOpen={deleteOpen}
                 setDeleteOpen={setDeleteOpen}
                 courseToDelete={selectedCourse}
-                handleDelete={handleDelete}
+                handleSuccess={() => {
+                    refetch();
+                    setDeleteOpen(false);
+                    setSelectedCourse(null)
+                }}
             />
 
         </div>

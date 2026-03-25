@@ -29,6 +29,7 @@ function App() {
     return (
         <Router>
             <Routes>
+                {/** PUBLIC ROUTES */}
                 <Route path="/" element={<Home/>}/>
                 <Route path="/courses" element={<CoursesPage/>}/>
                 <Route path="/courses/:id" element={<CourseDetailPage/>}/>
@@ -39,6 +40,7 @@ function App() {
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/register" element={<RegisterPage/>}/>
                 </Route>
+                {/** STUDENT ROUTES */}
 
                 <Route path="/dashboard" element={<StudentLayout/>}>
                     <Route index element={<DashboardOverview/>}/>
@@ -49,6 +51,7 @@ function App() {
                     <Route path="admin/video" element={<AdminVideo/>}/>
                 </Route>
 
+                {/** ADMIN TEACHER ROUTES */}
                 <Route path="/admin" element={<AdminLayout/>}>
                     <Route index element={<AdminDashboardPage/>}/>
                     <Route path="users" element={<AdminUsersPage/>}/>

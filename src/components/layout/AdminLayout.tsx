@@ -1,9 +1,12 @@
 import {BookOpen, CreditCard, Image, LayoutDashboard, UserCheck, Users, Video,} from 'lucide-react';
-import {Outlet, useLocation} from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import Link from "@/components/commons/Link.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {cn} from "@/lib/utils.ts";
 import {ProfileMenu} from "@/components/auth/profile-menu.tsx";
+import {useAppSelector} from "@/lib/redux/hooks.ts";
+import {useEffect} from "react";
+import {EnumRole} from "@/lib/enum.ts";
 
 const navItems = [
     {
@@ -45,7 +48,18 @@ const navItems = [
 
 export default function AdminLayout() {
     const {pathname} = useLocation();
+    const navigate = useNavigate();
+    const {currentUser} = useAppSelector(state => state.auth)
+    useEffect(() => {
+        // wait until auth is resolved
+        if (currentUser === undefined) return;
 
+        // not logged in OR not admin
+        if (currentUser?.role !== EnumRole.ADMIN) {
+            navigate("/", {replace: true});
+        }
+    }, [currentUser, navigate]);
+    if (!currentUser) return null;
     return (
         <div className="flex h-screen bg-background">
             {/* Sidebar */}

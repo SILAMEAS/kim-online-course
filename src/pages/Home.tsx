@@ -14,7 +14,7 @@ import {useListAllCoursesQuery} from "@/lib/api/api.generated.ts";
 export default function Home() {
     const dispatch = useDispatch();
     const {currentData} = useListAllCoursesQuery(DefaultPaginationRequest);
-    // console.log("CoursesPage",listCourseQuery?.data)
+    // console.log("AdminCoursesPage",listCourseQuery?.data)
     const courses = currentData?.contents || [];
     const featuredCourses = courses.slice(0, 6);
 

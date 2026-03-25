@@ -17,7 +17,13 @@ import AdminCourse from "@/pages/admins/AdminCourse.tsx";
 import AdminVideo from "@/pages/admins/AdminVideo.tsx";
 import NotFoundPage from "@/pages/NotFoundPage.tsx";
 import AdminLayout from "@/components/layout/AdminLayout.tsx";
-import AdminDashboardOverview from "@/pages/admins/AdminDashboardOverview.tsx";
+import AdminDashboardPage from "@/pages/admin/AdminDashboardPage.tsx";
+import AdminUsersPage from "@/pages/admin/users/AdminUsersPage.tsx";
+import AdminCoursesPage from "@/pages/admin/courses/AdminCoursesPage.tsx";
+import AdminVideosPage from "@/pages/admin/videos/AdminVideosPage.tsx";
+import AdminPaymentsPage from "@/pages/admin/payments/AdminPaymentsPage.tsx";
+import AdminEnrollmentsPage from "@/pages/admin/enrollments/AdminEnrollmentsPage.tsx";
+import AdminImagesPage from "@/pages/admin/images/AdminImagesPage.tsx";
 
 function App() {
     return (
@@ -44,9 +50,13 @@ function App() {
                 </Route>
 
                 <Route path="/admin" element={<AdminLayout/>}>
-                    <Route index element={<AdminDashboardOverview/>}/>
-                    <Route path="course" element={<AdminCourse/>}/>
-                    <Route path="video" element={<AdminVideo/>}/>
+                    <Route index element={<AdminDashboardPage/>}/>
+                    <Route path="users" element={<AdminUsersPage/>}/>
+                    <Route path="courses" element={<AdminCoursesPage/>}/>
+                    <Route path="videos" element={<AdminVideosPage/>}/>
+                    <Route path="payments" element={<AdminPaymentsPage/>}/>
+                    <Route path="enrollments" element={<AdminEnrollmentsPage/>}/>
+                    <Route path="images" element={<AdminImagesPage/>}/>
                 </Route>
                 {/* 🔥 Catch all route */}
                 <Route path="*" element={<NotFoundPage/>}/>

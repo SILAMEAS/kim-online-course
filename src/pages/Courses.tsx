@@ -17,7 +17,7 @@ export default function CoursesPage() {
     // const courses = useAppSelector((state) => state.courses.items);
     const filters = useAppSelector((state) => state.courses.filters);
     const {currentData} = useListAllCoursesQuery(DefaultPaginationRequest);
-    // console.log("CoursesPage",listCourseQuery?.data)
+    // console.log("AdminCoursesPage",listCourseQuery?.data)
     const courses = currentData?.contents || [];
     // Load courses on mount
     useEffect(() => {

@@ -1,4 +1,4 @@
-'use client';
+
 
 import { Review } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

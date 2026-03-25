@@ -1,4 +1,4 @@
-'use client';
+
 
 import React from 'react';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
@@ -14,7 +14,7 @@ interface StatCardProps {
     href: string;
 }
 
-function StatCard({title, value, icon, description, href}: StatCardProps) {
+function StatCard({title, value, icon, description, href}: Readonly<StatCardProps>) {
     return (
         <Link href={href}>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow">
@@ -33,7 +33,7 @@ function StatCard({title, value, icon, description, href}: StatCardProps) {
     );
 }
 
-export default function AdminDashboardOverview() {
+export default function AdminDashboardPage() {
     return (
         <div className="space-y-8">
             <div>

@@ -50,30 +50,30 @@ A fully functional, production-ready online course platform built with React, Ne
 
 ```
 app/
-├── layout.tsx                 # Root layout with providers
-├── page.tsx                  # Home page
+├── AdminLayout.tsx                 # Root layout with providers
+├── AdminCoursesPage.tsx                  # Home page
 ├── globals.css               # Global styles with design tokens
 ├── (auth)/                   # Auth routes
-│   ├── layout.tsx
+│   ├── AdminLayout.tsx
 │   ├── login/
-│   │   └── page.tsx
+│   │   └── AdminCoursesPage.tsx
 │   └── register/
-│       └── page.tsx
+│       └── AdminCoursesPage.tsx
 ├── (dashboard)/              # Protected dashboard routes
-│   ├── layout.tsx
-│   ├── page.tsx             # Dashboard home
+│   ├── AdminLayout.tsx
+│   ├── AdminCoursesPage.tsx             # Dashboard home
 │   ├── my-courses/
-│   │   └── page.tsx
+│   │   └── AdminCoursesPage.tsx
 │   ├── profile/
-│   │   └── page.tsx
+│   │   └── AdminCoursesPage.tsx
 │   └── wishlist/
-│       └── page.tsx
+│       └── AdminCoursesPage.tsx
 ├── courses/
-│   ├── page.tsx             # Courses listing
+│   ├── AdminCoursesPage.tsx             # Courses listing
 │   └── [id]/
-│       └── page.tsx         # Course details
+│       └── AdminCoursesPage.tsx         # Course details
 └── cart/
-    └── page.tsx             # Shopping cart
+    └── AdminCoursesPage.tsx             # Shopping cart
 
 components/
 ├── layout/

@@ -1,4 +1,4 @@
-'use client';
+
 
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 import {

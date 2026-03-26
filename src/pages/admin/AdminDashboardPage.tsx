@@ -4,7 +4,7 @@ import React from 'react';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {BookOpen, DollarSign, Image as ImageIcon, UserCheck, Users, Video} from 'lucide-react';
 import {Button} from '@/components/ui/button';
-import Link from "@/components/commons/Link.tsx";
+import Link from "@/components/Link.tsx";
 
 interface StatCardProps {
     title: string;

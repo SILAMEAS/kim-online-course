@@ -43,7 +43,7 @@ const DeleteCourseDialog = (props: IProps) => {
                 <AlertDialogTitle>Delete Course</AlertDialogTitle>
                 <AlertDialogDescription>
                     Are you sure you want to delete "{courseToDelete?.title}"? This action
-                    cannot be undone.
+                    cannot be undone. bbbbbbbbbbbbbbbb
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

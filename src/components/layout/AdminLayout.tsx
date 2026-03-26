@@ -1,13 +1,13 @@
 import {BookOpen, CreditCard, Image, LayoutDashboard, UserCheck, Users, Video,} from 'lucide-react';
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
-import Link from "@/components/commons/Link.tsx";
+import Link from "@/components/Link.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {cn} from "@/lib/utils.ts";
 import {ProfileMenu} from "@/components/auth/profile-menu.tsx";
 import {useEffect} from "react";
 import {EnumRole} from "@/lib/enum.ts";
 import useRestoreUserByToken from "@/hooks/useRestoreUserByToken.tsx";
-import ThemeLanguage from "@/components/commons/ThemeLanguage.tsx";
+import ThemeLanguage from "@/components/ThemeLanguage.tsx";
 
 const navItems = [
     {

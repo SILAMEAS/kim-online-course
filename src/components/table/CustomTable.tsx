@@ -1,0 +1,223 @@
+import React from 'react';
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from '@/components/ui/table.tsx';
+import {Button} from '@/components/ui/button.tsx';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog.tsx';
+import {ArrowUpDown, Edit2, Loader2, Trash2} from 'lucide-react';
+
+type SortDirection = 'ASC' | 'DES';
+
+interface Column<T> {
+    key: keyof T;
+    label: string;
+    sortable?: boolean;
+    render?: (value: T[keyof T], row: T) => React.ReactNode;
+}
+
+interface Pagination {
+    page: number;
+    limit: number;
+    total?: number;
+}
+
+interface DataTableProps<T> {
+    columns: Column<T>[];
+    data: T[];
+    isLoading?: boolean;
+
+    // actions
+    onEdit?: (row: T) => void;
+    onDelete?: (row: T) => void;
+    isDeleting?: string | null;
+
+    // sorting (controlled)
+    sortBy?: keyof T;
+    sortDirection?: SortDirection;
+    onSortChange?: (key: keyof T, direction: SortDirection) => void;
+
+    // pagination (controlled)
+    pagination?: Pagination;
+    onPageChange?: (page: number) => void;
+}
+
+export function CustomTable<T, >({
+                                     columns,
+                                     data,
+                                     isLoading,
+
+                                     onEdit,
+                                     onDelete,
+                                     isDeleting,
+
+                                     sortBy,
+                                     sortDirection = 'ASC',
+                                     onSortChange,
+
+                                     pagination,
+                                     onPageChange,
+                                 }: Readonly<DataTableProps<T>>) {
+    const [deleteId, setDeleteId] = React.useState<string | null>(null);
+    const [deleteItem, setDeleteItem] = React.useState<T | null>(null);
+
+    const handleSort = (key: keyof T) => {
+        if (!onSortChange) return;
+
+        const newDirection: SortDirection =
+            sortBy === key && sortDirection === 'ASC' ? 'DES' : 'ASC';
+
+        onSortChange(key, newDirection);
+    };
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground"/>
+            </div>
+        );
+    }
+
+    if (!data?.length) {
+        return (
+            <div className="text-center py-8">
+                <p className="text-muted-foreground">No data found</p>
+            </div>
+        );
+    }
+    const actionColumnStyle = "flex items-center justify-center gap-2 ";
+    return (
+        <>
+            <div className="border rounded-lg overflow-hidden">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            {columns.map((col) => (
+                                <TableHead key={String(col.key)}>
+                                    <div className="flex items-center gap-2">
+                                        {col.label}
+                                        {col.sortable && (
+                                            <button
+                                                onClick={() => handleSort(col.key)}
+                                                className="hover:opacity-70"
+                                            >
+                                                <ArrowUpDown className="h-4 w-4"/>
+                                            </button>
+                                        )}
+                                    </div>
+                                </TableHead>
+                            ))}
+                            <TableHead className={actionColumnStyle}>Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+
+                    <TableBody>
+                        {data.map((row, idx) => (
+                            <TableRow key={(row as { id: string | number })?.id ?? idx}>
+                                {columns.map((col) => {
+                                    const value = row[col.key];
+
+                                    return (
+                                        <TableCell key={String(col.key)}>
+                                            {col.render
+                                                ? col.render(value, row)
+                                                : (value as React.ReactNode) ?? '-'}
+                                        </TableCell>
+                                    );
+                                })}
+
+                                <TableCell>
+                                    <div className={actionColumnStyle}>
+                                        {onEdit && (
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => onEdit(row)}
+                                            >
+                                                <Edit2 className="h-4 w-4"/>
+                                            </Button>
+                                        )}
+
+                                        {onDelete && (
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => {
+                                                    setDeleteId((row as {
+                                                        id: string
+                                                    })?.id ?? null);
+                                                    setDeleteItem(row);
+                                                }}
+                                            >
+                                                <Trash2 className="h-4 w-4"/>
+                                            </Button>
+                                        )}
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+
+            {/* Pagination */}
+            {pagination && (
+                <div className="flex items-center justify-between mt-4">
+                    <p className="text-sm text-muted-foreground">
+                        Page {pagination.page}
+                    </p>
+
+                    <div className="flex gap-2">
+                        <Button
+                            size="sm"
+                            disabled={pagination.page <= 1}
+                            onClick={() => onPageChange?.(pagination.page - 1)}
+                        >
+                            Prev
+                        </Button>
+                        <Button
+                            size="sm"
+                            onClick={() => onPageChange?.(pagination.page + 1)}
+                        >
+                            Next
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Dialog */}
+            <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
+                <AlertDialogContent>
+                    <AlertDialogTitle>Delete Item</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Are you sure you want to delete this item? This action cannot be undone.xxxxx
+                    </AlertDialogDescription>
+
+                    <div className="flex justify-end gap-3">
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                        <AlertDialogAction
+                            onClick={() => {
+                                if (onDelete && deleteItem) {
+                                    onDelete(deleteItem);
+                                }
+                                setDeleteId(null);
+                                setDeleteItem(null);
+                            }}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            {isDeleting === deleteId && (
+                                <Loader2 className="h-4 w-4 animate-spin mr-2"/>
+                            )}
+                            Delete
+                        </AlertDialogAction>
+                    </div>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
+    );
+}

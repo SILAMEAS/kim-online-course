@@ -1,6 +1,6 @@
 import {Link, Outlet} from "react-router-dom";
 import {BookOpen} from "lucide-react";
-import ThemeLanguage from "@/components/commons/ThemeLanguage.tsx";
+import ThemeLanguage from "@/components/ThemeLanguage.tsx";
 
 export default function AuthLayout() {
 

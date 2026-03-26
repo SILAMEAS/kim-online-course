@@ -13,7 +13,7 @@ const TriggerTheme = () => {
     const {theme, setTheme} = useTheme();
     return   <DropdownMenu>
         <DropdownMenuTrigger asChild>
-            <button>{theme=='light'?<Sun size={22}/>:<Moon size={22}/>}</button>
+            <button>{theme=='light'?<Sun size={20}/>:<Moon size={20}/>}</button>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent

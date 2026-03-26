@@ -1,9 +1,11 @@
 import {Link, Outlet} from "react-router-dom";
 import {BookOpen} from "lucide-react";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 import ThemeLanguage from "@/components/ThemeLanguage.tsx";
 
 export default function AuthLayout() {
-
+    const {t} = useTranslation();
     return (
         <div className="min-h-screen flex flex-col md:flex-row h-full">
             <ThemeLanguage className={"fixed right-4 top-4  "}/>
@@ -16,11 +18,10 @@ export default function AuthLayout() {
 
                 <div>
                     <h1 className="text-4xl font-bold mb-4">
-                        Welcome to Learning outcomes
+                        {t(Localization("loginPage","welcome_to_learning_outcomes"))}
                     </h1>
                     <p className="text-lg opacity-90">
-                        Join thousands of students and advance your skills with world-class
-                        courses from industry experts.
+                        {t(Localization("loginPage","join_our_website"))}
                     </p>
                 </div>
 

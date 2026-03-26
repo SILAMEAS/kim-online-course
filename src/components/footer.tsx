@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { BookOpen, Mail, MapPin, Phone } from "lucide-react";
-
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 export function Footer() {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -18,21 +20,20 @@ export function Footer() {
               </span>
             </div>
             <p className="text-sm text-foreground/60">
-              Empowering learners worldwide with world-class courses and expert
-              instruction.
+              {t(Localization("footer","empowering_learners_worldwide"))}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold mb-4 text-foreground">Quick Links</h4>
+            <h4 className="font-semibold mb-4 text-foreground">{t(Localization("footer","quick_links"))}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
                   to="/courses"
                   className="text-foreground/60 hover:text-primary transition"
                 >
-                  Browse Courses
+                  {t(Localization("footer","browse_course"))}
                 </Link>
               </li>
               <li>
@@ -40,7 +41,7 @@ export function Footer() {
                   to="/about"
                   className="text-foreground/60 hover:text-primary transition"
                 >
-                  About Us
+                  {t(Localization("footer","about_us"))}
                 </Link>
               </li>
               <li>
@@ -48,7 +49,7 @@ export function Footer() {
                   to="/contact"
                   className="text-foreground/60 hover:text-primary transition"
                 >
-                  Contact
+                  {t(Localization("footer","contact"))}
                 </Link>
               </li>
               <li>
@@ -64,7 +65,7 @@ export function Footer() {
 
           {/* Categories */}
           <div>
-            <h4 className="font-semibold mb-4 text-foreground">Categories</h4>
+            <h4 className="font-semibold mb-4 text-foreground">{t(Localization("footer","categories"))}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
@@ -103,19 +104,19 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold mb-4 text-foreground">Contact</h4>
+            <h4 className="font-semibold mb-4 text-foreground">{t(Localization("footer","contact"))}</h4>
             <div className="space-y-3 text-sm">
               <div className="flex items-start gap-2 text-foreground/60">
                 <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>support@Learning outcomes.app</span>
+                <span>moeurkkimsour@gmail.com</span>
               </div>
               <div className="flex items-start gap-2 text-foreground/60">
                 <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>+1 (555) 123-4567</span>
+                <span>+855 16 43 91 44 </span>
               </div>
               <div className="flex items-start gap-2 text-foreground/60">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>San Francisco, CA</span>
+                <span>Cambodia , Battambang city</span>
               </div>
             </div>
           </div>

@@ -8,10 +8,13 @@ import {Input} from "@/components/ui/input";
 import {toast} from "sonner";
 import {Loader2} from "lucide-react";
 import {SignUpApiArg, useSignUpMutation} from "@/lib/api/api.generated.ts";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 export function RegisterForm() {
     const navigate = useNavigate();
     const [signUp, {isLoading}] = useSignUpMutation();
+    const {t} = useTranslation();
     const form = useForm<SignUpApiArg["signUpRequest"]>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -64,7 +67,7 @@ export function RegisterForm() {
                     name="firstName"
                     render={({field}) => (
                         <FormItem>
-                            <FormLabel>First Name</FormLabel>
+                            <FormLabel>{t(Localization("form","first_name"))}</FormLabel>
                             <FormControl>
                                 <Input placeholder="John" disabled={isLoading} {...field} />
                             </FormControl>
@@ -78,7 +81,7 @@ export function RegisterForm() {
                     name="lastName"
                     render={({field}) => (
                         <FormItem>
-                            <FormLabel>Last Name</FormLabel>
+                            <FormLabel>{t(Localization("form","last_name"))}</FormLabel>
                             <FormControl>
                                 <Input placeholder="Doe" disabled={isLoading} {...field} />
                             </FormControl>
@@ -92,7 +95,7 @@ export function RegisterForm() {
                     name="email"
                     render={({field}) => (
                         <FormItem>
-                            <FormLabel>Email Address</FormLabel>
+                            <FormLabel>{t(Localization("form","form_email"))}</FormLabel>
                             <FormControl>
                                 <Input
                                     type="email"
@@ -111,7 +114,7 @@ export function RegisterForm() {
                     name="password"
                     render={({field}) => (
                         <FormItem>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel>{t(Localization("form","form_password"))}</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
@@ -130,7 +133,7 @@ export function RegisterForm() {
                     name="confirmPassword"
                     render={({field}) => (
                         <FormItem>
-                            <FormLabel>Confirm Password</FormLabel>
+                            <FormLabel>{t(Localization("form","confirm_password"))}</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
@@ -149,7 +152,7 @@ export function RegisterForm() {
                     name="file"
                     render={({field}) => (
                         <FormItem>
-                            <FormLabel>Profile</FormLabel>
+                            <FormLabel>{t(Localization("form","profile"))}</FormLabel>
                             <FormControl>
                                 <Input
                                     type="file"
@@ -168,7 +171,8 @@ export function RegisterForm() {
 
                 <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                    {isLoading ? "Creating account..." : "Create account"}
+                    {t(Localization("form", "create_account"))}
+                    {isLoading && "..."}
                 </Button>
             </form>
         </Form>

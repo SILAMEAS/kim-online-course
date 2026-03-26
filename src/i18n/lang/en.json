@@ -2,16 +2,48 @@
   "loginPage": {
     "welcome": "Welcome",
     "login": "Login",
+    "logout": "Logout",
     "welcome_to_learning_outcomes": "Welcome to Learning outcomes",
     "join_our_website": "Join thousands of students and advance your skills with world-class courses from industry experts.",
     "login_continue_learning": "Sign in to your account to continue learning",
-    "not_have_acc": "Don't have an account?"
+    "not_have_acc": "Don't have an account?",
+    "start_your_learning": "Start your learning journey with Learning outcomes today",
+    "already_have_an_account":"Already have an account?"
+
   },
   "form": {
     "form_email": "Email Address",
     "form_password": "Password",
+    "confirm_password": "Confirm Password",
     "sign_up": "Sign up",
     "sign_in": "Sign in",
-    "username": "User name"
+    "username": "User name",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "full_name": "Full Name",
+    "email_address": "Email Address",
+    "profile": "Profile",
+    "create_account": "Create account"
+  },
+  "footer": {
+    "empowering_learners_worldwide": "Empowering learners worldwide",
+    "quick_links": "Quick Links",
+    "browse_course": "Browse Courses",
+    "about_us": "About Us",
+    "contact": "Contact",
+    "categories": "Categories"
+  },
+  "contactPage": {
+    "have_questions": "Have questions? Feedback? Want to become an instructor? We'd love to hear from you.",
+    "contact_information" : "Contact Information",
+    "remote_first_team": "We're a remote-first team",
+    "response_time": "Response Time",
+    "usually_within": "Usually within 24–48 hours",
+    "subject": "Subject",
+    "massage": "Massage",
+    "send_massage": "Send Massage",
+    "thank_you":"Thank you! We'll get back to you soon.",
+    "please_try_again":"Something went wrong. Please try again.",
+    "mon_sunday": "Mon - Sunday 8:00 - 21:00 (GMT+7)"
   }
 }

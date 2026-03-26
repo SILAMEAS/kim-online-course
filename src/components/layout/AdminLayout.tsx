@@ -1,12 +1,14 @@
 import {BookOpen, CreditCard, Image, LayoutDashboard, UserCheck, Users, Video,} from 'lucide-react';
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
-import Link from "@/components/Link.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {cn} from "@/lib/utils.ts";
 import {ProfileMenu} from "@/components/auth/profile-menu.tsx";
 import {useEffect} from "react";
 import {EnumRole} from "@/lib/enum.ts";
 import useRestoreUserByToken from "@/hooks/useRestoreUserByToken.tsx";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
+import Link from "@/components/Link.tsx";
 import ThemeLanguage from "@/components/ThemeLanguage.tsx";
 
 const navItems = [
@@ -48,11 +50,16 @@ const navItems = [
 ];
 
 export default function AdminLayout() {
+    const {t} = useTranslation();
     const {pathname} = useLocation();
     const navigate = useNavigate();
     const {currentData: currentUser, isLoading} = useRestoreUserByToken();
     useEffect(() => {
-        if ((!currentUser || currentUser?.role != EnumRole.ADMIN) && !isLoading) {
+        // wait until auth is resolved
+        if (!currentUser) return;
+
+        // not logged in OR not admin
+        if (currentUser && currentUser?.role != EnumRole.ADMIN) {
             navigate("/", {replace: true});
         }
     }, [currentUser, navigate]);
@@ -74,10 +81,14 @@ export default function AdminLayout() {
                                 const Icon = item.icon;
                                 const isActive = pathname === item.href;
                                 return (
-                                    <Link key={item.href} href={item.href}
-                                          className={cn("w-full justify-start gap-3", isActive && "text-primary border-2 border-primary")}>
-                                        <Icon className="h-5 w-5"/>
-                                        {item.label}
+                                    <Link key={item.href} href={item.href} className={cn("w-full")}>
+                                        <Button
+                                            variant={"outline"}
+                                            className={cn("w-full justify-start gap-3", isActive && "text-primary border-2 border-primary")}
+                                        >
+                                            <Icon className="h-5 w-5"/>
+                                            {item.label}
+                                        </Button>
                                     </Link>
                                 );
                             })}
@@ -87,7 +98,7 @@ export default function AdminLayout() {
                     {/* Footer */}
                     <div className="p-4 border-t border-border">
                         <Button variant="outline" className="w-full">
-                            Logout
+                            {t(Localization("loginPage","logout"))}
                         </Button>
                     </div>
                 </div>

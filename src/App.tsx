@@ -13,7 +13,6 @@ import DashboardOverview from "./pages/dashboard/DashboardOverview";
 import MyCoursesPage from "./pages/dashboard/MyCourses";
 import ProfilePage from "./pages/dashboard/Profile";
 import WishlistPage from "./pages/dashboard/Wishlist";
-import AdminCourse from "@/pages/admins/AdminCourse.tsx";
 import AdminVideo from "@/pages/admins/AdminVideo.tsx";
 import NotFoundPage from "@/pages/NotFoundPage.tsx";
 import AdminLayout from "@/components/layout/AdminLayout.tsx";
@@ -47,8 +46,7 @@ function App() {
                     <Route path="my-courses" element={<MyCoursesPage/>}/>
                     <Route path="profile" element={<ProfilePage/>}/>
                     <Route path="wishlist" element={<WishlistPage/>}/>
-                    <Route path="admin/course" element={<AdminCourse/>}/>
-                    <Route path="admin/video" element={<AdminVideo/>}/>
+                    <Route path="admins/video" element={<AdminVideo/>}/>
                 </Route>
 
                 {/** ADMIN TEACHER ROUTES */}

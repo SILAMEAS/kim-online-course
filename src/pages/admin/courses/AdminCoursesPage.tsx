@@ -23,7 +23,7 @@ export default function AdminCoursesPage() {
     const {currentData, refetch} = useListAllCoursesQuery(DefaultPaginationRequest);
     const courses = currentData?.contents || [];
     const [open, setOpen] = React.useState(false);
-    const [deleteCourse] = useDeleteCourseByIdMutation();
+    const [deleteCourse, resultDeleteCourse] = useDeleteCourseByIdMutation();
     const [selectedCourse, setSelectedCourse] = React.useState<CourseResponse | null>(null);
 
     const handleAdd = () => {
@@ -60,7 +60,7 @@ export default function AdminCoursesPage() {
                 }}
                 pagination={{page, limit, total: currentData?.total ?? 0}}
                 onPageChange={setPage}
-                onEdit={(course) => {
+                onEdit={async (course) => {
                     setSelectedCourse(course);
                     setOpen(true);
                 }}
@@ -79,6 +79,7 @@ export default function AdminCoursesPage() {
                     }
                 }}
                 isLoading={false}
+                isDeleting={resultDeleteCourse.isLoading}
                 onLimitChange={(newLimit) => {
                     setLimit(newLimit);
                     setPage(1);

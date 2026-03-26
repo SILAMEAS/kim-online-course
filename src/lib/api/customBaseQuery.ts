@@ -4,7 +4,7 @@ import {BaseQueryFn, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 import {LoginResponse} from "@/lib/types.ts";
 
-const publicEndpoint = ["getUserByJwtToken"];
+const publicEndpoint = [""];
 
 // --- Custom baseQuery that adds Authorization header if needed ---
 const customBaseQuery = (baseUrl: string, skipAuth: boolean) => {
@@ -37,12 +37,11 @@ export const baseQueryWithReauth: BaseQueryFn<any, unknown, unknown> = async (
     }
 
     let result = await baseQuery(args, api, extraOptions);
-    console.log(api.endpoint)
+    const Forbidden = result.error && (result.error as any).status === 401;
 
     // If 401, attempt refresh token
-    if (result.error && (result.error as any).status === 401 && !publicEndpoint.includes(api.endpoint)) {
+    if (Forbidden && !publicEndpoint.includes(api.endpoint)) {
         const refreshToken = Cookies.get("refreshToken");
-        console.log(refreshToken)
         if (refreshToken) {
             const refreshResult = await baseQuery(
                 {url: "/auths/refresh-token", method: "POST", body: {refreshToken}},

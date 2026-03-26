@@ -24,12 +24,6 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.body,
       }),
     }),
-    deleteVideo: build.mutation<DeleteVideoApiResponse, DeleteVideoApiArg>({
-      query: (queryArg) => ({
-        url: `/api/videos/${queryArg.publicId}`,
-        method: "DELETE",
-      }),
-    }),
     updateUser: build.mutation<UpdateUserApiResponse, UpdateUserApiArg>({
       query: (queryArg) => ({
         url: `/api/users/${queryArg.id}`,
@@ -251,6 +245,12 @@ const injectedRtkApi = api.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    deleteVideo: build.mutation<DeleteVideoApiResponse, DeleteVideoApiArg>({
+      query: (queryArg) => ({
+        url: `/api/videos/${queryArg.id}/publicId/${queryArg.publicId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -271,12 +271,6 @@ export type UpdateVideoApiArg = {
     /** New video file */
     file: Blob;
   };
-};
-export type DeleteVideoApiResponse =
-  /** status 200 Video deleted successfully */ string;
-export type DeleteVideoApiArg = {
-  /** Public ID of the video in Cloudinary */
-  publicId: string;
 };
 export type UpdateUserApiResponse =
   /** status 200 User updated successfully */ string;
@@ -327,7 +321,7 @@ export type RefreshTokenApiArg = {
   body: string;
 };
 export type UploadVideoApiResponse =
-  /** status 200 Video uploaded successfully */ string;
+  /** status 200 Video uploaded successfully */ GeneralResponse;
 export type UploadVideoApiArg = {
   courseId: number;
   uploadVideoRequest: UploadVideoRequest;
@@ -450,6 +444,14 @@ export type DeleteAllByCourseApiArg = {
   /** ID of the course */
   courseId: number;
 };
+export type DeleteVideoApiResponse =
+  /** status 200 Video deleted successfully */ GeneralResponse;
+export type DeleteVideoApiArg = {
+  /** Public ID of the video in Cloudinary */
+  publicId: string;
+  /** Video ID */
+  id: number;
+};
 export type UserResponse = {
   id: number;
   firstName: string;
@@ -559,6 +561,10 @@ export type LoginRequest = {
   email: string;
   password: string;
 };
+export type GeneralResponse = {
+  message?: string;
+  status?: number;
+};
 export type UploadVideoRequest = {
   title?: string;
   file: Blob;
@@ -663,7 +669,6 @@ export const {
   useGetUserByJwtTokenQuery,
   useUpdateProfileMutation,
   useUpdateVideoMutation,
-  useDeleteVideoMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
   useGetCourseDetailQuery,
@@ -688,4 +693,5 @@ export const {
   useGetAllQuery,
   useGetAllByCourseQuery,
   useDeleteAllByCourseMutation,
+  useDeleteVideoMutation,
 } = injectedRtkApi;

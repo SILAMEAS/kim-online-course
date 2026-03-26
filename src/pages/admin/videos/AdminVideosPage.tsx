@@ -1,147 +1,98 @@
-import React from 'react';
 import {Button} from '@/components/ui/button';
-import {Card, CardContent} from '@/components/ui/card';
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from '@/components/ui/table';
+import {Card} from '@/components/ui/card';
+import {Plus} from 'lucide-react';
+import {CustomTable} from "@/components/table/CustomTable.tsx";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import {Edit2, Plus, Trash2} from 'lucide-react';
-import {useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {z} from 'zod';
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from '@/components/ui/form';
+    UploadVideoApiArg,
+    useDeleteVideoMutation,
+    useGetVideosQuery,
+    useUploadVideoMutation,
+    VideoListResponse
+} from "@/lib/api/api.generated.ts";
+import {toast} from "sonner";
+import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
+import {DefaultPaginationRequest} from "@/lib/types.ts";
+import React, {useState} from 'react';
+import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,} from '@/components/ui/dialog';
 import {Input} from '@/components/ui/input';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from '@/components/ui/select';
+import {useForm} from "react-hook-form";
 
-const videoSchema = z.object({
-    title: z.string().min(1, 'Title is required'),
-    courseId: z.string().min(1, 'Course is required'),
-    duration: z.coerce.number().min(1, 'Duration must be at least 1 minute'),
-    sequenceNumber: z.coerce.number().min(1, 'Sequence must be at least 1'),
-});
-
-type VideoFormData = z.infer<typeof videoSchema>;
-
-const mockVideos = [
-    {
-        id: '1',
-        title: 'Introduction to React',
-        courseId: '1',
-        duration: 45,
-        sequenceNumber: 1,
-    },
-    {
-        id: '2',
-        title: 'React Hooks Deep Dive',
-        courseId: '1',
-        duration: 60,
-        sequenceNumber: 2,
-    },
-    {
-        id: '3',
-        title: 'Next.js Fundamentals',
-        courseId: '2',
-        duration: 50,
-        sequenceNumber: 1,
-    },
-];
-
-const mockCourses = [
-    {id: '1', name: 'React Advanced Patterns'},
-    {id: '2', name: 'Next.js Full Stack'},
-];
 
 export default function AdminVideosPage() {
-    const [videos, setVideos] = React.useState(mockVideos);
-    const [open, setOpen] = React.useState(false);
-    const [deleteOpen, setDeleteOpen] = React.useState(false);
-    const [selectedVideo, setSelectedVideo] = React.useState<typeof mockVideos[0] | null>(null);
-    const [videoToDelete, setVideoToDelete] = React.useState<typeof mockVideos[0] | null>(null);
-
-    const form = useForm<VideoFormData>({
-        resolver: zodResolver(videoSchema),
+    const {
+        setPage,
+        page,
+        limit,
+        setSortDirection,
+        setSortBy,
+        sortBy,
+        sortDirection,
+        setLimit,
+        setOpen, open, setSelectedItem, selectedItem
+    } = useCustomTable<VideoListResponse>();
+    //   State management
+    const [uploadVideo, {isLoading}] = useUploadVideoMutation();
+    const [deleteVideo, resultDeleteVideo] = useDeleteVideoMutation();
+    const {currentData, refetch} = useGetVideosQuery(DefaultPaginationRequest);
+    const videos = currentData?.contents || [];
+    const [preview, setPreview] = useState<string | null>(null);
+    //  Form management
+    const form = useForm<UploadVideoApiArg>({
         defaultValues: {
-            title: '',
-            courseId: '',
-            duration: 0,
-            sequenceNumber: 1,
+            courseId: 5,
+            uploadVideoRequest: {
+                title: "TEST",
+                file: undefined,
+            }
         },
     });
 
-    React.useEffect(() => {
-        if (selectedVideo) {
-            form.reset({
-                title: selectedVideo.title,
-                courseId: selectedVideo.courseId,
-                duration: selectedVideo.duration,
-                sequenceNumber: selectedVideo.sequenceNumber,
-            });
-        } else {
-            form.reset({
-                title: '',
-                courseId: '',
-                duration: 0,
-                sequenceNumber: 1,
-            });
-        }
-    }, [selectedVideo, form]);
+    async function onSubmit(data: UploadVideoApiArg) {
+        try {
+            const formData = new FormData();
+            formData.append("title", String(data.uploadVideoRequest.title));
+            const file = data.uploadVideoRequest.file;
 
-    const onSubmit = (data: VideoFormData) => {
-        if (selectedVideo) {
-            setVideos(
-                videos.map((video) =>
-                    video.id === selectedVideo.id ? {...video, ...data} : video
-                )
+            if (file instanceof File) {
+                formData.append("file", file);
+            }
+
+
+            if (!data.uploadVideoRequest.file) {
+                toast.error("Please select a video file");
+                return;
+            }
+
+            await uploadVideo({
+                courseId: data.courseId,
+                uploadVideoRequest: formData as any
+            }).unwrap();
+
+            toast.success("Video uploaded successfully");
+            refetch();
+            form.reset();
+            setPreview(null);
+            setOpen(false);
+        } catch (err: any) {
+            console.error(err);
+            toast.error(
+                "Upload failed: " + err?.data?.message
             );
-        } else {
-            const newVideo = {
-                id: Date.now().toString(),
-                ...data,
-            };
-            setVideos([...videos, newVideo]);
         }
-        setOpen(false);
-        setSelectedVideo(null);
-        form.reset();
-    };
+    }
 
-    const handleEdit = (video: typeof mockVideos[0]) => {
-        setSelectedVideo(video);
-        setOpen(true);
-    };
-
-    const handleDeleteClick = (video: typeof mockVideos[0]) => {
-        setVideoToDelete(video);
-        setDeleteOpen(true);
-    };
-
-    const handleDelete = () => {
-        if (videoToDelete) {
-            setVideos(videos.filter((video) => video.id !== videoToDelete.id));
-            setDeleteOpen(false);
-            setVideoToDelete(null);
+    React.useEffect(() => {
+        if (selectedItem) {
+            form.reset({
+                courseId: selectedItem.id,
+                uploadVideoRequest: {
+                    title: selectedItem.title,
+                    file: selectedItem.publicId,
+                }
+            });
         }
-    };
+    }, [selectedItem, form]);
 
-    const handleAdd = () => {
-        setSelectedVideo(null);
-        setOpen(true);
-    };
 
     return (
         <div className="space-y-6">
@@ -150,7 +101,9 @@ export default function AdminVideosPage() {
                     <h1 className="text-3xl font-bold">Videos</h1>
                     <p className="text-muted-foreground mt-1">Manage course videos</p>
                 </div>
-                <Button onClick={handleAdd}>
+                <Button onClick={() => {
+                    setOpen(true);
+                }}>
                     <Plus className="mr-2 h-4 w-4"/>
                     Add Video
                 </Button>
@@ -158,46 +111,47 @@ export default function AdminVideosPage() {
 
             <Card>
 
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Title</TableHead>
-                                <TableHead>Course</TableHead>
-                                <TableHead>Duration</TableHead>
-                                <TableHead>Sequence</TableHead>
-                                <TableHead className="text-right">Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {videos.map((video) => (
-                                <TableRow key={video.id}>
-                                    <TableCell className="font-medium">{video.title}</TableCell>
-                                    <TableCell>{video.courseId}</TableCell>
-                                    <TableCell>{video.duration} min</TableCell>
-                                    <TableCell>{video.sequenceNumber}</TableCell>
-                                    <TableCell className="text-right space-x-2">
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => handleEdit(video)}
-                                        >
-                                            <Edit2 className="h-4 w-4"/>
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="text-red-600"
-                                            onClick={() => handleDeleteClick(video)}
-                                        >
-                                            <Trash2 className="h-4 w-4"/>
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
+                <CustomTable<VideoListResponse>
+                    columns={[
+                        {key: 'id', label: 'ID', sortable: true},
+                        {key: 'title', label: 'Title', sortable: true},
+                        {key: 'publicId', label: 'Url', sortable: true},
+                    ]}
+                    data={videos}
+                    sortBy={sortBy}
+                    sortDirection={sortDirection}
+                    onSortChange={(key, dir) => {
+                        setSortBy(key);
+                        setSortDirection(dir);
+                    }}
+                    pagination={{page, limit, total: currentData?.total ?? 0}}
+                    onPageChange={setPage}
+                    onEdit={async (video) => {
+                        setSelectedItem(video);
+                        setOpen(true);
+                    }}
+                    onDelete={async (video) => {
+                        try {
+                            if (video?.publicId && video.id) {
+                                console.log("video.id", video.id);
+                                await deleteVideo({id: video.id, publicId: video.publicId}).unwrap();
+
+                                toast.success("success to delete video");
+                                refetch();
+                                setSelectedItem(null);
+
+                            }
+                        } catch (e: any) {
+                            toast.error("Failed to delete video. Please try again later." + e?.data?.message);
+                        }
+                    }}
+                    isLoading={false}
+                    onLimitChange={(newLimit) => {
+                        setLimit(newLimit);
+                        setPage(1);
+                    }}
+                    isDeleting={resultDeleteVideo.isLoading}
+                />
             </Card>
 
             {/* Add/Edit Dialog */}
@@ -205,113 +159,61 @@ export default function AdminVideosPage() {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {selectedVideo ? 'Edit Video' : 'Add New Video'}
+                            {selectedItem ? 'Edit Video' : 'Add New Video'}
                         </DialogTitle>
                         <DialogDescription>
-                            {selectedVideo ? 'Update video information' : 'Create a new video'}
+                            {selectedItem ? 'Update video information' : 'Create a new video'}
                         </DialogDescription>
                     </DialogHeader>
 
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                            <FormField
-                                control={form.control}
-                                name="title"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Title</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Video Title" {...field} />
-                                        </FormControl>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 
-                            <FormField
-                                control={form.control}
-                                name="courseId"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Course</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select a course"/>
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {mockCourses.map((course) => (
-                                                    <SelectItem key={course.id} value={course.id}>
-                                                        {course.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
+                        {/* COURSE ID */}
+                        <Input
+                            type="number"
+                            placeholder="Course ID"
+                            {...form.register("courseId", {valueAsNumber: true})}
+                        />
 
-                            <FormField
-                                control={form.control}
-                                name="duration"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Duration (minutes)</FormLabel>
-                                        <FormControl>
-                                            <Input type="number" placeholder="45" {...field} />
-                                        </FormControl>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
+                        {/* TITLE */}
+                        <Input
+                            type="text"
+                            placeholder="Video title"
+                            {...form.register("uploadVideoRequest.title")}
+                        />
 
-                            <FormField
-                                control={form.control}
-                                name="sequenceNumber"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Sequence Number</FormLabel>
-                                        <FormControl>
-                                            <Input type="number" placeholder="1" {...field} />
-                                        </FormControl>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
+                        {/* FILE */}
+                        <Input
+                            type="file"
+                            accept="video/*"
+                            onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                form.setValue("uploadVideoRequest.file", file);
 
-                            <DialogFooter>
-                                <Button variant="outline" onClick={() => setOpen(false)}>
-                                    Cancel
-                                </Button>
-                                <Button type="submit">
-                                    {selectedVideo ? 'Update' : 'Create'}
-                                </Button>
-                            </DialogFooter>
-                        </form>
-                    </Form>
+                                // preview video
+                                const url = URL.createObjectURL(file);
+                                setPreview(url);
+                            }}
+                        />
+
+                        {/* VIDEO PREVIEW */}
+                        {preview && (
+                            <video
+                                src={preview}
+                                controls
+                                className="w-full rounded-md border"
+                            />
+                        )}
+
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? "Uploading..." : "Upload Video"}
+                        </Button>
+                    </form>
+
                 </DialogContent>
             </Dialog>
 
-            {/* Delete Confirmation Dialog */}
-            <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Delete Video</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Are you sure you want to delete "{videoToDelete?.title}"? This action
-                            cannot be undone.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleDelete} className="bg-red-600">
-                            Delete
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
         </div>
     );
 }

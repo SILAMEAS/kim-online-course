@@ -33,9 +33,9 @@ interface DataTableProps<T> {
     isLoading?: boolean;
 
     // actions
-    onEdit?: (row: T) => void;
-    onDelete?: (row: T) => void;
-    isDeleting?: string | null;
+    onEdit?: (row: T) => Promise<void>;
+    onDelete?: (row: T) => Promise<void>;
+    isDeleting?: boolean;
 
     // sorting (controlled)
     sortBy?: keyof T;
@@ -50,22 +50,22 @@ interface DataTableProps<T> {
 }
 
 // @ts-ignore
-export function CustomTable<T, >({
-                                     columns,
-                                     data,
-                                     isLoading,
+export function CustomTable<T extends Record<string, any>>({
+                                                               columns,
+                                                               data,
+                                                               isLoading,
 
-                                     onEdit,
-                                     onDelete,
-                                     isDeleting,
+                                                               onEdit,
+                                                               onDelete,
+                                                               isDeleting,
 
-                                     sortBy,
-                                     sortDirection = 'ASC',
-                                     onSortChange,
+                                                               sortBy,
+                                                               sortDirection = 'ASC',
+                                                               onSortChange,
 
-                                     pagination, onLimitChange,
-                                     onPageChange
-                                 }: Readonly<DataTableProps<T>>) {
+                                                               pagination, onLimitChange,
+                                                               onPageChange
+                                                           }: Readonly<DataTableProps<T>>) {
     const [deleteId, setDeleteId] = React.useState<string | null>(null);
     const [deleteItem, setDeleteItem] = React.useState<T | null>(null);
 
@@ -122,7 +122,7 @@ export function CustomTable<T, >({
 
                     <TableBody>
                         {data.map((row, idx) => (
-                            <TableRow key={(row as { id: string | number })?.id ?? idx}>
+                            <TableRow key={row?.id ?? idx}>
                                 {columns.map((col) => {
                                     const value = row[col.key];
 
@@ -147,19 +147,20 @@ export function CustomTable<T, >({
                                             </Button>
                                         )}
 
+
                                         {onDelete && (
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => {
-                                                    setDeleteId((row as {
-                                                        id: string
-                                                    })?.id ?? null);
-                                                    setDeleteItem(row);
-                                                }}
-                                            >
-                                                <Trash2 className="h-4 w-4"/>
-                                            </Button>
+                                            (isDeleting && row?.id == deleteItem?.id) ?
+                                                <Loader2 className="h-4 w-4 animate-spin"/> :
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        setDeleteId(row.id ?? null);
+                                                        setDeleteItem(row);
+                                                    }}
+                                                >
+                                                    <Trash2 className="h-4 w-4"/>
+                                                </Button>
                                         )}
                                     </div>
                                 </TableCell>
@@ -172,7 +173,7 @@ export function CustomTable<T, >({
             {/* Pagination */}
             <PaginationCustomTable pagination={pagination} onPageChange={onPageChange} onLimitChange={onLimitChange}/>
             {/* Delete Dialog */}
-            <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
+            <AlertDialog open={Boolean(deleteId)} onOpenChange={() => setDeleteId(null)}>
                 <AlertDialogContent>
                     <AlertDialogTitle>Delete Item</AlertDialogTitle>
                     <AlertDialogDescription>
@@ -183,16 +184,22 @@ export function CustomTable<T, >({
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
 
                         <AlertDialogAction
-                            onClick={() => {
-                                if (onDelete && deleteItem) {
-                                    onDelete(deleteItem);
+                            onClick={async () => {
+                                try {
+                                    if (onDelete && deleteItem) {
+                                        await onDelete(deleteItem).then(() => {
+                                            setDeleteId(null);
+                                            setDeleteItem(null);
+                                        })
+                                    }
+                                } catch (e) {
+                                    console.log("error", e)
                                 }
-                                setDeleteId(null);
-                                setDeleteItem(null);
-                            }}
+                            }
+                            }
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
-                            {isDeleting === deleteId && (
+                            {isDeleting && (
                                 <Loader2 className="h-4 w-4 animate-spin mr-2"/>
                             )}
                             Delete

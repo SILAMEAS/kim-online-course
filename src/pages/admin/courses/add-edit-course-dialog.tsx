@@ -84,7 +84,7 @@ export function AddEditCourseDialog({
                 description: "new description of the course",
                 instructorId: undefined,
                 level: "BEGINNER",
-                price: 10,
+                price: 100,
                 status: "PUBLISHED",
             });
             setPreview(null)

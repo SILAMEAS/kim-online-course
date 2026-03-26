@@ -527,6 +527,14 @@ export type UpdateCourseRequest = {
   status?: "DRAFT" | "PUBLISHED" | "PREPARE";
   instructorId?: number;
   file?: Blob;
+  category?:
+    | "WEB_DEVELOPMENT"
+    | "DATA_SCIENCE"
+    | "DESIGN"
+    | "MOBILE_DEVELOPMENT"
+    | "CLOUD_COMPUTING"
+    | "DEV_OPS"
+    | "BUSINESS";
 };
 export type SignUpRequest = {
   email: string;

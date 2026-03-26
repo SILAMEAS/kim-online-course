@@ -66,7 +66,10 @@ export const CreateCourseApiArgSchema = z.object({
     description: z.string().max(500, 'Description must be less than 500 characters').optional(),
     instructorId: z.number(),
     level: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]).optional(),
-    price: z.number(),
+    price: z.preprocess((val) => {
+        if (typeof val === "string") return Number(val);
+        return val;
+    }, z.number().min(0, 'Price must be bigger than 0$')).optional(),
     status: z.enum(["DRAFT", "PUBLISHED"]).optional(),
 });
 

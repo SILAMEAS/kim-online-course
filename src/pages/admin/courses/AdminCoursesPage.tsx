@@ -47,7 +47,7 @@ export default function AdminCoursesPage() {
             <CustomTable<CourseResponse>
                 columns={[
                     {key: 'title', label: 'Title', sortable: true},
-                    {key: 'category', label: 'First Name', sortable: true},
+                    {key: 'category', label: 'Category', sortable: true},
                     {key: 'price', label: 'Price', sortable: true},
                     {key: 'status', label: 'Status', sortable: true},
                 ]}

@@ -1,0 +1,38 @@
+import {IPaginationCustomTable} from "@/components/table/CustomTable.tsx";
+import {Button} from "@/components/ui/button.tsx";
+
+export const PaginationButton = ({pagination, onPageChange}: {
+    pagination: IPaginationCustomTable,
+    onPageChange: any
+}) => {
+    return <div className="flex items-center gap-1">
+        <Button
+            size="sm"
+            variant="outline"
+            disabled={pagination.page <= 1}
+            onClick={() => onPageChange?.(pagination.page - 1)}
+        >
+            Prev
+        </Button>
+
+        {[...Array(Math.ceil(pagination.total / pagination.limit)).keys()].map((p) => (
+            <Button
+                key={p + 1}
+                size="sm"
+                variant={p + 1 === pagination.page ? "default" : "outline"}
+                onClick={() => onPageChange?.(p + 1)}
+            >
+                {p + 1}
+            </Button>
+        ))}
+
+        <Button
+            size="sm"
+            variant="outline"
+            disabled={pagination.page >= Math.ceil(pagination.total / pagination.limit)}
+            onClick={() => onPageChange?.(pagination.page + 1)}
+        >
+            Next
+        </Button>
+    </div>
+}

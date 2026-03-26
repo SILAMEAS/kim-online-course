@@ -3,18 +3,13 @@ import {Button} from '@/components/ui/button';
 import {Plus} from 'lucide-react';
 import {CourseResponse, useDeleteCourseByIdMutation, useListAllCoursesQuery} from "@/lib/api/api.generated.ts";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
-import {AddEditCourseDialog} from "@/pages/admin/courses/modal/add-edit-course-dialog.tsx";
+import {AddEditCourseDialog} from "@/pages/admin/courses/add-edit-course-dialog.tsx";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
-import useCustomTable from "@/components/table/useCustomTable.tsx";
+import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {toast} from "sonner";
 
 
 export default function AdminCoursesPage() {
-    const {currentData, refetch} = useListAllCoursesQuery(DefaultPaginationRequest);
-    const courses = currentData?.contents || [];
-    const [open, setOpen] = React.useState(false);
-    const [deleteCourse] = useDeleteCourseByIdMutation();
-    const [selectedCourse, setSelectedCourse] = React.useState<CourseResponse | null>(null);
     const {
         setPage,
         page,
@@ -22,8 +17,14 @@ export default function AdminCoursesPage() {
         setSortDirection,
         setSortBy,
         sortBy,
-        sortDirection
+        sortDirection,
+        setLimit
     } = useCustomTable<CourseResponse>();
+    const {currentData, refetch} = useListAllCoursesQuery(DefaultPaginationRequest);
+    const courses = currentData?.contents || [];
+    const [open, setOpen] = React.useState(false);
+    const [deleteCourse] = useDeleteCourseByIdMutation();
+    const [selectedCourse, setSelectedCourse] = React.useState<CourseResponse | null>(null);
 
     const handleAdd = () => {
         setSelectedCourse(null);
@@ -45,7 +46,6 @@ export default function AdminCoursesPage() {
 
             <CustomTable<CourseResponse>
                 columns={[
-                    // {key: 'id', label: 'ID', sortable: true},
                     {key: 'title', label: 'Title', sortable: true},
                     {key: 'category', label: 'First Name', sortable: true},
                     {key: 'price', label: 'Price', sortable: true},
@@ -58,7 +58,7 @@ export default function AdminCoursesPage() {
                     setSortBy(key);
                     setSortDirection(dir);
                 }}
-                pagination={{page, limit}}
+                pagination={{page, limit, total: currentData?.total ?? 0}}
                 onPageChange={setPage}
                 onEdit={(course) => {
                     setSelectedCourse(course);
@@ -79,6 +79,10 @@ export default function AdminCoursesPage() {
                     }
                 }}
                 isLoading={false}
+                onLimitChange={(newLimit) => {
+                    setLimit(newLimit);
+                    setPage(1);
+                }}
             />
 
             {/* Add/Edit Dialog */}

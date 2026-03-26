@@ -10,6 +10,7 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog.tsx';
 import {ArrowUpDown, Edit2, Loader2, Trash2} from 'lucide-react';
+import PaginationCustomTable from "@/components/table/commons/PaginationCustomTable.tsx";
 
 type SortDirection = 'ASC' | 'DES';
 
@@ -20,10 +21,10 @@ interface Column<T> {
     render?: (value: T[keyof T], row: T) => React.ReactNode;
 }
 
-interface Pagination {
+export interface IPaginationCustomTable {
     page: number;
     limit: number;
-    total?: number;
+    total: number;
 }
 
 interface DataTableProps<T> {
@@ -42,10 +43,13 @@ interface DataTableProps<T> {
     onSortChange?: (key: keyof T, direction: SortDirection) => void;
 
     // pagination (controlled)
-    pagination?: Pagination;
+    pagination: IPaginationCustomTable;
     onPageChange?: (page: number) => void;
+
+    onLimitChange?: (limit: number) => void;  // <-- new
 }
 
+// @ts-ignore
 export function CustomTable<T, >({
                                      columns,
                                      data,
@@ -59,8 +63,8 @@ export function CustomTable<T, >({
                                      sortDirection = 'ASC',
                                      onSortChange,
 
-                                     pagination,
-                                     onPageChange,
+                                     pagination, onLimitChange,
+                                     onPageChange
                                  }: Readonly<DataTableProps<T>>) {
     const [deleteId, setDeleteId] = React.useState<string | null>(null);
     const [deleteItem, setDeleteItem] = React.useState<T | null>(null);
@@ -89,7 +93,8 @@ export function CustomTable<T, >({
             </div>
         );
     }
-    const actionColumnStyle = "flex items-center justify-center gap-2 ";
+    const actionColumnStyle = "flex items-center justify-center gap-2";
+
     return (
         <>
             <div className="border rounded-lg overflow-hidden">
@@ -165,30 +170,7 @@ export function CustomTable<T, >({
             </div>
 
             {/* Pagination */}
-            {pagination && (
-                <div className="flex items-center justify-between mt-4">
-                    <p className="text-sm text-muted-foreground">
-                        Page {pagination.page}
-                    </p>
-
-                    <div className="flex gap-2">
-                        <Button
-                            size="sm"
-                            disabled={pagination.page <= 1}
-                            onClick={() => onPageChange?.(pagination.page - 1)}
-                        >
-                            Prev
-                        </Button>
-                        <Button
-                            size="sm"
-                            onClick={() => onPageChange?.(pagination.page + 1)}
-                        >
-                            Next
-                        </Button>
-                    </div>
-                </div>
-            )}
-
+            <PaginationCustomTable pagination={pagination} onPageChange={onPageChange} onLimitChange={onLimitChange}/>
             {/* Delete Dialog */}
             <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
                 <AlertDialogContent>

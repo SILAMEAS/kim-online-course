@@ -1,5 +1,4 @@
 import {EnumRole, SORT} from "./enum.ts";
-import {ListAllCoursesApiArg} from "@/lib/api/api.generated.ts";
 
 export interface Instructor {
     id: string;
@@ -156,12 +155,12 @@ export interface ProfileResponse {
     role: EnumRole
 }
 
-export const DefaultPaginationRequest: ListAllCoursesApiArg = {
-    search:"",
+export const DefaultPaginationRequest: PaginationRequest = {
+    search: "",
     limit: 10,
     sortBy: 'id',
     page: 1,
-    sortOrder: SORT.DESC as string
+    sortOrder: SORT.DESC
 }
 
 export interface PaginationRequest {

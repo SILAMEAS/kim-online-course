@@ -78,14 +78,10 @@ export default function AdminLayout() {
                                 const Icon = item.icon;
                                 const isActive = pathname === item.href;
                                 return (
-                                    <Link key={item.href} href={item.href} className={cn("w-full")}>
-                                        <Button
-                                            variant={"outline"}
-                                            className={cn("w-full justify-start gap-3", isActive && "text-primary border-2 border-primary")}
-                                        >
-                                            <Icon className="h-5 w-5"/>
-                                            {item.label}
-                                        </Button>
+                                    <Link key={item.href} href={item.href}
+                                          className={cn("w-full justify-start gap-3", isActive && "text-primary border-2 border-primary")}>
+                                        <Icon className="h-5 w-5"/>
+                                        {item.label}
                                     </Link>
                                 );
                             })}

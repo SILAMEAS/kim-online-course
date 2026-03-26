@@ -1,9 +1,6 @@
-
-
 import React from 'react';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {BookOpen, DollarSign, Image as ImageIcon, UserCheck, Users, Video} from 'lucide-react';
-import {Button} from '@/components/ui/button';
 import Link from "@/components/Link.tsx";
 
 interface StatCardProps {
@@ -16,20 +13,19 @@ interface StatCardProps {
 
 function StatCard({title, value, icon, description, href}: Readonly<StatCardProps>) {
     return (
-        <Link href={href}>
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">{title}</CardTitle>
-                    <div className="text-muted-foreground">{icon}</div>
-                </CardHeader>
-                <CardContent>
-                    <div className="text-2xl font-bold">{value}</div>
-                    {description && (
-                        <p className="text-xs text-muted-foreground mt-1">{description}</p>
-                    )}
-                </CardContent>
-            </Card>
-        </Link>
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow"
+              onClick={() => globalThis.location.href = href}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{title}</CardTitle>
+                <div className="text-muted-foreground">{icon}</div>
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">{value}</div>
+                {description && (
+                    <p className="text-xs text-muted-foreground mt-1">{description}</p>
+                )}
+            </CardContent>
+        </Card>
     );
 }
 
@@ -92,15 +88,9 @@ export default function AdminDashboardPage() {
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <Button variant="outline" className="w-full">
-                            <Link href="/admin/users">Manage Users</Link>
-                        </Button>
-                        <Button variant="outline" className="w-full">
-                            <Link href="/admin/courses">Manage Courses</Link>
-                        </Button>
-                        <Button variant="outline" className="w-full">
-                            <Link href="/admin/payments">View Payments</Link>
-                        </Button>
+                        <Link href="/admin/users">Manage Users</Link>
+                        <Link href="/admin/courses">Manage Courses</Link>
+                        <Link href="/admin/payments">View Payments</Link>
                     </div>
                 </CardContent>
             </Card>

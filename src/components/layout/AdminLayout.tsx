@@ -52,11 +52,7 @@ export default function AdminLayout() {
     const navigate = useNavigate();
     const {currentData: currentUser, isLoading} = useRestoreUserByToken();
     useEffect(() => {
-        // wait until auth is resolved
-        if (!currentUser) return;
-
-        // not logged in OR not admin
-        if (currentUser && currentUser?.role != EnumRole.ADMIN) {
+        if ((!currentUser || currentUser?.role != EnumRole.ADMIN) && !isLoading) {
             navigate("/", {replace: true});
         }
     }, [currentUser, navigate]);

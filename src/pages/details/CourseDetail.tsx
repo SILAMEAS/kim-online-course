@@ -6,8 +6,8 @@ import { setSelectedCourse } from "@/lib/redux/slices/courses.slice.ts";
 
 import { useGetReviewsByCourse } from "@/lib/api/queries.ts";
 import { MOCK_COURSES } from "@/lib/data/courses.ts";
-import { Navbar } from "@/components/layout/navbar.tsx";
-import { Footer } from "@/components/layout/footer.tsx";
+import { Navbar } from "@/components/navbar.tsx";
+import { Footer } from "@/components/footer.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { CourseCurriculum } from "@/components/course/course-curriculum.tsx";

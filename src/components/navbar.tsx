@@ -1,12 +1,12 @@
 import {Link} from "react-router-dom";
 import {useState} from "react";
-import {useAppSelector} from "@/lib/redux/hooks";
-import {Button} from "@/components/ui/button";
-import {Badge} from "@/components/ui/badge";
-import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
+import {useAppSelector} from "@/lib/redux/hooks.ts";
+import {Button} from "@/components/ui/button.tsx";
+import {Badge} from "@/components/ui/badge.tsx";
+import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet.tsx";
 import {BookOpen, Menu, ShoppingCart} from "lucide-react";
-import {ProfileMenu} from "@/components/auth/profile-menu";
-import {MobileNav} from "./mobile-nav";
+import {ProfileMenu} from "@/components/auth/profile-menu.tsx";
+import {MobileNav} from "./mobile-nav.tsx";
 import TriggerTheme from "@/components/providers/theme/TriggerTheme.tsx";
 import TriggerLanguage from "@/components/providers/i18n/TriggerLanguage.tsx";
 import useRestoreUserByToken from "@/hooks/useRestoreUserByToken.tsx";

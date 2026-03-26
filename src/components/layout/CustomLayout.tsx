@@ -1,5 +1,5 @@
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
+import { Navbar } from "@/components/navbar.tsx";
+import { Footer } from "@/components/footer.tsx";
 
 const CustomLayout = ({ children }: { children: React.ReactNode }) => {
   return (

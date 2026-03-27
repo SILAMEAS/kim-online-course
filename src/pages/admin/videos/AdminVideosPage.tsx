@@ -1,21 +1,24 @@
 import {Button} from '@/components/ui/button';
 import {Card} from '@/components/ui/card';
-import {Plus} from 'lucide-react';
+import {Loader2, Plus} from 'lucide-react';
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import {
     UploadVideoApiArg,
     useDeleteVideoMutation,
     useGetVideosQuery,
+    useListAllCoursesQuery,
     useUploadVideoMutation,
     VideoListResponse
 } from "@/lib/api/api.generated.ts";
 import {toast} from "sonner";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,} from '@/components/ui/dialog';
 import {Input} from '@/components/ui/input';
 import {useForm} from "react-hook-form";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
+import previewCloudinary from "@/components/previewCloudinary.ts";
 
 
 export default function AdminVideosPage() {
@@ -30,8 +33,10 @@ export default function AdminVideosPage() {
         setLimit,
         setOpen, open, setSelectedItem, selectedItem
     } = useCustomTable<VideoListResponse>();
+    const listAllCoursesQuery = useListAllCoursesQuery(DefaultPaginationRequest);
+    const courses = listAllCoursesQuery?.data?.contents || [];
     //   State management
-    const [uploadVideo, {isLoading}] = useUploadVideoMutation();
+    const [uploadVideo] = useUploadVideoMutation();
     const [deleteVideo, resultDeleteVideo] = useDeleteVideoMutation();
     const {currentData, refetch} = useGetVideosQuery(DefaultPaginationRequest);
     const videos = currentData?.contents || [];
@@ -90,9 +95,33 @@ export default function AdminVideosPage() {
                     file: selectedItem.publicId,
                 }
             });
+            if (selectedItem.publicId) {
+                setPreview(previewCloudinary({type: 'video', url: selectedItem.publicId}));
+            }
         }
     }, [selectedItem, form]);
 
+    const handleSelectCourse = () => {
+        if (listAllCoursesQuery?.isLoading) {
+            return <option disabled>Loading...</option>
+        }
+        if (courses?.length === 0) {
+            return <option disabled>No teachers found</option>
+        }
+        return courses?.map((c) => (
+            <option key={c.id} value={c.id}>
+                {c.title}
+            </option>
+        ))
+    }
+    useEffect(() => {
+        if (!open) {
+            setSelectedItem(null);
+            form.reset();
+        }
+
+    }, [open])
+console.log("form", form.watch('uploadVideoRequest'));
 
     return (
         <div className="space-y-6">
@@ -166,50 +195,99 @@ export default function AdminVideosPage() {
                         </DialogDescription>
                     </DialogHeader>
 
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit, (errors) => {
+                            // 🔍 Debugging: Log validation errors if submission fails
+                            console.error("Form Validation Failed:", errors);
+                            toast.error("Please check the form for errors.");
+                        })} className="space-y-4">
 
-                        {/* COURSE ID */}
-                        <Input
-                            type="number"
-                            placeholder="Course ID"
-                            {...form.register("courseId", {valueAsNumber: true})}
-                        />
-
-                        {/* TITLE */}
-                        <Input
-                            type="text"
-                            placeholder="Video title"
-                            {...form.register("uploadVideoRequest.title")}
-                        />
-
-                        {/* FILE */}
-                        <Input
-                            type="file"
-                            accept="video/*"
-                            onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (!file) return;
-                                form.setValue("uploadVideoRequest.file", file);
-
-                                // preview video
-                                const url = URL.createObjectURL(file);
-                                setPreview(url);
-                            }}
-                        />
-
-                        {/* VIDEO PREVIEW */}
-                        {preview && (
-                            <video
-                                src={preview}
-                                controls
-                                className="w-full rounded-md border"
+                            <FormField
+                                control={form.control}
+                                name="uploadVideoRequest.title"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Course Title</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter course title" {...field} />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
                             />
-                        )}
+                            <FormField
+                                control={form.control}
+                                name="courseId"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Course</FormLabel>
+                                        <FormControl>
+                                            <select
+                                                {...field}
+                                                className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                                                value={field.value ?? ""}
+                                                onChange={(e) =>
+                                                    field.onChange(Number(e.target.value))
+                                                }
+                                            >
+                                                <option value="">Select course</option>
+                                                {handleSelectCourse()}
+                                            </select>
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
 
-                        <Button type="submit" disabled={isLoading}>
-                            {isLoading ? "Uploading..." : "Upload Video"}
-                        </Button>
-                    </form>
+
+                            {/* File Upload */}
+                            <FormField
+                                control={form.control}
+                                name="uploadVideoRequest.file"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Image</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="file"
+                                                accept="video/*"
+                                                onChange={(e) => {
+                                                    const file =
+                                                        e.target.files?.[0];
+                                                    if (!file) return;
+
+                                                    field.onChange(file);
+
+                                                    const reader =
+                                                        new FileReader();
+                                                    reader.onloadend = () => {
+                                                        setPreview(
+                                                            reader.result as string
+                                                        );
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }}
+                                            />
+
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                            {/* PREVIEW */}
+                            {preview && (
+                                <video
+                                    src={preview}
+                                    controls
+                                    className="w-full rounded-md border"
+                                />
+                            )}
+                            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                                {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                                {selectedItem ? 'Update video' : 'Create video'}
+                            </Button>
+                        </form>
+                    </Form>
 
                 </DialogContent>
             </Dialog>

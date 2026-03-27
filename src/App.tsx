@@ -13,7 +13,6 @@ import DashboardOverview from "./pages/dashboard/DashboardOverview";
 import MyCoursesPage from "./pages/dashboard/MyCourses";
 import ProfilePage from "./pages/dashboard/Profile";
 import WishlistPage from "./pages/dashboard/Wishlist";
-import AdminVideo from "@/pages/admins/AdminVideo.tsx";
 import NotFoundPage from "@/pages/NotFoundPage.tsx";
 import AdminLayout from "@/components/layout/AdminLayout.tsx";
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage.tsx";
@@ -28,6 +27,7 @@ function App() {
     return (
         <Router>
             <Routes>
+
                 {/** PUBLIC ROUTES */}
                 <Route path="/" element={<Home/>}/>
                 <Route path="/courses" element={<CoursesPage/>}/>
@@ -39,14 +39,13 @@ function App() {
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/register" element={<RegisterPage/>}/>
                 </Route>
-                {/** STUDENT ROUTES */}
 
+                {/** STUDENT ROUTES */}
                 <Route path="/dashboard" element={<StudentLayout/>}>
                     <Route index element={<DashboardOverview/>}/>
                     <Route path="my-courses" element={<MyCoursesPage/>}/>
                     <Route path="profile" element={<ProfilePage/>}/>
                     <Route path="wishlist" element={<WishlistPage/>}/>
-                    <Route path="admins/video" element={<AdminVideo/>}/>
                 </Route>
 
                 {/** ADMIN TEACHER ROUTES */}
@@ -59,8 +58,10 @@ function App() {
                     <Route path="enrollments" element={<AdminEnrollmentsPage/>}/>
                     <Route path="images" element={<AdminImagesPage/>}/>
                 </Route>
-                {/* 🔥 Catch all route */}
+
+                {/** All routes */}
                 <Route path="*" element={<NotFoundPage/>}/>
+
             </Routes>
         </Router>
     );

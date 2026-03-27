@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {Button} from "@/components/ui/button";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {BookMarked, LogOut, Settings, User} from "lucide-react";
+import {BookMarked, LogOut, User} from "lucide-react";
 import {useLogout} from "@/hooks/useLogout";
 
 export function ProfileMenu() {
@@ -64,17 +64,6 @@ export function ProfileMenu() {
                         My Courses
                     </Link>
                 </DropdownMenuItem>
-
-                <DropdownMenuItem asChild>
-                    <Link
-                        to="/dashboard/profile"
-                        className="flex items-center gap-2 cursor-pointer"
-                    >
-                        <Settings className="w-4 h-4"/>
-                        Advance Manage
-                    </Link>
-                </DropdownMenuItem>
-
 
                 <DropdownMenuSeparator/>
 

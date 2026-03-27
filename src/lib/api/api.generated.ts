@@ -461,8 +461,8 @@ export type UserResponse = {
   imageUrl: string;
 };
 export type UserRequest = {
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
   file?: Blob;
 };
 export type UpdateUserRequest = {

@@ -51,7 +51,7 @@ const useRestoreUserByToken = () => {
         }
     }, [currentData, dispatch]);
 
-    return {currentData, isLoading, isFetching, isError, error};
+    return {currentData, isLoading, isFetching, isError, error,refetch};
 };
 
 export default useRestoreUserByToken;

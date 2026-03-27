@@ -38,19 +38,7 @@ const SIDEBAR_ITEMS: Array<ISidebarItem> = [
         label: "Profile",
         icon: User,
         rolesAccess: [EnumRole.ADMIN, EnumRole.INSTRUCTOR, EnumRole.STUDENT]
-    },
-    {
-        to: "/dashboard/admins/course",
-        label: "Course",
-        icon: LayoutDashboard,
-        rolesAccess: [EnumRole.ADMIN]
-    },
-    {
-        to: "/dashboard/admins/video",
-        label: "Video",
-        icon: LayoutDashboard,
-        rolesAccess: [EnumRole.ADMIN]
-    },
+    }
 
 ];
 

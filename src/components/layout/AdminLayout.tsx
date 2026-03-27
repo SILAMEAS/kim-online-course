@@ -10,6 +10,7 @@ import {useTranslation} from "react-i18next";
 import {Localization} from "@/i18n/lang";
 import Link from "@/components/Link.tsx";
 import ThemeLanguage from "@/components/ThemeLanguage.tsx";
+import Cookies from "js-cookie";
 
 const navItems = [
     {
@@ -54,15 +55,21 @@ export default function AdminLayout() {
     const {pathname} = useLocation();
     const navigate = useNavigate();
     const {currentData: currentUser, isLoading} = useRestoreUserByToken();
+    const accessToken = Cookies.get("accessToken");
     useEffect(() => {
+        // if not logged in
+        if (!accessToken) {
+            navigate("/", {replace: true});
+
+        }
         // wait until auth is resolved
         if (!currentUser) return;
 
-        // not logged in OR not admin
+        //  not admin
         if (currentUser && currentUser?.role != EnumRole.ADMIN) {
             navigate("/", {replace: true});
         }
-    }, [currentUser, navigate]);
+    }, [currentUser, navigate, accessToken]);
     if (isLoading) return <>loading ...</>
     return (
         <div className="flex h-screen bg-background">
@@ -98,7 +105,7 @@ export default function AdminLayout() {
                     {/* Footer */}
                     <div className="p-4 border-t border-border">
                         <Button variant="outline" className="w-full">
-                            {t(Localization("loginPage","logout"))}
+                            {t(Localization("loginPage", "logout"))}
                         </Button>
                     </div>
                 </div>

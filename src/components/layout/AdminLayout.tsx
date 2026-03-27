@@ -1,7 +1,6 @@
 import {BookOpen, CreditCard, Image, LayoutDashboard, UserCheck, Users, Video,} from 'lucide-react';
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {Button} from "@/components/ui/button.tsx";
-import {cn} from "@/lib/utils.ts";
 import {ProfileMenu} from "@/components/auth/profile-menu.tsx";
 import {useEffect} from "react";
 import {EnumRole} from "@/lib/enum.ts";
@@ -86,16 +85,10 @@ export default function AdminLayout() {
                         <div className="space-y-2">
                             {navItems.map((item) => {
                                 const Icon = item.icon;
-                                const isActive = pathname === item.href;
                                 return (
-                                    <Link key={item.href} href={item.href} className={cn("w-full")}>
-                                        <Button
-                                            variant={"outline"}
-                                            className={cn("w-full justify-start gap-3", isActive && "text-primary border-2 border-primary")}
-                                        >
-                                            <Icon className="h-5 w-5"/>
-                                            {item.label}
-                                        </Button>
+                                    <Link key={item.href} href={item.href} isActive={pathname === item.href}>
+                                        <Icon className="h-5 w-5"/>
+                                        {item.label}
                                     </Link>
                                 );
                             })}

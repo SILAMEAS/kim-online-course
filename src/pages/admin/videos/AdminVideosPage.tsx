@@ -121,7 +121,6 @@ export default function AdminVideosPage() {
         }
 
     }, [open])
-console.log("form", form.watch('uploadVideoRequest'));
 
     return (
         <div className="space-y-6">

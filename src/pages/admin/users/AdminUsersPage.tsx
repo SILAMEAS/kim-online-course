@@ -1,7 +1,5 @@
 import React from 'react';
 import {Button} from '@/components/ui/button';
-import {Card, CardContent} from '@/components/ui/card';
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from '@/components/ui/table';
 import {
     Dialog,
     DialogContent,
@@ -10,87 +8,70 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import {Edit2, Plus, Trash2} from 'lucide-react';
+import {Plus} from 'lucide-react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from '@/components/ui/form';
 import {Input} from '@/components/ui/input';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from '@/components/ui/select';
+import {
+    CreateUserRequest,
+    UpdateUserRequest,
+    useCreateUserMutation,
+    useDeleteUserMutation,
+    useListUsersQuery,
+    UserResponse,
+    useUpdateUserMutation
+} from "@/lib/api/api.generated.ts";
+import {DefaultPaginationRequest} from "@/lib/types.ts";
+import {toast} from "sonner";
+import {CustomTable} from "@/components/table/CustomTable.tsx";
+import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 
 const userSchema = z.object({
     firstName: z.string().min(1, 'First name is required'),
     lastName: z.string().min(1, 'Last name is required'),
     email: z.string().email('Invalid email'),
     role: z.enum(['STUDENT', 'INSTRUCTOR', 'ADMIN']),
-    isActive: z.boolean(),
+    status: z.enum(['ACTIVE', 'INACTIVE']),
 });
 
-type UserFormData = z.infer<typeof userSchema>;
-
-const mockUsers = [
-    {
-        id: '1',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john@example.com',
-        role: 'INSTRUCTOR',
-        isActive: true,
-    },
-    {
-        id: '2',
-        firstName: 'Jane',
-        lastName: 'Smith',
-        email: 'jane@example.com',
-        role: 'STUDENT',
-        isActive: true,
-    },
-    {
-        id: '3',
-        firstName: 'Admin',
-        lastName: 'User',
-        email: 'admin@example.com',
-        role: 'ADMIN',
-        isActive: true,
-    },
-];
-
 export default function AdminUsersPage() {
-    const [users, setUsers] = React.useState(mockUsers);
-    const [open, setOpen] = React.useState(false);
-    const [deleteOpen, setDeleteOpen] = React.useState(false);
-    const [selectedUser, setSelectedUser] = React.useState<typeof mockUsers[0] | null>(null);
-    const [userToDelete, setUserToDelete] = React.useState<typeof mockUsers[0] | null>(null);
 
-    const form = useForm<UserFormData>({
-        resolver: zodResolver(userSchema),
-        defaultValues: {
-            firstName: '',
-            lastName: '',
-            email: '',
-            role: 'STUDENT',
-            isActive: true,
-        },
+    const {currentData, refetch} = useListUsersQuery(DefaultPaginationRequest);
+    const users = currentData?.contents ?? []
+    // const [users, setUsers] = React.useState(mockUsers);
+    const [open, setOpen] = React.useState(false);
+    // const [selectedUser, setSelectedUser] = React.useState<UserResponse | null>(null);
+    const [createUser] = useCreateUserMutation();
+    const [updateUser] = useUpdateUserMutation();
+    const [deleteUser, {isLoading: ladingDelete}] = useDeleteUserMutation();
+    const {
+        setPage,
+        page,
+        limit,
+        setSortDirection,
+        setSortBy,
+        sortBy,
+        sortDirection,
+        setLimit,
+        selectedItem,
+        setSelectedItem,
+    } = useCustomTable<UserResponse>();
+
+    const form = useForm<CreateUserRequest | UpdateUserRequest>({
+        resolver: zodResolver(userSchema)
     });
 
     React.useEffect(() => {
-        if (selectedUser) {
+        if (selectedItem) {
             form.reset({
-                firstName: selectedUser.firstName,
-                lastName: selectedUser.lastName,
-                email: selectedUser.email,
-                role: selectedUser.role as 'STUDENT' | 'INSTRUCTOR' | 'ADMIN',
-                isActive: selectedUser.isActive,
+                firstName: selectedItem.firstName,
+                lastName: selectedItem.lastName,
+                email: selectedItem.email,
+                role: selectedItem.role as 'STUDENT' | 'INSTRUCTOR' | 'ADMIN',
+                status: selectedItem.status,
             });
         } else {
             form.reset({
@@ -98,52 +79,67 @@ export default function AdminUsersPage() {
                 lastName: '',
                 email: '',
                 role: 'STUDENT',
-                isActive: true,
+                status: "ACTIVE"
             });
         }
-    }, [selectedUser, form]);
+    }, [selectedItem, form]);
 
-    const onSubmit = (data: UserFormData) => {
-        if (selectedUser) {
-            // Update
-            setUsers(
-                users.map((user) =>
-                    user.id === selectedUser.id ? {...user, ...data} : user
-                )
-            );
-        } else {
-            // Create
-            const newUser = {
-                id: Date.now().toString(),
-                ...data,
-            };
-            setUsers([...users, newUser]);
-        }
-        setOpen(false);
-        setSelectedUser(null);
-        form.reset();
-    };
+    const onSubmit = async (data: any) => {
 
-    const handleEdit = (user: typeof mockUsers[0]) => {
-        setSelectedUser(user);
-        setOpen(true);
-    };
+        try {
+            const formData = new FormData();
+            formData.append('firstName', data.firstName);
+            formData.append('lastName', data.lastName);
 
-    const handleDeleteClick = (user: typeof mockUsers[0]) => {
-        setUserToDelete(user);
-        setDeleteOpen(true);
-    };
 
-    const handleDelete = () => {
-        if (userToDelete) {
-            setUsers(users.filter((user) => user.id !== userToDelete.id));
-            setDeleteOpen(false);
-            setUserToDelete(null);
+            console.log(data);
+            if (selectedItem?.id) {
+                await updateUser({
+                    id: selectedItem.id,
+                    updateUserRequest: formData as any
+                }).unwrap();
+            } else {
+                data?.email &&
+                formData.append('email', data?.email);
+                formData.append('password', "#Kim346414");
+                if (data?.role) {
+                    formData.append('role', data.role);
+                }
+
+                await createUser({
+                    createUserRequest: formData as any
+                }).unwrap();
+            }
+            setOpen(false);
+            setSelectedItem(null);
+            form.reset();
+        } catch (e: any) {
+            console.error(e);
+            toast.error(e?.data?.message || 'Something went wrong');
+
         }
     };
+
+    // const handleEdit = (user: UserResponse) => {
+    //     setSelectedUser(user);
+    //     setOpen(true);
+    // };
+    //
+    // const handleDeleteClick = (user: UserResponse) => {
+    //     setUserToDelete(user);
+    //     setDeleteOpen(true);
+    // };
+
+    // const handleDelete = () => {
+    //     if (userToDelete) {
+    //         // setUsers(users.filter((user) => user.id !== userToDelete.id));
+    //         setDeleteOpen(false);
+    //         setUserToDelete(null);
+    //     }
+    // };
 
     const handleAdd = () => {
-        setSelectedUser(null);
+        setSelectedItem(null);
         setOpen(true);
     };
 
@@ -160,82 +156,67 @@ export default function AdminUsersPage() {
                 </Button>
             </div>
 
-            <Card>
+            <CustomTable<UserResponse>
+                columns={[
+                    {key: 'firstName', label: 'FirstName', sortable: true},
+                    {key: 'lastName', label: 'LastName', sortable: true},
+                    {key: 'email', label: 'Email', sortable: true},
+                    {key: 'role', label: 'Role', sortable: true},
+                    {key: 'status', label: 'Status', sortable: true},
+                ]}
+                data={users}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                onSortChange={(key, dir) => {
+                    setSortBy(key);
+                    setSortDirection(dir);
+                }}
+                pagination={{page, limit, total: currentData?.total ?? 0}}
+                onPageChange={setPage}
+                onEdit={async (course) => {
+                    setSelectedItem(course);
+                    setOpen(true);
+                }}
+                onDelete={async (course) => {
+                    try {
+                        if (course?.id) {
+                            await deleteUser({id: course.id}).unwrap();
 
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>First Name</TableHead>
-                                <TableHead>Last Name</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Role</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead className="text-right">Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {users.map((user) => (
-                                <TableRow key={user.id}>
-                                    <TableCell>{user.firstName}</TableCell>
-                                    <TableCell>{user.lastName}</TableCell>
-                                    <TableCell>{user.email}</TableCell>
-                                    <TableCell>
-                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                      {user.role}
-                    </span>
-                                    </TableCell>
-                                    <TableCell>
-                    <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                            user.isActive
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-red-100 text-red-800'
-                        }`}
-                    >
-                      {user.isActive ? 'Active' : 'Inactive'}
-                    </span>
-                                    </TableCell>
-                                    <TableCell className="text-right space-x-2">
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => handleEdit(user)}
-                                        >
-                                            <Edit2 className="h-4 w-4"/>
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="text-red-600"
-                                            onClick={() => handleDeleteClick(user)}
-                                        >
-                                            <Trash2 className="h-4 w-4"/>
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
+                        }
+                    } catch (e: any) {
+                        if (e?.originalStatus !== 200) {
+                            toast.error("Failed to delete course. Please try again later." + e?.data?.message);
+                        }
+                        toast.success("success to delete course");
+                        refetch();
+                    }
+                }}
+                isLoading={false}
+                isDeleting={ladingDelete}
+                onLimitChange={(newLimit) => {
+                    setLimit(newLimit);
+                    setPage(1);
+                }}
+            />
+
 
             {/* Add/Edit Dialog */}
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {selectedUser ? 'Edit User' : 'Add New User'}
+                            {selectedItem ? 'Edit User' : 'Add New User'}
                         </DialogTitle>
                         <DialogDescription>
-                            {selectedUser
+                            {selectedItem
                                 ? 'Update user information'
                                 : 'Create a new user account'}
                         </DialogDescription>
                     </DialogHeader>
 
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <form onSubmit={form.handleSubmit(onSubmit, errors => console.error(errors))}
+                              className="space-y-4">
                             <FormField
                                 control={form.control}
                                 name="firstName"
@@ -300,10 +281,9 @@ export default function AdminUsersPage() {
                                     </FormItem>
                                 )}
                             />
-
                             <FormField
                                 control={form.control}
-                                name="isActive"
+                                name="status"
                                 render={({field}) => (
                                     <FormItem>
                                         <FormLabel>Status</FormLabel>
@@ -331,32 +311,13 @@ export default function AdminUsersPage() {
                                     Cancel
                                 </Button>
                                 <Button type="submit">
-                                    {selectedUser ? 'Update' : 'Create'}
+                                    {selectedItem ? 'Update' : 'Create'}
                                 </Button>
                             </DialogFooter>
                         </form>
                     </Form>
                 </DialogContent>
             </Dialog>
-
-            {/* Delete Confirmation Dialog */}
-            <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Delete User</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Are you sure you want to delete {userToDelete?.firstName}{' '}
-                            {userToDelete?.lastName}? This action cannot be undone.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleDelete} className="bg-red-600">
-                            Delete
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
         </div>
     );
 }

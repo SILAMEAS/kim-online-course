@@ -273,7 +273,7 @@ export type UpdateVideoApiArg = {
   };
 };
 export type UpdateUserApiResponse =
-  /** status 200 User updated successfully */ string;
+  /** status 200 User updated successfully */ GeneralResponse;
 export type UpdateUserApiArg = {
   /** ID of the user to update */
   id: number;
@@ -327,7 +327,7 @@ export type UploadVideoApiArg = {
   uploadVideoRequest: UploadVideoRequest;
 };
 export type ListUsersApiResponse =
-  /** status 200 Users retrieved successfully */ UserResponse;
+  /** status 200 Users retrieved successfully */ ListUserPageResponse;
 export type ListUsersApiArg = {
   search?: string;
   page?: number;
@@ -459,16 +459,22 @@ export type UserResponse = {
   email: string;
   role: "STUDENT" | "INSTRUCTOR" | "ADMIN";
   imageUrl: string;
+  status: "ACTIVE" | "INACTIVE";
 };
 export type UserRequest = {
   firstName: string;
   lastName: string;
   file?: Blob;
 };
+export type GeneralResponse = {
+  message?: string;
+  status?: number;
+};
 export type UpdateUserRequest = {
-  fistName: string;
+  firstName: string;
   lastName: string;
-  role: "STUDENT" | "INSTRUCTOR" | "ADMIN";
+  role?: "STUDENT" | "INSTRUCTOR" | "ADMIN";
+  status?: "ACTIVE" | "INACTIVE";
 };
 export type VideoListResponse = {
   id?: number;
@@ -561,13 +567,17 @@ export type LoginRequest = {
   email: string;
   password: string;
 };
-export type GeneralResponse = {
-  message?: string;
-  status?: number;
-};
 export type UploadVideoRequest = {
   title?: string;
   file: Blob;
+};
+export type ListUserPageResponse = {
+  contents?: UserResponse[];
+  page?: number;
+  limit?: number;
+  total?: number;
+  totalPage?: number;
+  hasNext?: boolean;
 };
 export type EntityResponseHandlerUserResponse = {
   contents?: UserResponse[];

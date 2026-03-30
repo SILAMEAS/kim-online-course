@@ -16,8 +16,18 @@ import {
 import {useForm} from "react-hook-form";
 import {toast} from "sonner";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {CreateCourseApiArgSchema} from "@/lib/validations/schemas.ts";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
+import {z} from "zod";
+import {
+    categorySchema,
+    courseStatusSchema,
+    courseTitleSchema,
+    descriptionSchema,
+    fileSchema,
+    instructorIdSchema,
+    levelSchema,
+    priceSchema
+} from "@/lib/validations/global-schema.ts";
 
 interface CourseDialogProps {
     open: boolean;
@@ -36,6 +46,17 @@ enum CategoryStatus {
     BUSINESS = "BUSINESS",
 }
 
+enum levelStatus {
+    BEGINNER = "BEGINNER",
+    INTERMEDIATE = "INTERMEDIATE",
+    ADVANCE = "ADVANCE"
+}
+
+const levelStatusLabels: Record<levelStatus, string> = {
+    BEGINNER: "Beginner",
+    INTERMEDIATE: "intermediate",
+    ADVANCE: "advance",
+};
 const categoryLabels: Record<CategoryStatus, string> = {
     WEB_DEVELOPMENT: "Web Development",
     DATA_SCIENCE: "Data Science",
@@ -54,13 +75,22 @@ export function AddEditCourseDialog({
                                         handleSuccess
                                     }: Readonly<CourseDialogProps>) {
     const [preview, setPreview] = useState<string | null>(null);
-    const listTeachersQuery = useListTeachersQuery(DefaultPaginationRequest);
-    const teachers = listTeachersQuery.currentData?.contents || [];
+    const {currentData, refetch, isLoading} = useListTeachersQuery(DefaultPaginationRequest);
+    const teachers = currentData?.contents || [];
     const [addCourse] = useCreateCourseMutation();
     const [updateCourse] = useUpdateCourseMutation();
 
     const form = useForm<CreateCourseRequest>({
-        resolver: zodResolver(CreateCourseApiArgSchema),
+        resolver: zodResolver(z.object({
+            title: courseTitleSchema,
+            category: categorySchema,
+            file: fileSchema,
+            description: descriptionSchema,
+            instructorId: instructorIdSchema,
+            level: levelSchema,
+            price: priceSchema,
+            status: courseStatusSchema,
+        })),
     });
 
     React.useEffect(() => {
@@ -76,24 +106,25 @@ export function AddEditCourseDialog({
                 file: selectedCourse.imageUrl
             });
             selectedCourse.imageUrl && setPreview(selectedCourse.imageUrl)
-        } else {
-            form.reset({
-                title: `New Course <${new Date(Date.now() + 1000 * 60 * 60).toISOString()?.slice(0, 19)}>`,
-                file: "",
-                category: "WEB_DEVELOPMENT",
-                description: "new description of the course",
-                instructorId: undefined,
-                level: "BEGINNER",
-                price: 100,
-                status: "PUBLISHED",
-            });
-            setPreview(null)
         }
+        // else {
+        //     form.reset({
+        //         title: `New Course <${new Date(Date.now() + 1000 * 60 * 60).toISOString()?.slice(0, 19)}>`,
+        //         file: "",
+        //         category: "WEB_DEVELOPMENT",
+        //         description: "new description of the course",
+        //         instructorId: undefined,
+        //         level: "BEGINNER",
+        //         price: 100,
+        //         status: "PUBLISHED",
+        //     });
+        //     setPreview(null)
+        // }
     }, [selectedCourse, form]);
 
 
     const handleSelectTeachers = () => {
-        if (listTeachersQuery?.isLoading) {
+        if (isLoading) {
             return <option disabled>Loading...</option>
         }
         if (teachers.length === 0) {
@@ -144,6 +175,11 @@ export function AddEditCourseDialog({
         }
     }
 
+    React.useEffect(() => {
+        open &&
+        refetch()
+    }, [open])
+
     return (
         <Dialog open={open} onOpenChange={() => {
             onOpenChange(false);
@@ -191,7 +227,7 @@ export function AddEditCourseDialog({
                             )}
                         />
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-3 gap-4">
                             <FormField
                                 control={form.control}
                                 name="instructorId"
@@ -231,6 +267,29 @@ export function AddEditCourseDialog({
                                                 {Object.values(CategoryStatus).map((c) => (
                                                     <option key={c} value={c}>
                                                         {categoryLabels[c]}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* Level */}
+                            <FormField
+                                control={form.control}
+                                name="level"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Level</FormLabel>
+                                        <FormControl>
+                                            <select {...field}
+                                                    className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+                                                <option value="">Select Level</option>
+                                                {Object.values(levelStatus).map((c) => (
+                                                    <option key={c} value={c}>
+                                                        {levelStatusLabels[c]}
                                                     </option>
                                                 ))}
                                             </select>

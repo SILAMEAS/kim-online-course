@@ -139,6 +139,7 @@ export function CustomTable<T extends Record<string, any>>({
                                     <div className={actionColumnStyle}>
                                         {onEdit && (
                                             <Button
+                                                disabled={Boolean(row?.role==="ADMIN")}
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={() => onEdit(row)}
@@ -152,6 +153,7 @@ export function CustomTable<T extends Record<string, any>>({
                                             (isDeleting && row?.id == deleteItem?.id) ?
                                                 <Loader2 className="h-4 w-4 animate-spin"/> :
                                                 <Button
+                                                    disabled={Boolean(row?.role==="ADMIN")}
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => {

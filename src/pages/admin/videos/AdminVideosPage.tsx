@@ -19,6 +19,9 @@ import {Input} from '@/components/ui/input';
 import {useForm} from "react-hook-form";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import previewCloudinary from "@/components/previewCloudinary.ts";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {z} from "zod";
+import {videoFileSchema} from "@/lib/validations/global-schema.ts";
 
 
 export default function AdminVideosPage() {
@@ -43,17 +46,26 @@ export default function AdminVideosPage() {
     const [preview, setPreview] = useState<string | null>(null);
     //  Form management
     const form = useForm<UploadVideoApiArg>({
-        defaultValues: {
-            courseId: 5,
-            uploadVideoRequest: {
-                title: "TEST",
-                file: undefined,
-            }
-        },
+        resolver: zodResolver(z.object({
+            courseId: z
+                .number({
+                    required_error: "Course is required",
+                    invalid_type_error: "Course ID must be a number",
+                })
+                .min(1, {message: "Course must be selected"}),
+            uploadVideoRequest: z.object({
+                title: z.string({
+                    required_error: "Title is required",
+                    invalid_type_error: "Title must be string"
+                }).min(5, {message: "Title more than 5 characters"}),
+                file: videoFileSchema
+            })
+        }))
     });
 
     async function onSubmit(data: UploadVideoApiArg) {
         try {
+            console.log("data", data)
             const formData = new FormData();
             formData.append("title", String(data.uploadVideoRequest.title));
             const file = data.uploadVideoRequest.file;
@@ -119,9 +131,14 @@ export default function AdminVideosPage() {
             setSelectedItem(null);
             form.reset();
         }
+        if (open) {
+            listAllCoursesQuery.refetch();
+            form.reset();
+        }
 
     }, [open])
 
+    console.log(form.getValues())
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -253,6 +270,7 @@ export default function AdminVideosPage() {
                                                 onChange={(e) => {
                                                     const file =
                                                         e.target.files?.[0];
+                                                    console.log("file", file);
                                                     if (!file) return;
 
                                                     field.onChange(file);

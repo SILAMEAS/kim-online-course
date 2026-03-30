@@ -28,24 +28,25 @@ import {DefaultPaginationRequest} from "@/lib/types.ts";
 import {toast} from "sonner";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
+import {useAppSelector} from "@/lib/redux/hooks.ts";
+import {EnumRole} from "@/lib/enum.ts";
+import {
+    emailSchema,
+    firstNameSchema,
+    lastNameSchema,
+    roleSchema,
+    statusSchema
+} from "@/lib/validations/global-schema.ts";
 
-const userSchema = z.object({
-    firstName: z.string().min(1, 'First name is required'),
-    lastName: z.string().min(1, 'Last name is required'),
-    email: z.string().email('Invalid email'),
-    role: z.enum(['STUDENT', 'INSTRUCTOR', 'ADMIN']),
-    status: z.enum(['ACTIVE', 'INACTIVE']),
-});
 
 export default function AdminUsersPage() {
+    const {currentUser} = useAppSelector(state => state.auth)
 
     const {currentData, refetch} = useListUsersQuery(DefaultPaginationRequest);
     const users = currentData?.contents ?? []
-    // const [users, setUsers] = React.useState(mockUsers);
     const [open, setOpen] = React.useState(false);
-    // const [selectedUser, setSelectedUser] = React.useState<UserResponse | null>(null);
-    const [createUser] = useCreateUserMutation();
-    const [updateUser] = useUpdateUserMutation();
+    const [createUser, {isSuccess: isSuccessCreateUser}] = useCreateUserMutation();
+    const [updateUser, {isSuccess: isSuccessUpdateUser}] = useUpdateUserMutation();
     const [deleteUser, {isLoading: ladingDelete}] = useDeleteUserMutation();
     const {
         setPage,
@@ -61,7 +62,13 @@ export default function AdminUsersPage() {
     } = useCustomTable<UserResponse>();
 
     const form = useForm<CreateUserRequest | UpdateUserRequest>({
-        resolver: zodResolver(userSchema)
+        resolver: zodResolver(z.object({
+            firstName: firstNameSchema,
+            lastName: lastNameSchema,
+            role: roleSchema,
+            email: emailSchema,
+            status: statusSchema
+        }))
     });
 
     React.useEffect(() => {
@@ -70,7 +77,7 @@ export default function AdminUsersPage() {
                 firstName: selectedItem.firstName,
                 lastName: selectedItem.lastName,
                 email: selectedItem.email,
-                role: selectedItem.role as 'STUDENT' | 'INSTRUCTOR' | 'ADMIN',
+                role: selectedItem.role as any,
                 status: selectedItem.status,
             });
         } else {
@@ -90,9 +97,9 @@ export default function AdminUsersPage() {
             const formData = new FormData();
             formData.append('firstName', data.firstName);
             formData.append('lastName', data.lastName);
+            formData.append('role', data.role);
 
 
-            console.log(data);
             if (selectedItem?.id) {
                 await updateUser({
                     id: selectedItem.id,
@@ -120,28 +127,17 @@ export default function AdminUsersPage() {
         }
     };
 
-    // const handleEdit = (user: UserResponse) => {
-    //     setSelectedUser(user);
-    //     setOpen(true);
-    // };
-    //
-    // const handleDeleteClick = (user: UserResponse) => {
-    //     setUserToDelete(user);
-    //     setDeleteOpen(true);
-    // };
-
-    // const handleDelete = () => {
-    //     if (userToDelete) {
-    //         // setUsers(users.filter((user) => user.id !== userToDelete.id));
-    //         setDeleteOpen(false);
-    //         setUserToDelete(null);
-    //     }
-    // };
 
     const handleAdd = () => {
         setSelectedItem(null);
         setOpen(true);
     };
+
+    React.useEffect(() => {
+        if (isSuccessCreateUser || isSuccessUpdateUser) {
+            refetch()
+        }
+    }, [isSuccessUpdateUser, isSuccessCreateUser])
 
     return (
         <div className="space-y-6">
@@ -274,7 +270,8 @@ export default function AdminUsersPage() {
                                             <SelectContent>
                                                 <SelectItem value="STUDENT">Student</SelectItem>
                                                 <SelectItem value="INSTRUCTOR">Instructor</SelectItem>
-                                                <SelectItem value="ADMIN">Admin</SelectItem>
+                                                <SelectItem value="ADMIN"
+                                                            disabled={currentUser?.role !== EnumRole.ADMIN}>Admin</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage/>

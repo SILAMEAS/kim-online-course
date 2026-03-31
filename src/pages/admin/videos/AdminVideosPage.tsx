@@ -138,7 +138,6 @@ export default function AdminVideosPage() {
 
     }, [open])
 
-    console.log(form.getValues())
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">

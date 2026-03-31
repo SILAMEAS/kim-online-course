@@ -1,12 +1,11 @@
 import {useParams} from "react-router-dom";
-import {useAppSelector} from "@/lib/redux/hooks.ts";
 import {Navbar} from "@/components/navbar.tsx";
 import {Footer} from "@/components/footer.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
 import {BookMarked, Clock, ShoppingCart, Star, Users} from "lucide-react";
 import {
     useGetAllEnrollmentsByCourseQuery,
-    useGetCourseDetailQuery,
+    useGetCourseDetailQuery, useGetVideosByCourseIdQuery,
     useSubmitPaymentMutation
 } from "@/lib/api/api.generated.ts";
 import {Avatar, AvatarImage} from "@/components/ui/avatar.tsx";
@@ -17,36 +16,17 @@ import {RootState} from "@/lib/redux/store.ts";
 import {EnumRole} from "@/lib/enum.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {toast} from "sonner";
+import {CourseCurriculum} from "@/components/course/course-curriculum.tsx";
+import {DefaultPaginationRequest} from "@/lib/types.ts";
 
 export default function CourseDetailPage() {
     const currentUser = useSelector((state: RootState) => state.auth.currentUser);
     const {id: courseId} = useParams<{ id: string }>();
     const courseDetailQuery = useGetCourseDetailQuery({courseId: Number(courseId)}, {skip: !courseId});
     const enrollmentsByCourseQuery = useGetAllEnrollmentsByCourseQuery({courseId: Number(courseId)}, {skip: !courseDetailQuery?.currentData?.id || currentUser?.role == EnumRole.INSTRUCTOR});
+    const videosByCourseIdQuery=useGetVideosByCourseIdQuery({ ...DefaultPaginationRequest, courseId: Number(courseId)})
     const [submitPayment, {isLoading: paymentLoading}] = useSubmitPaymentMutation();
-    // const navigate = useNavigate();
-
-    // const dispatch = useAppDispatch();
-    const selectedCourse = useAppSelector(
-        (state) => state.courses.selectedCourse,
-    );
-    // const currentUser = useAppSelector((state) => state.auth.currentUser);
-    // const enrolledCourses = currentUser?.enrolled_courses || [];
-
-    // const {data: reviews = [], isLoading: reviewsLoading} =
-    //     useGetReviewsByCourse(courseId || "");
-    //
-    // const [isBuyLoading, setIsBuyLoading] = useState(false);
-
-    // Load course on mount
-    // useEffect(() => {
-    //     if (courseDetailQuery?.currentData) {
-    //         dispatch(setSelectedCourse(courseDetailQuery?.currentData));
-    //     } else {
-    //         toast.error("Course not found");
-    //         navigate("/courses");
-    //     }
-    // }, [courseDetailQuery.isSuccess, courseDetailQuery.currentData]);
+    const hasBeenEnrollments = enrollmentsByCourseQuery?.currentData?.contents?.find(d => d.course?.id === Number(courseId))
 
     if ((courseDetailQuery?.isLoading || courseDetailQuery?.isFetching) && !courseDetailQuery?.currentData) {
         return (
@@ -61,42 +41,8 @@ export default function CourseDetailPage() {
             </div>
         );
     }
-    //
-    // const isEnrolled = enrolledCourses.includes(selectedCourse.id);
-    //
-    // const handleEnroll = async () => {
-    //     if (!currentUser) {
-    //         toast.error("Please login to enroll");
-    //         navigate("/login");
-    //         return;
-    //     }
-    //
-    //     setIsBuyLoading(true);
-    //
-    //     try {
-    //         // Simulate enrollment
-    //         await new Promise((resolve) => setTimeout(resolve, 1000));
-    //
-    //         // Add to cart first
-    //         dispatch(
-    //             addToCart({
-    //                 id: `cart-${selectedCourse.id}`,
-    //                 course_id: selectedCourse.id,
-    //                 course_title: selectedCourse.title,
-    //                 price: selectedCourse.price,
-    //                 image: selectedCourse.image,
-    //                 instructor_name: selectedCourse.instructor.name,
-    //             }),
-    //         );
-    //
-    //         toast.success("Course added to cart! Proceed to checkout.");
-    //         navigate("/cart");
-    //     } catch (error) {
-    //         toast.error("Failed to add course. Please try again.");
-    //     } finally {
-    //         setIsBuyLoading(false);
-    //     }
-    // };
+
+    // console.log("videosByCourseIdQuery",videosByCourseIdQuery?.currentData)
     return (
         <div className="min-h-screen flex flex-col">
             <Navbar/>
@@ -172,20 +118,15 @@ export default function CourseDetailPage() {
                                         <p className="font-semibold">
                                             {`${courseDetailQuery?.currentData?.instructor?.firstName} ${courseDetailQuery?.currentData?.instructor?.lastName}`}
                                         </p>
-                                        <p className="text-sm text-foreground/60">
-                                            {/*{courseDetailQuery?.currentData?.instructor?.}*/}
-                                        </p>
-                                        {/*{selectedCourse.instructor.bio && (*/}
-                                        {/*    <p className="text-sm text-foreground/70 mt-2">*/}
-                                        {/*        {selectedCourse.instructor.bio}*/}
-                                        {/*    </p>*/}
-                                        {/*)}*/}
                                     </div>
                                 </div>
                             </div>
 
                             {/* Curriculum */}
-                            {/*<CourseCurriculum curriculum={selectedCourse.curriculum}/>*/}
+                            {
+                                videosByCourseIdQuery?.currentData?.contents&&videosByCourseIdQuery?.currentData?.contents?.length > 0 && <CourseCurriculum curriculum={ videosByCourseIdQuery?.currentData?.contents}/>
+                            }
+
 
                             {/* Reviews */}
                             <div className="space-y-6">
@@ -219,7 +160,7 @@ export default function CourseDetailPage() {
                                         </p>
                                     </div>
 
-                                    {enrollmentsByCourseQuery?.currentData?.contents?.find(en => en.id === courseId) ? (
+                                    {hasBeenEnrollments ? (
                                         <Button className="w-full" disabled>
                                             <BookMarked className="w-4 h-4 mr-2"/>
                                             Already Enrolled
@@ -246,7 +187,7 @@ export default function CourseDetailPage() {
                                     <div className="space-y-3 text-sm">
                                         <div className="flex items-start gap-3">
                                             <Clock className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary"/>
-                                            <span>{selectedCourse?.duration} hours of content</span>
+                                            <span>{courseDetailQuery?.currentData?.duration} hours of content</span>
                                         </div>
                                         <div className="flex items-start gap-3">
                                             <Star className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary"/>

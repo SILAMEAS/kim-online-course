@@ -483,6 +483,7 @@ export type VideoListResponse = {
   id?: number;
   title?: string;
   publicId?: string;
+  duration?: number;
 };
 export type CourseDetailResponse = {
   id?: number;

@@ -3,7 +3,6 @@ import {Button} from "@/components/ui/button";
 import {
     BookOpen,
     CreditCard,
-    Image,
     LayoutDashboard,
     PanelLeftClose,
     PanelLeftOpen,
@@ -55,11 +54,11 @@ const navItemsDefault = [
         label: 'Enrollments',
         icon: UserCheck,
     },
-    {
-        href: '/admin/images',
-        label: 'Images',
-        icon: Image,
-    },
+    // {
+    //     href: '/admin/images',
+    //     label: 'Images',
+    //     icon: Image,
+    // },
 ];
 
 export const Sidebar = ({navItems, pathname}: SidebarProps) => {

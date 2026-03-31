@@ -209,7 +209,10 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
-    getAll: build.query<GetAllApiResponse, GetAllApiArg>({
+    getAllEnrollments: build.query<
+      GetAllEnrollmentsApiResponse,
+      GetAllEnrollmentsApiArg
+    >({
       query: (queryArg) => ({
         url: `/api/enrollments`,
         params: {
@@ -221,9 +224,9 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
-    getAllByCourse: build.query<
-      GetAllByCourseApiResponse,
-      GetAllByCourseApiArg
+    getAllEnrollmentsByCourse: build.query<
+      GetAllEnrollmentsByCourseApiResponse,
+      GetAllEnrollmentsByCourseApiArg
     >({
       query: (queryArg) => ({
         url: `/api/enrollments/courses/${queryArg.courseId}`,
@@ -410,7 +413,7 @@ export type ListTeachersApiArg = {
   sortOrder?: string;
 };
 export type GetAllPaymentsApiResponse =
-  /** status 200 Payments retrieved successfully */ ListPaymentResponse;
+  /** status 200 Payments retrieved successfully */ PaymentsPageResponse;
 export type GetAllPaymentsApiArg = {
   search?: string;
   page?: number;
@@ -418,18 +421,18 @@ export type GetAllPaymentsApiArg = {
   sortBy?: string;
   sortOrder?: string;
 };
-export type GetAllApiResponse =
-  /** status 200 Enrollments retrieved successfully */ EnrollmentResponse;
-export type GetAllApiArg = {
+export type GetAllEnrollmentsApiResponse =
+  /** status 200 Enrollments retrieved successfully */ EnrollmentsPageResponse;
+export type GetAllEnrollmentsApiArg = {
   search?: string;
   page?: number;
   limit?: number;
   sortBy?: string;
   sortOrder?: string;
 };
-export type GetAllByCourseApiResponse =
-  /** status 200 Enrollments retrieved successfully */ EnrollmentResponse;
-export type GetAllByCourseApiArg = {
+export type GetAllEnrollmentsByCourseApiResponse =
+  /** status 200 Enrollments retrieved successfully */ EnrollmentsPageResponse;
+export type GetAllEnrollmentsByCourseApiArg = {
   /** ID of the course */
   courseId: number;
   search?: string;
@@ -658,6 +661,16 @@ export type ListPaymentResponse = {
   amount?: number;
   status?: string;
   user?: UserResponse;
+  course?: CourseResponse;
+  approvedBy?: number;
+};
+export type PaymentsPageResponse = {
+  contents?: ListPaymentResponse[];
+  page?: number;
+  limit?: number;
+  total?: number;
+  totalPage?: number;
+  hasNext?: boolean;
 };
 export type EntityResponseHandlerListPaymentResponse = {
   contents?: ListPaymentResponse[];
@@ -665,6 +678,14 @@ export type EntityResponseHandlerListPaymentResponse = {
   limit?: number;
   totalPage?: number;
   total?: number;
+  hasNext?: boolean;
+};
+export type EnrollmentsPageResponse = {
+  contents?: EnrollmentResponse[];
+  page?: number;
+  limit?: number;
+  total?: number;
+  totalPage?: number;
   hasNext?: boolean;
 };
 export type EntityResponseHandlerEnrollmentResponse = {
@@ -700,8 +721,8 @@ export const {
   useDeleteVideosByCourseIdMutation,
   useListTeachersQuery,
   useGetAllPaymentsQuery,
-  useGetAllQuery,
-  useGetAllByCourseQuery,
+  useGetAllEnrollmentsQuery,
+  useGetAllEnrollmentsByCourseQuery,
   useDeleteAllByCourseMutation,
   useDeleteVideoMutation,
 } = injectedRtkApi;

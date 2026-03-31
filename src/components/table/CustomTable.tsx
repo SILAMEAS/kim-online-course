@@ -35,6 +35,7 @@ interface DataTableProps<T> {
     // actions
     onEdit?: (row: T) => Promise<void>;
     onDelete?: (row: T) => Promise<void>;
+    quickAction?: (row: T) => React.ReactNode;
     isDeleting?: boolean;
 
     // sorting (controlled)
@@ -64,7 +65,9 @@ export function CustomTable<T extends Record<string, any>>({
                                                                onSortChange,
 
                                                                pagination, onLimitChange,
-                                                               onPageChange
+                                                               onPageChange,
+
+                                                               quickAction
                                                            }: Readonly<DataTableProps<T>>) {
     const [deleteId, setDeleteId] = React.useState<string | null>(null);
     const [deleteItem, setDeleteItem] = React.useState<T | null>(null);
@@ -139,7 +142,7 @@ export function CustomTable<T extends Record<string, any>>({
                                     <div className={actionColumnStyle}>
                                         {onEdit && (
                                             <Button
-                                                disabled={Boolean(row?.role==="ADMIN")}
+                                                disabled={Boolean(row?.role === "ADMIN")}
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={() => onEdit(row)}
@@ -153,7 +156,7 @@ export function CustomTable<T extends Record<string, any>>({
                                             (isDeleting && row?.id == deleteItem?.id) ?
                                                 <Loader2 className="h-4 w-4 animate-spin"/> :
                                                 <Button
-                                                    disabled={Boolean(row?.role==="ADMIN")}
+                                                    disabled={Boolean(row?.role === "ADMIN")}
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => {
@@ -164,6 +167,8 @@ export function CustomTable<T extends Record<string, any>>({
                                                     <Trash2 className="h-4 w-4"/>
                                                 </Button>
                                         )}
+
+                                        {quickAction?.(row)}
                                     </div>
                                 </TableCell>
                             </TableRow>

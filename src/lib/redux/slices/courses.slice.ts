@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Course } from '../../types';
+import {CourseResponse} from "@/lib/api/api.generated.ts";
 
 interface CourseFilters {
   category: string | null;
@@ -11,7 +12,7 @@ interface CourseFilters {
 
 interface CoursesState {
   items: Course[];
-  selectedCourse: Course | null;
+  selectedCourse: CourseResponse | null;
   filters: CourseFilters;
   isLoading: boolean;
   error: string | null;
@@ -42,7 +43,7 @@ const coursesSlice = createSlice({
       state.items = action.payload;
       state.isLoading = false;
     },
-    setSelectedCourse: (state, action: PayloadAction<Course | null>) => {
+    setSelectedCourse: (state, action: PayloadAction<CourseResponse | null>) => {
       state.selectedCourse = action.payload;
     },
     setError: (state, action: PayloadAction<string>) => {

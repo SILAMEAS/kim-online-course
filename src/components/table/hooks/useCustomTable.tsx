@@ -1,4 +1,5 @@
 import React from 'react';
+import {useAppSelector} from "@/lib/redux/hooks.ts";
 
 const useCustomTable = <T, >() => {
     const [sortBy, setSortBy] = React.useState<keyof T | undefined>();
@@ -7,6 +8,7 @@ const useCustomTable = <T, >() => {
     const [limit, setLimit] = React.useState(10);
     const [open, setOpen] = React.useState(false);
     const [selectedItem, setSelectedItem] = React.useState<T | null>(null);
+    const {currentUser} = useAppSelector(state => state.auth)
     return {
         sortBy,
         setSortBy,
@@ -19,7 +21,10 @@ const useCustomTable = <T, >() => {
         open,
         setOpen,
         selectedItem,
-        setSelectedItem
+        setSelectedItem,
+        // filter,
+        // setFilter,
+        currentUser
     }
 };
 

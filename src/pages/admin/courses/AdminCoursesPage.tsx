@@ -20,7 +20,7 @@ export default function AdminCoursesPage() {
         sortDirection,
         setLimit
     } = useCustomTable<CourseResponse>();
-    const {currentData, refetch} = useListAllCoursesQuery(DefaultPaginationRequest);
+    const {currentData, refetch} = useListAllCoursesQuery({...DefaultPaginationRequest, sortBy, page, limit});
     const courses = currentData?.contents || [];
     const [open, setOpen] = React.useState(false);
     const [deleteCourse, resultDeleteCourse] = useDeleteCourseByIdMutation();

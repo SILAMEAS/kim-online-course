@@ -36,7 +36,7 @@ export default function AdminVideosPage() {
         setLimit,
         setOpen, open, setSelectedItem, selectedItem
     } = useCustomTable<VideoListResponse>();
-    const listAllCoursesQuery = useListAllCoursesQuery(DefaultPaginationRequest);
+    const listAllCoursesQuery = useListAllCoursesQuery({...DefaultPaginationRequest, sortBy, page, limit});
     const courses = listAllCoursesQuery?.data?.contents || [];
     //   State management
     const [uploadVideo] = useUploadVideoMutation();

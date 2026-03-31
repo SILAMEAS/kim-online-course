@@ -28,7 +28,6 @@ import {DefaultPaginationRequest} from "@/lib/types.ts";
 import {toast} from "sonner";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
-import {useAppSelector} from "@/lib/redux/hooks.ts";
 import {EnumRole} from "@/lib/enum.ts";
 import {
     emailSchema,
@@ -40,14 +39,6 @@ import {
 
 
 export default function AdminUsersPage() {
-    const {currentUser} = useAppSelector(state => state.auth)
-
-    const {currentData, refetch} = useListUsersQuery(DefaultPaginationRequest);
-    const users = currentData?.contents ?? []
-    const [open, setOpen] = React.useState(false);
-    const [createUser, {isSuccess: isSuccessCreateUser}] = useCreateUserMutation();
-    const [updateUser, {isSuccess: isSuccessUpdateUser}] = useUpdateUserMutation();
-    const [deleteUser, {isLoading: ladingDelete}] = useDeleteUserMutation();
     const {
         setPage,
         page,
@@ -59,7 +50,15 @@ export default function AdminUsersPage() {
         setLimit,
         selectedItem,
         setSelectedItem,
+        currentUser,
     } = useCustomTable<UserResponse>();
+
+    const {currentData, refetch} = useListUsersQuery({...DefaultPaginationRequest, sortBy, page, limit});
+    const users = currentData?.contents ?? []
+    const [open, setOpen] = React.useState(false);
+    const [createUser, {isSuccess: isSuccessCreateUser}] = useCreateUserMutation();
+    const [updateUser, {isSuccess: isSuccessUpdateUser}] = useUpdateUserMutation();
+    const [deleteUser, {isLoading: ladingDelete}] = useDeleteUserMutation();
 
     const form = useForm<CreateUserRequest | UpdateUserRequest>({
         resolver: zodResolver(z.object({

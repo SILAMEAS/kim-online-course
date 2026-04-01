@@ -53,7 +53,7 @@ export default function AdminUsersPage() {
         currentUser,
     } = useCustomTable<UserResponse>();
 
-    const {currentData, refetch} = useListUsersQuery({...DefaultPaginationRequest, sortBy, page, limit});
+    const {currentData, refetch,isLoading,isFetching} = useListUsersQuery({...DefaultPaginationRequest, sortBy, page, limit});
     const users = currentData?.contents ?? []
     const [open, setOpen] = React.useState(false);
     const [createUser, {isSuccess: isSuccessCreateUser}] = useCreateUserMutation();
@@ -186,7 +186,7 @@ export default function AdminUsersPage() {
                         refetch();
                     }
                 }}
-                isLoading={false}
+                isLoading={isLoading||isFetching}
                 isDeleting={ladingDelete}
                 onLimitChange={(newLimit) => {
                     setLimit(newLimit);

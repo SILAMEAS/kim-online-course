@@ -20,7 +20,7 @@ export default function AdminCoursesPage() {
         sortDirection,
         setLimit
     } = useCustomTable<CourseResponse>();
-    const {currentData, refetch} = useListAllCoursesQuery({...DefaultPaginationRequest, sortBy, page, limit});
+    const {currentData, refetch,isLoading,isFetching} = useListAllCoursesQuery({...DefaultPaginationRequest, sortBy, page, limit});
     const courses = currentData?.contents || [];
     const [open, setOpen] = React.useState(false);
     const [deleteCourse, resultDeleteCourse] = useDeleteCourseByIdMutation();
@@ -78,7 +78,7 @@ export default function AdminCoursesPage() {
                         refetch();
                     }
                 }}
-                isLoading={false}
+                isLoading={isLoading||isFetching}
                 isDeleting={resultDeleteCourse.isLoading}
                 onLimitChange={(newLimit) => {
                     setLimit(newLimit);

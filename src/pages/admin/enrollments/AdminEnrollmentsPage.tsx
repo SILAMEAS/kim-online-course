@@ -3,7 +3,7 @@ import {Button} from '@/components/ui/button';
 import {Plus} from 'lucide-react';
 // import {z} from 'zod';
 import {CustomTable} from "@/components/table/CustomTable.tsx";
-import {EnrollmentResponse, useGetAllEnrollmentsQuery} from "@/lib/api/api.generated.ts";
+import {EnrollmentResponse, ListCourseResponse, useGetAllEnrollmentsQuery} from "@/lib/api/api.generated.ts";
 import {toast} from "sonner";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
@@ -86,8 +86,10 @@ export default function AdminEnrollmentsPage() {
                 columns={[
                     {key: 'id', label: 'ID', sortable: true},
                     {key: 'status', label: 'Status', sortable: true},
-                    // {key: '', label: 'Course Id', sortable: true},
-                    {key: 'course', label: 'Amount', sortable: true},
+                    {key: 'course', label: 'Course',render:(r)=>{
+                        const data=r as ListCourseResponse;
+                        return <p> {data.title} </p>
+                        }},
                 ]}
                 data={enrollments}
                 sortBy={sortBy}

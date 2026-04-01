@@ -381,9 +381,8 @@ export type GetVideosApiArg = {
   sortOrder?: string;
 };
 export type WatchVideoApiResponse =
-  /** status 200 Video link retrieved successfully */ string;
+  /** status 200 Watch video successfully */ VideoWatchResponse;
 export type WatchVideoApiArg = {
-  /** Public ID of the video in Cloudinary */
   publicId: string;
 };
 export type GetVideosByCourseIdApiResponse =
@@ -657,6 +656,10 @@ export type EntityResponseHandlerVideoListResponse = {
   total?: number;
   hasNext?: boolean;
 };
+export type VideoWatchResponse = {
+  url?: string;
+  expiresAt?: number;
+};
 export type ListPaymentResponse = {
   id?: number;
   amount?: number;
@@ -726,4 +729,5 @@ export const {
   useGetAllEnrollmentsByCourseQuery,
   useDeleteAllByCourseMutation,
   useDeleteVideoMutation,
+  useLazyWatchVideoQuery
 } = injectedRtkApi;

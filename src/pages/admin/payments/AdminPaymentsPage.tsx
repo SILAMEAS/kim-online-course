@@ -32,7 +32,7 @@ export default function AdminPaymentsPage() {
         setLimit,
         currentUser
     } = useCustomTable<ListPaymentResponse>();
-    const {currentData, refetch} = useGetAllPaymentsQuery(DefaultPaginationRequest);
+    const {currentData, refetch,isLoading,isFetching} = useGetAllPaymentsQuery(DefaultPaginationRequest);
     const [approve, approveResult] = useApproveMutation();
     const payments = currentData?.contents ?? [];
 
@@ -89,7 +89,7 @@ export default function AdminPaymentsPage() {
                 >
                     {approveResult?.isLoading?"Approving ...": "Approve"}
                 </Button>}
-                isLoading={false}
+                isLoading={isLoading||isFetching}
                 onLimitChange={(newLimit) => {
                     setLimit(newLimit);
                     setPage(1);

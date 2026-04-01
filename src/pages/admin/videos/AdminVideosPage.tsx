@@ -189,7 +189,7 @@ export default function AdminVideosPage() {
                             toast.error("Failed to delete video. Please try again later." + e?.data?.message);
                         }
                     }}
-                    isLoading={false}
+                    isLoading={listAllCoursesQuery?.isLoading||listAllCoursesQuery?.isFetching}
                     onLimitChange={(newLimit) => {
                         setLimit(newLimit);
                         setPage(1);

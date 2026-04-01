@@ -9,7 +9,7 @@ import {
     AlertDialogDescription,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog.tsx';
-import {ArrowUpDown, Edit2, Loader2, Trash2} from 'lucide-react';
+import {ArrowDown, ArrowRightLeft, ArrowUp, Edit2, Loader2, Trash2} from 'lucide-react';
 import PaginationCustomTable from "@/components/table/commons/PaginationCustomTable.tsx";
 
 type SortDirection = 'ASC' | 'DES';
@@ -73,6 +73,7 @@ export function CustomTable<T extends Record<string, any>>({
     const [deleteItem, setDeleteItem] = React.useState<T | null>(null);
 
     const handleSort = (key: keyof T) => {
+
         if (!onSortChange) return;
 
         const newDirection: SortDirection =
@@ -98,6 +99,16 @@ export function CustomTable<T extends Record<string, any>>({
     }
     const actionColumnStyle = "flex items-center justify-center gap-2";
 
+    const handleIconSort = (col: Column<T>) => {
+        if (sortBy && col.key === sortBy) {
+            if (sortDirection === "ASC") {
+                return <ArrowUp className="h-4 w-4"/>
+            }
+            return <ArrowDown className="h-4 w-4"/>
+        }
+        return <ArrowRightLeft className="h-4 w-4"/>;
+    }
+
     return (
         <>
             <div className="border rounded-lg overflow-hidden">
@@ -113,7 +124,10 @@ export function CustomTable<T extends Record<string, any>>({
                                                 onClick={() => handleSort(col.key)}
                                                 className="hover:opacity-70"
                                             >
-                                                <ArrowUpDown className="h-4 w-4"/>
+                                                {
+                                                    handleIconSort(col)
+                                                }
+
                                             </button>
                                         )}
                                     </div>
@@ -200,7 +214,7 @@ export function CustomTable<T extends Record<string, any>>({
                                         })
                                     }
                                 } catch (e) {
-                                    console.log("error", e)
+                                    console.error("error", e)
                                 }
                             }
                             }

@@ -43,11 +43,12 @@ export const baseQueryWithReauth: BaseQueryFn<any, unknown, unknown> = async (
     if (Forbidden && !publicEndpoint.includes(api.endpoint)) {
         const refreshToken = Cookies.get("refreshToken");
         if (refreshToken) {
-            const refreshResult = await baseQuery(
-                {url: "/auths/refresh-token", method: "POST", body: {refreshToken}},
-                api,
-                extraOptions,
-            );
+            // Call refresh endpoint WITHOUT accessToken
+            const refreshResult = await customBaseQuery(ENV.API_URL, true)({
+                url: "/auths/refresh-token",
+                method: "POST",
+                body: { refreshToken },
+            }, api, extraOptions);
             console.log(refreshResult)
             if (refreshResult.data) {
                 const data = refreshResult.data as LoginResponse;

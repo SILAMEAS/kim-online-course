@@ -381,8 +381,9 @@ export type GetVideosApiArg = {
   sortOrder?: string;
 };
 export type WatchVideoApiResponse =
-  /** status 200 Watch video successfully */ VideoWatchResponse;
+  /** status 200 Video link retrieved successfully */ string;
 export type WatchVideoApiArg = {
+  /** Public ID of the video in Cloudinary */
   publicId: string;
 };
 export type GetVideosByCourseIdApiResponse =
@@ -478,35 +479,6 @@ export type UpdateUserRequest = {
   role?: "STUDENT" | "INSTRUCTOR" | "ADMIN";
   status?: "ACTIVE" | "INACTIVE";
 };
-export type VideoListResponse = {
-  id?: number;
-  title?: string;
-  publicId?: string;
-  duration?: number;
-};
-export type CourseDetailResponse = {
-  id?: number;
-  title?: string;
-  description?: string;
-  price?: number;
-  instructor?: UserResponse;
-  imageUrl?: string;
-  level?: "BEGINNER" | "INTERMEDIATE" | "ADVANCE";
-  status?: "DRAFT" | "PUBLISHED" | "PREPARE";
-  category?:
-    | "WEB_DEVELOPMENT"
-    | "DATA_SCIENCE"
-    | "DESIGN"
-    | "MOBILE_DEVELOPMENT"
-    | "CLOUD_COMPUTING"
-    | "DEV_OPS"
-    | "BUSINESS";
-  rating?: number;
-  reviewsCount?: number;
-  duration?: number;
-  studentsCount?: number;
-  curriculum?: VideoListResponse;
-};
 export type CourseResponse = {
   id?: number;
   title?: string;
@@ -530,6 +502,36 @@ export type CourseResponse = {
   duration?: number;
   studentsCount?: number;
   instructor?: UserResponse;
+};
+export type VideoListResponse = {
+  id?: number;
+  title?: string;
+  publicId?: string;
+  duration?: number;
+  course?: CourseResponse;
+};
+export type CourseDetailResponse = {
+  id?: number;
+  title?: string;
+  description?: string;
+  price?: number;
+  instructor?: UserResponse;
+  imageUrl?: string;
+  level?: "BEGINNER" | "INTERMEDIATE" | "ADVANCE";
+  status?: "DRAFT" | "PUBLISHED" | "PREPARE";
+  category?:
+    | "WEB_DEVELOPMENT"
+    | "DATA_SCIENCE"
+    | "DESIGN"
+    | "MOBILE_DEVELOPMENT"
+    | "CLOUD_COMPUTING"
+    | "DEV_OPS"
+    | "BUSINESS";
+  rating?: number;
+  reviewsCount?: number;
+  duration?: number;
+  studentsCount?: number;
+  curriculum?: VideoListResponse;
 };
 export type UpdateCourseRequest = {
   title?: string;
@@ -656,10 +658,6 @@ export type EntityResponseHandlerVideoListResponse = {
   total?: number;
   hasNext?: boolean;
 };
-export type VideoWatchResponse = {
-  url?: string;
-  expiresAt?: number;
-};
 export type ListPaymentResponse = {
   id?: number;
   amount?: number;
@@ -729,5 +727,4 @@ export const {
   useGetAllEnrollmentsByCourseQuery,
   useDeleteAllByCourseMutation,
   useDeleteVideoMutation,
-  useLazyWatchVideoQuery
 } = injectedRtkApi;

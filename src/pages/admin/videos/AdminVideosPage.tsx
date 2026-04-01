@@ -99,9 +99,9 @@ export default function AdminVideosPage() {
     }
 
     React.useEffect(() => {
-        if (selectedItem) {
+        if (selectedItem?.course?.id) {
             form.reset({
-                courseId: selectedItem.id,
+                courseId: selectedItem?.course?.id,
                 uploadVideoRequest: {
                     title: selectedItem.title,
                     file: selectedItem.publicId,
@@ -159,7 +159,7 @@ export default function AdminVideosPage() {
                     columns={[
                         {key: 'id', label: 'ID', sortable: true},
                         {key: 'title', label: 'Title', sortable: true},
-                        {key: 'publicId', label: 'Url', sortable: true},
+                        {key: 'publicId', label: 'PublicId', sortable: true},
                     ]}
                     data={videos}
                     sortBy={sortBy}
@@ -171,6 +171,7 @@ export default function AdminVideosPage() {
                     pagination={{page, limit, total: currentData?.total ?? 0}}
                     onPageChange={setPage}
                     onEdit={async (video) => {
+                        console.log(video)
                         setSelectedItem(video);
                         setOpen(true);
                     }}
@@ -189,7 +190,7 @@ export default function AdminVideosPage() {
                             toast.error("Failed to delete video. Please try again later." + e?.data?.message);
                         }
                     }}
-                    isLoading={listAllCoursesQuery?.isLoading||listAllCoursesQuery?.isFetching}
+                    isLoading={listAllCoursesQuery?.isLoading || listAllCoursesQuery?.isFetching}
                     onLimitChange={(newLimit) => {
                         setLimit(newLimit);
                         setPage(1);

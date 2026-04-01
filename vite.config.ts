@@ -16,5 +16,24 @@ export default ({ mode }: any) => {
         "@": "/src",
       },
     },
+    build: {
+      // Increase chunk size warning limit to 600kB
+      chunkSizeWarningLimit: 600,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // Split React and React DOM into their own chunk
+            "react-vendor": ["react", "react-dom", "react-dom/client"],
+            
+            // Split React Router into its own chunk
+            "router-vendor": ["react-router-dom"],
+            
+            // Split UI libraries into their own chunks if they exist
+            // These will only be created if the packages are used
+            "ui-vendor": ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu", "@radix-ui/react-slot"],
+          },
+        },
+      },
+    },
   });
 };

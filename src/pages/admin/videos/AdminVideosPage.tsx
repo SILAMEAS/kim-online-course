@@ -22,6 +22,7 @@ import previewCloudinary from "@/components/previewCloudinary.ts";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import {videoFileSchema} from "@/lib/validations/global-schema.ts";
+import VideoRender from "@/components/VideoRender.tsx";
 
 
 export default function AdminVideosPage() {
@@ -293,11 +294,7 @@ export default function AdminVideosPage() {
                             />
                             {/* PREVIEW */}
                             {preview && (
-                                <video
-                                    src={preview}
-                                    controls
-                                    className="w-full rounded-md border"
-                                />
+                                <VideoRender preview={preview}/>
                             )}
                             <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                                 {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}

@@ -1,8 +1,10 @@
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion";
 import {Clock} from "lucide-react";
 import {VideoListResponse} from "@/lib/api/api.generated.ts";
-import previewCloudinary from "@/components/previewCloudinary.ts";
 import React from "react";
+import {formatDuration} from "@/lib/utils/formatDuration.ts";
+import VideoRender from "@/components/VideoRender.tsx";
+import previewCloudinary from "@/components/previewCloudinary.ts";
 
 interface CourseCurriculumProps {
     curriculum: VideoListResponse[];
@@ -19,17 +21,7 @@ export function CourseCurriculum({curriculum}: Readonly<CourseCurriculumProps>) 
         [curriculum]
     );
 
-    const formatDuration = (seconds?: number) => {
-        if (!seconds) return "0m";
 
-        const h = Math.floor(seconds / 3600);
-        const m = Math.floor((seconds % 3600) / 60);
-        const s = Math.floor(seconds % 60);
-
-        if (h > 0) return `${h}h ${m}m`;
-        if (m > 0) return `${m}m ${s}s`;
-        return `${s}s`;
-    };
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg border border-border">
@@ -60,18 +52,7 @@ export function CourseCurriculum({curriculum}: Readonly<CourseCurriculumProps>) 
                             </div>
                         </AccordionTrigger>
                         <AccordionContent className="pl-11 pt-0">
-                            <video controls className="w-full rounded-md border">
-                                <source
-                                    src={previewCloudinary({type: "video", url: `${video.publicId}`})}
-                                    type="video/mp4"
-                                />
-                                <track
-                                    kind="captions"
-                                    src={`https://res.cloudinary.com/<cloud-name>/video/upload/${video.publicId}.vtt`}
-                                    srcLang="en"
-                                    label="English"
-                                />
-                            </video>
+                            <VideoRender preview={previewCloudinary({type: "video", url: `${video.publicId}`})}/>
                         </AccordionContent>
                     </AccordionItem>
                 ))}

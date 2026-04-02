@@ -1,1 +1,0 @@
-import{j as e}from"./ui-vendor-CmicFHRC.js";import{T as a,a as t}from"./TriggerLanguage-A7KEaF2G.js";import{a as m}from"./createLucideIcon-CVFWjZMa.js";const g=({className:r,...s})=>e.jsxs("div",{...s,className:m("space-x-2.5 flex justify-center items-center",r),children:[e.jsx(a,{}),e.jsx(t,{})]});export{g as T};

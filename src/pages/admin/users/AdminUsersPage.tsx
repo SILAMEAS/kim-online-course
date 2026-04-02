@@ -84,7 +84,6 @@ export default function AdminUsersPage() {
             });
         }
     }, [selectedItem, form]);
-    // ewrwr
 
 
     return (
@@ -184,6 +183,7 @@ export default function AdminUsersPage() {
                         formData.append('firstName', data.firstName);
                         formData.append('lastName', data.lastName);
                         formData.append('role', data.role);
+                        formData.append('status', data.status);
 
 
                         if (selectedItem?.id) {

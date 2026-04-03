@@ -23,7 +23,7 @@ import {
     courseStatusSchema,
     courseTitleSchema,
     descriptionSchema,
-    fileSchema,
+    fileOrUrlSchema,
     instructorIdSchema,
     levelSchema,
     priceSchema
@@ -84,7 +84,7 @@ export function AddEditCourseDialog({
         resolver: zodResolver(z.object({
             title: courseTitleSchema,
             category: categorySchema,
-            file: fileSchema,
+            file: fileOrUrlSchema,
             description: descriptionSchema,
             instructorId: instructorIdSchema,
             level: levelSchema,
@@ -95,6 +95,7 @@ export function AddEditCourseDialog({
 
     React.useEffect(() => {
         if (selectedCourse) {
+            console.log("Selected course:", selectedCourse);
             form.reset({
                 title: selectedCourse.title,
                 instructorId: selectedCourse?.instructor?.id ?? undefined,
@@ -107,19 +108,6 @@ export function AddEditCourseDialog({
             });
             selectedCourse.imageUrl && setPreview(selectedCourse.imageUrl)
         }
-        // else {
-        //     form.reset({
-        //         title: `New Course <${new Date(Date.now() + 1000 * 60 * 60).toISOString()?.slice(0, 19)}>`,
-        //         file: "",
-        //         category: "WEB_DEVELOPMENT",
-        //         description: "new description of the course",
-        //         instructorId: undefined,
-        //         level: "BEGINNER",
-        //         price: 100,
-        //         status: "PUBLISHED",
-        //     });
-        //     setPreview(null)
-        // }
     }, [selectedCourse, form]);
 
 
@@ -157,6 +145,7 @@ export function AddEditCourseDialog({
             }
 
             if (isUpdate) {
+                console.log("Updating course with data:", formData);
                 await updateCourse({
                     courseId: Number(selectedCourse?.id),
                     updateCourseRequest: formData as any

@@ -50,6 +50,14 @@ export const quantitySchema = z
 
 
 // Base file
+export const fileOrUrlSchema = z
+    .union([
+        z.instanceof(File), // Accept a File object
+        z.string().url("Invalid URL"), // Accept a valid URL string
+    ])
+    .refine((file) => file !== null && file !== undefined, {
+        message: "File or URL is required",
+    });
 export const fileSchema = z
     .any()
     .refine((file) => file instanceof File, {

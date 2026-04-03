@@ -209,6 +209,18 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
+    listImages: build.query<ListImagesApiResponse, ListImagesApiArg>({
+      query: (queryArg) => ({
+        url: `/api/images`,
+        params: {
+          search: queryArg.search,
+          page: queryArg.page,
+          limit: queryArg.limit,
+          sortBy: queryArg.sortBy,
+          sortOrder: queryArg.sortOrder,
+        },
+      }),
+    }),
     getAllEnrollments: build.query<
       GetAllEnrollmentsApiResponse,
       GetAllEnrollmentsApiArg
@@ -247,6 +259,9 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/enrollments/courses/${queryArg.courseId}`,
         method: "DELETE",
       }),
+    }),
+    dashboard: build.query<DashboardApiResponse, DashboardApiArg>({
+      query: () => ({ url: `/api/dashboard` }),
     }),
     deleteVideo: build.mutation<DeleteVideoApiResponse, DeleteVideoApiArg>({
       query: (queryArg) => ({
@@ -421,6 +436,15 @@ export type GetAllPaymentsApiArg = {
   sortBy?: string;
   sortOrder?: string;
 };
+export type ListImagesApiResponse =
+  /** status 200 Courses retrieved successfully */ ImagesPageResponse;
+export type ListImagesApiArg = {
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: string;
+};
 export type GetAllEnrollmentsApiResponse =
   /** status 200 Enrollments retrieved successfully */ EnrollmentsPageResponse;
 export type GetAllEnrollmentsApiArg = {
@@ -447,6 +471,9 @@ export type DeleteAllByCourseApiArg = {
   /** ID of the course */
   courseId: number;
 };
+export type DashboardApiResponse =
+  /** status 200 Users retrieved successfully */ DashboardResponse;
+export type DashboardApiArg = void;
 export type DeleteVideoApiResponse =
   /** status 200 Video deleted successfully */ GeneralResponse;
 export type DeleteVideoApiArg = {
@@ -504,11 +531,11 @@ export type CourseResponse = {
   instructor?: UserResponse;
 };
 export type VideoListResponse = {
-  id?: number;
-  title?: string;
-  publicId?: string;
-  duration?: number;
-  course?: CourseResponse;
+  id: number;
+  title: string;
+  publicId: string;
+  duration: number;
+  course: CourseResponse;
 };
 export type CourseDetailResponse = {
   id?: number;
@@ -682,6 +709,27 @@ export type EntityResponseHandlerListPaymentResponse = {
   total?: number;
   hasNext?: boolean;
 };
+export type ImageListResponse = {
+  id?: number;
+  title?: string;
+  publicId?: string;
+};
+export type ImagesPageResponse = {
+  contents?: ImageListResponse[];
+  page?: number;
+  limit?: number;
+  total?: number;
+  totalPage?: number;
+  hasNext?: boolean;
+};
+export type EntityResponseHandlerImageListResponse = {
+  contents?: ImageListResponse[];
+  page?: number;
+  limit?: number;
+  totalPage?: number;
+  total?: number;
+  hasNext?: boolean;
+};
 export type EnrollmentsPageResponse = {
   contents?: EnrollmentResponse[];
   page?: number;
@@ -697,6 +745,14 @@ export type EntityResponseHandlerEnrollmentResponse = {
   totalPage?: number;
   total?: number;
   hasNext?: boolean;
+};
+export type DashboardResponse = {
+  totalUsers: number;
+  totalCourses: number;
+  totalVideos: number;
+  totalRevenues: string;
+  totalEnrollments: number;
+  totalImages: number;
 };
 export const {
   useGetUserByJwtTokenQuery,
@@ -723,8 +779,10 @@ export const {
   useDeleteVideosByCourseIdMutation,
   useListTeachersQuery,
   useGetAllPaymentsQuery,
+  useListImagesQuery,
   useGetAllEnrollmentsQuery,
   useGetAllEnrollmentsByCourseQuery,
   useDeleteAllByCourseMutation,
+  useDashboardQuery,
   useDeleteVideoMutation,
 } = injectedRtkApi;

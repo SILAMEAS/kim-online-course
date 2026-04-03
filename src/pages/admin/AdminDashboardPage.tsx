@@ -2,6 +2,7 @@ import React from 'react';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {BookOpen, DollarSign, Image as ImageIcon, UserCheck, Users, Video} from 'lucide-react';
 import Link from "@/components/Link.tsx";
+import {useDashboardQuery} from "@/lib/api/api.generated.ts";
 
 interface StatCardProps {
     title: string;
@@ -9,9 +10,24 @@ interface StatCardProps {
     icon: React.ReactNode;
     description?: string;
     href: string;
+    isLoading?:boolean
 }
 
-function StatCard({title, value, icon, description, href}: Readonly<StatCardProps>) {
+function StatCard({title, value, icon, description, href, isLoading}: Readonly<StatCardProps>) {
+    if(isLoading){
+        return  <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                {/*<CardTitle className="text-sm font-medium">{title}</CardTitle>*/}
+                {/*<div className="text-muted-foreground">{icon}</div>*/}
+            </CardHeader>
+            <CardContent>
+                {/*<div className="text-2xl font-bold">{value}</div>*/}
+                {/*{description && (*/}
+                {/*    <p className="text-xs text-muted-foreground mt-1">{description}</p>*/}
+                {/*)}*/}
+            </CardContent>
+        </Card>
+    }
     return (
         <Card className="cursor-pointer hover:shadow-lg transition-shadow"
               onClick={() => globalThis.location.href = href}>
@@ -30,6 +46,7 @@ function StatCard({title, value, icon, description, href}: Readonly<StatCardProp
 }
 
 export default function AdminDashboardPage() {
+    const {currentData,isLoading}=useDashboardQuery();
     return (
         <div className="space-y-8">
             <div>
@@ -40,45 +57,51 @@ export default function AdminDashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <StatCard
                     title="Total Users"
-                    value="2,543"
+                    value={currentData?.totalUsers || 'Loading...'}
                     icon={<Users className="h-4 w-4"/>}
                     description="Active user accounts"
                     href="/admin/users"
+                    isLoading={isLoading}
                 />
                 <StatCard
                     title="Courses"
-                    value="124"
+                    value={currentData?.totalCourses || 'Loading...'}
                     icon={<BookOpen className="h-4 w-4"/>}
                     description="Published courses"
                     href="/admin/courses"
+                    isLoading={isLoading}
                 />
                 <StatCard
                     title="Videos"
-                    value="856"
+                    value={currentData?.totalVideos || 'Loading...'}
                     icon={<Video className="h-4 w-4"/>}
                     description="Total videos"
                     href="/admin/videos"
+                    isLoading={isLoading}
                 />
                 <StatCard
                     title="Revenue"
-                    value="$45,231"
+                    value={currentData?.totalRevenues || 'Loading...'}
                     icon={<DollarSign className="h-4 w-4"/>}
                     description="Completed payments"
                     href="/admin/payments"
+                    isLoading={isLoading}
                 />
                 <StatCard
                     title="Enrollments"
-                    value="3,234"
+                    value={currentData?.totalEnrollments || 'Loading...'}
                     icon={<UserCheck className="h-4 w-4"/>}
                     description="Active enrollments"
                     href="/admin/enrollments"
+                    isLoading={isLoading}
                 />
                 <StatCard
                     title="Images"
-                    value="892"
+                    value={currentData?.totalImages || 'Loading...'}
                     icon={<ImageIcon className="h-4 w-4"/>}
                     description="Uploaded images"
                     href="/admin/images"
+                    isLoading={isLoading}
                 />
             </div>
 

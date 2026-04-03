@@ -1,0 +1,21 @@
+import{j as e}from"./ui-vendor-CmicFHRC.js";import{P as m}from"./profile-menu-Dg1j6Fib.js";import{r as c,k as f,j as h,O as x}from"./router-vendor-BXgUBERE.js";import{k as u,E as p}from"./index-CoFbjTsv.js";import{u as j}from"./useRestoreUserByToken-Cw-w5pYi.js";import{T as b}from"./ThemeLanguage-CtLzB8Rn.js";import{B as i}from"./button-Bm7k3UQo.js";import{V as y,U as g,I as v,L as N}from"./Link-DVu24_eB.js";import{c as l}from"./createLucideIcon-CVFWjZMa.js";import{L as k}from"./layout-dashboard-CbWrxZ9M.js";import{U as w}from"./users-D62LFRno.js";import{B as L}from"./book-open-afXF8Vdg.js";import"./TriggerLanguage-BudGtf7E.js";import"./check-BvzCRBFr.js";import"./useTranslation-B3Ibz4O9.js";import"./book-marked-BMNU_qER.js";import"./react-vendor-MWd6AI72.js";import"./hooks-BUl20BNo.js";import"./api.generated-CdHuDjJv.js";/**
+ * @license lucide-react v0.544.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const C=[["rect",{width:"20",height:"14",x:"2",y:"5",rx:"2",key:"ynyp8z"}],["line",{x1:"2",x2:"22",y1:"10",y2:"10",key:"1b3vmo"}]],I=l("credit-card",C);/**
+ * @license lucide-react v0.544.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const E=[["rect",{width:"18",height:"18",x:"3",y:"3",rx:"2",key:"afitv7"}],["path",{d:"M9 3v18",key:"fh3hqa"}],["path",{d:"m16 15-3-3 3-3",key:"14y99z"}]],O=l("panel-left-close",E);/**
+ * @license lucide-react v0.544.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const P=[["rect",{width:"18",height:"18",x:"3",y:"3",rx:"2",key:"afitv7"}],["path",{d:"M9 3v18",key:"fh3hqa"}],["path",{d:"m14 9 3 3-3 3",key:"8010ee"}]],_=l("panel-left-open",P),B=[{href:"/admin",label:"Dashboard",icon:k},{href:"/admin/users",label:"Users",icon:w},{href:"/admin/courses",label:"Courses",icon:L},{href:"/admin/videos",label:"Videos",icon:y},{href:"/admin/payments",label:"Payments",icon:I},{href:"/admin/enrollments",label:"Enrollments",icon:g},{href:"/admin/images",label:"Images",icon:v}],D=({navItems:n,pathname:r})=>{const[s,t]=c.useState(!1),a=n??B;return e.jsxs(e.Fragment,{children:[e.jsx(i,{className:"md:hidden m-4 fixed",variant:"outline",onClick:()=>t(!0),children:e.jsx(_,{})}),s&&e.jsx("button",{className:"fixed inset-0 bg-black/50 z-40 md:hidden",onClick:()=>t(!1)}),e.jsx("aside",{className:`
+          fixed top-0 left-0 h-full w-64 bg-card border-r border-border z-50
+          transform transition-transform duration-300 ease-in-out
+          ${s?"translate-x-0":"-translate-x-full"} 
+          md:translate-x-0 md:static md:h-auto
+        `,children:e.jsxs("div",{className:"flex flex-col h-full",children:[e.jsxs("div",{className:"p-6 border-b border-border flex justify-between items-center",children:[e.jsxs("div",{children:[e.jsx("h1",{className:"text-2xl font-bold text-foreground",children:"Admin Panel"}),e.jsx("p",{className:"text-sm text-muted-foreground mt-1",children:"Course Management"})]}),e.jsx(i,{className:"md:hidden p-2",variant:"outline",onClick:()=>t(!1),children:e.jsx(O,{})})]}),e.jsx("nav",{className:"flex-1 overflow-y-auto p-4",children:e.jsx("div",{className:"space-y-2",children:a==null?void 0:a.map(o=>{const d=o.icon;return e.jsxs(N,{href:o.href,isActive:r===o.href,children:[e.jsx(d,{className:"h-5 w-5"}),o.label]},o.href)})})}),e.jsx("div",{className:"p-4 border-t border-border",children:e.jsx(i,{variant:"outline",className:"w-full",children:"Logout"})})]})})]})};function Z(){const{pathname:n}=f(),r=h(),{currentData:s,isLoading:t}=j(),a=u.get("accessToken");return c.useEffect(()=>{a||r("/",{replace:!0}),s&&s&&(s==null?void 0:s.role)!=p.ADMIN&&r("/",{replace:!0})},[s,r,a]),t?e.jsx(e.Fragment,{children:"loading ..."}):e.jsxs("div",{className:"flex h-screen bg-background",children:[e.jsx(D,{pathname:n}),e.jsxs("main",{className:"flex-1 overflow-y-auto",children:[e.jsxs("div",{className:"flex flex-grow flex-row justify-self-end mr-4 mt-4",children:[e.jsx(b,{className:"w-[100px]"}),e.jsx(m,{})]}),e.jsx("div",{className:"p-8",children:e.jsx(x,{})})]})]})}export{Z as default};

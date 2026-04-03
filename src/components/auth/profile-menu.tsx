@@ -13,7 +13,8 @@ import {Button} from "@/components/ui/button";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {BookMarked, LogOut, User} from "lucide-react";
 import {useLogout} from "@/hooks/useLogout";
-
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 export function ProfileMenu() {
     const currentUser = useSelector((state: RootState) => state.auth.currentUser);
 
@@ -27,7 +28,7 @@ export function ProfileMenu() {
         .join("")
         .toUpperCase()
         .slice(0, 2);
-
+    const {t} = useTranslation();
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -51,7 +52,7 @@ export function ProfileMenu() {
                         className="flex items-center gap-2 cursor-pointer"
                     >
                         <User className="w-4 h-4"/>
-                        Dashboard
+                        {t(Localization("profile","dashboard"))}
                     </Link>
                 </DropdownMenuItem>
 
@@ -61,7 +62,7 @@ export function ProfileMenu() {
                         className="flex items-center gap-2 cursor-pointer"
                     >
                         <BookMarked className="w-4 h-4"/>
-                        My Courses
+                        {t(Localization("profile","my_courses"))}
                     </Link>
                 </DropdownMenuItem>
 
@@ -72,7 +73,7 @@ export function ProfileMenu() {
                     className="flex items-center gap-2 text-destructive cursor-pointer"
                 >
                     <LogOut className="w-4 h-4"/>
-                    Logout
+                    {t(Localization("loginPage","logout"))}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

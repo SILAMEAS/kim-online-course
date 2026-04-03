@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 interface CartSummaryProps {
   total: number;
@@ -18,10 +20,10 @@ export function CartSummary({
   const TAX_RATE = 0.1; // 10% tax
   const tax = total * TAX_RATE;
   const finalTotal = total + tax;
-
+  const {t} = useTranslation();
   return (
     <div className="bg-card border border-border rounded-lg p-6 sticky top-24 h-fit">
-      <h3 className="text-xl font-semibold mb-6">Order Summary</h3>
+      <h3 className="text-xl font-semibold mb-6">{t(Localization("cart","order_summary"))}</h3>
 
       <div className="space-y-4 mb-6">
         <div className="flex justify-between text-sm">
@@ -32,12 +34,12 @@ export function CartSummary({
         </div>
 
         <div className="flex justify-between text-sm">
-          <span className="text-foreground/60">Tax (10%)</span>
+          <span className="text-foreground/60">{t(Localization("cart","tax_10"))}</span>
           <span className="font-medium">${tax.toFixed(2)}</span>
         </div>
 
         <div className="border-t pt-4 flex justify-between">
-          <span className="font-semibold">Total</span>
+          <span className="font-semibold">{t(Localization("cart","total"))}</span>
           <span className="text-2xl font-bold text-primary">
             ${finalTotal.toFixed(2)}
           </span>
@@ -50,18 +52,18 @@ export function CartSummary({
         onClick={onCheckout}
         disabled={isLoading || quantity === 0}
       >
-        {isLoading ? "Processing..." : "Proceed to Checkout"}
+          {`${isLoading?t(Localization("cart","proceed_to_checkout")):t(Localization("cart","proceed_to_checkout"))}`}
       </Button>
 
       <Link to="/courses">
         <Button variant="outline" className="w-full gap-2" disabled={isLoading}>
           <ArrowLeft className="w-4 h-4" />
-          Continue Shopping
+          {t(Localization("cart","continue_shopping"))}
         </Button>
       </Link>
 
       <p className="text-xs text-foreground/60 text-center mt-4">
-        30-day money-back guarantee on all courses
+          {t(Localization("cart","guarantee_on_all_courses"))}
       </p>
     </div>
   );

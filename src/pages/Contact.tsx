@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Mail, Phone, MapPin, Send, Clock } from "lucide-react";
 import {Footer} from "@/components/footer.tsx";
 import {Navbar} from "@/components/navbar.tsx";
-
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 export default function ContactPage() {
     // const {t} = useTranslation();
     const [formStatus, setFormStatus] = useState<
@@ -22,7 +23,7 @@ export default function ContactPage() {
             setFormStatus("success");
         }, 1200);
     };
-
+    const {t} = useTranslation();
     return (
         <div className="min-h-screen flex flex-col">
             <Navbar />
@@ -32,11 +33,10 @@ export default function ContactPage() {
                     {/* Header */}
                     <div className="text-center mb-10 md:mb-14">
                         <h1 className="text-4xl md:text-5xl font-bold mb-3">
-                            Get in Touch
+                            {t(Localization("contactPage","get_in_touch"))}
                         </h1>
                         <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-                            Have questions? Feedback? Want to become an instructor? We'd love
-                            to hear from you.
+                            {t(Localization("contactPage","have_questions"))}
                         </p>
                     </div>
 
@@ -44,12 +44,12 @@ export default function ContactPage() {
                         {/* Contact Info */}
                         <div className="md:col-span-2 space-y-8">
                             <div>
-                                <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
+                                <h2 className="text-2xl font-bold mb-6">{t(Localization("contactPage","contact_information"))}</h2>
                                 <div className="space-y-5">
                                     <div className="flex items-start gap-4">
                                         <Mail className="w-6 h-6 text-primary mt-1" />
                                         <div>
-                                            <p className="font-medium">Email</p>
+                                            <p className="font-medium">{t(Localization("form","email_address"))}</p>
                                             <a
                                                 href="mailto:hello@yourplatform.com"
                                                 className="text-primary hover:underline"
@@ -62,7 +62,7 @@ export default function ContactPage() {
                                     <div className="flex items-start gap-4">
                                         <Phone className="w-6 h-6 text-primary mt-1" />
                                         <div>
-                                            <p className="font-medium">Phone</p>
+                                            <p className="font-medium">{t(Localization("contactPage","phone"))}</p>
                                             <p>+855 16 43 91 44 </p>
                                             <p className="text-sm text-foreground/60 mt-1">
                                                 Mon - Sunday 8:00 - 21:00 (GMT+7)
@@ -73,10 +73,10 @@ export default function ContactPage() {
                                     <div className="flex items-start gap-4">
                                         <MapPin className="w-6 h-6 text-primary mt-1" />
                                         <div>
-                                            <p className="font-medium">Office</p>
-                                            <p>Cambodia, Battambang City</p>
+                                            <p className="font-medium">{t(Localization("contactPage","office"))}</p>
+                                            <p>{t(Localization("contactPage","location"))}</p>
                                             <p className="text-sm text-foreground/60">
-                                                We're a remote-first team
+                                                {t(Localization("contactPage","remote_first_team"))}
                                             </p>
                                         </div>
                                     </div>
@@ -84,10 +84,10 @@ export default function ContactPage() {
                             </div>
 
                             <div>
-                                <h3 className="text-xl font-semibold mb-4">Response Time</h3>
+                                <h3 className="text-xl font-semibold mb-4">{t(Localization("contactPage","response_time"))}</h3>
                                 <div className="flex items-center gap-3 text-foreground/80">
                                     <Clock className="w-5 h-5" />
-                                    <span>Usually within 24–48 hours</span>
+                                    <span>{t(Localization("contactPage","usually_within"))}</span>
                                 </div>
                             </div>
                         </div>
@@ -98,11 +98,11 @@ export default function ContactPage() {
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <div className="grid sm:grid-cols-2 gap-6">
                                         <div className="space-y-2">
-                                            <Label htmlFor="name">Full Name</Label>
+                                            <Label htmlFor="name">{t(Localization("form","full_name"))}</Label>
                                             <Input id="name" placeholder="Your name" required />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="email">Email</Label>
+                                            <Label htmlFor="email">{t(Localization("form","email_address"))}</Label>
                                             <Input
                                                 id="email"
                                                 type="email"
@@ -113,7 +113,7 @@ export default function ContactPage() {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="subject">Subject</Label>
+                                        <Label htmlFor="subject">{t(Localization("contactPage","subject"))}</Label>
                                         <Input
                                             id="subject"
                                             placeholder="How can we help you?"
@@ -122,7 +122,7 @@ export default function ContactPage() {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="message">Message</Label>
+                                        <Label htmlFor="message">{t(Localization("contactPage","massage"))}</Label>
                                         <Textarea
                                             id="message"
                                             placeholder="Please tell us more about your question or feedback..."
@@ -141,19 +141,19 @@ export default function ContactPage() {
                                             "Sending..."
                                         ) : (
                                             <>
-                                                Send Message <Send className="w-4 h-4" />
+                                                {t(Localization("contactPage","send_massage"))} <Send className="w-4 h-4" />
                                             </>
                                         )}
                                     </Button>
 
                                     {formStatus === "success" && (
                                         <p className="text-green-600 text-center mt-4">
-                                            Thank you! We'll get back to you soon.
+                                            {t(Localization("contactPage","thank_you"))}
                                         </p>
                                     )}
                                     {formStatus === "error" && (
                                         <p className="text-destructive text-center mt-4">
-                                            Something went wrong. Please try again.
+                                            {t(Localization("contactPage","please_try_again"))}
                                         </p>
                                     )}
                                 </form>

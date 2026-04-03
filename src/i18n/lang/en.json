@@ -44,6 +44,22 @@
     "send_massage": "Send Massage",
     "thank_you":"Thank you! We'll get back to you soon.",
     "please_try_again":"Something went wrong. Please try again.",
-    "mon_sunday": "Mon - Sunday 8:00 - 21:00 (GMT+7)"
+    "mon_sunday": "Mon - Sunday 8:00 - 21:00 (GMT+7)",
+    "phone": "Phone",
+    "location": "Cambodia, Battambang City",
+    "get_in_touch": "Get in Touch",
+    "office": "Office"
+  },
+  "profile": {
+    "dashboard": "Dashboard",
+    "my_courses": "My Courses"
+  },
+  "cart": {
+    "tax_10": "Tax (10%)",
+    "total": "Total",
+    "proceed_to_checkout": "Proceed to Checkout",
+    "continue_shopping": "Continue Shopping",
+    "guarantee_on_all_courses": "30-day money-back guarantee on all courses",
+    "order_summary": "Order Summary"
   }
 }

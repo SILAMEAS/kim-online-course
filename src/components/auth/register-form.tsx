@@ -6,7 +6,6 @@ import {Button} from "@/components/ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {toast} from "sonner";
-import {Loader2} from "lucide-react";
 import {SignUpApiArg, useSignUpMutation} from "@/lib/api/api.generated.ts";
 import {useTranslation} from "react-i18next";
 import {Localization} from "@/i18n/lang";
@@ -170,9 +169,7 @@ export function RegisterForm() {
                 />
 
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                    {t(Localization("form", "create_account"))}
-                    {isLoading && "..."}
+                    {`${isLoading?t(Localization("form","create_account")):t(Localization("form","create_account"))}`}
                 </Button>
             </form>
         </Form>

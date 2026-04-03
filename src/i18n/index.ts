@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/en';
 import i18n from 'i18next';
 import LanguageDetector, {DetectorOptions,} from 'i18next-browser-languagedetector';
-import Backend from 'i18next-http-backend';
 import {initReactI18next} from 'react-i18next';
 
 // since we can't access constant file from here, we have to declare it here
@@ -22,7 +21,7 @@ const resources = {
         translation: km,
     }
 };
-const fallbackLng = ['fr'];
+const fallbackLng = ['en'];
 export const options: DetectorOptions = {
     /** order and from where user language should be detected **/
     order: [
@@ -53,13 +52,12 @@ export const options: DetectorOptions = {
     cookieDomain: 'myDomain',
 
     /** optional htmlTag with lang attribute, the default is:**/
-    htmlTag: document.documentElement,
+    htmlTag: typeof document !== "undefined" ? document.documentElement : undefined,
 
     /** optional set cookie options, reference:https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie**/
     cookieOptions: {path: '/', sameSite: 'strict'},
 };
 i18n
-    .use(Backend)
     .use(LanguageDetector)
     .use(initReactI18next) /** passes i18n down to react-i18next**/
     .init({
@@ -80,7 +78,6 @@ i18n
             useSuspense: false,
         },
     })
-    .then(r => r);
 
 // Set Day.js locale based on i18n language
 dayjs.locale(i18n.language);

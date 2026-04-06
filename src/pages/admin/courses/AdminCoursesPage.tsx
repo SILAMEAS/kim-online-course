@@ -2,7 +2,6 @@ import React from 'react';
 import {Button} from '@/components/ui/button';
 import {Plus} from 'lucide-react';
 import {CourseResponse, useDeleteCourseByIdMutation, useListAllCoursesQuery} from "@/lib/api/api.generated.ts";
-import {DefaultPaginationRequest} from "@/lib/types.ts";
 import {AddEditCourseDialog} from "@/pages/admin/courses/add-edit-course-dialog.tsx";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
@@ -11,16 +10,15 @@ import {toast} from "sonner";
 
 export default function AdminCoursesPage() {
     const {
-        setPage,
-        page,
-        limit,
-        setSortDirection,
-        setSortBy,
-        sortBy,
-        sortDirection,
-        setLimit
+        filter,
+        setFilter,
     } = useCustomTable<CourseResponse>();
-    const {currentData, refetch,isLoading,isFetching} = useListAllCoursesQuery({...DefaultPaginationRequest, sortBy, page, limit});
+    const {
+        currentData,
+        refetch,
+        isLoading,
+        isFetching
+    } = useListAllCoursesQuery(filter, {refetchOnMountOrArgChange: true,});
     const courses = currentData?.contents || [];
     const [open, setOpen] = React.useState(false);
     const [deleteCourse, resultDeleteCourse] = useDeleteCourseByIdMutation();
@@ -45,6 +43,8 @@ export default function AdminCoursesPage() {
             </div>
 
             <CustomTable<CourseResponse>
+                setFilter={setFilter}
+                filter={filter}
                 columns={[
                     {key: 'title', label: 'Title', sortable: true},
                     {key: 'category', label: 'Category', sortable: true},
@@ -52,14 +52,7 @@ export default function AdminCoursesPage() {
                     {key: 'status', label: 'Status', sortable: true},
                 ]}
                 data={courses}
-                sortBy={sortBy}
-                sortDirection={sortDirection}
-                onSortChange={(key, dir) => {
-                    setSortBy(key);
-                    setSortDirection(dir);
-                }}
-                pagination={{page, limit, total: currentData?.total ?? 0}}
-                onPageChange={setPage}
+                pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
                 onEdit={async (course) => {
                     setSelectedCourse(course);
                     setOpen(true);
@@ -78,12 +71,9 @@ export default function AdminCoursesPage() {
                         refetch();
                     }
                 }}
-                isLoading={isLoading||isFetching}
+                isLoading={isLoading || isFetching}
                 isDeleting={resultDeleteCourse.isLoading}
-                onLimitChange={(newLimit) => {
-                    setLimit(newLimit);
-                    setPage(1);
-                }}
+
             />
 
             {/* Add/Edit Dialog */}

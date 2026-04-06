@@ -11,8 +11,8 @@ import {
 } from '@/components/ui/alert-dialog.tsx';
 import {ArrowDown, ArrowRightLeft, ArrowUp, Edit2, Loader2, Trash2} from 'lucide-react';
 import PaginationCustomTable from "@/components/table/commons/PaginationCustomTable.tsx";
+import {SORT} from "@/lib/enum.ts";
 
-type SortDirection = 'ASC' | 'DES';
 
 interface Column<T> {
     key: keyof T;
@@ -39,15 +39,31 @@ interface DataTableProps<T> {
     isDeleting?: boolean;
 
     // sorting (controlled)
-    sortBy?: keyof T;
-    sortDirection?: SortDirection;
-    onSortChange?: (key: keyof T, direction: SortDirection) => void;
+    // sortBy?: keyof T;
+    // sortDirection?: SORT;
+    // onSortChange?: (key: keyof T, direction: SORT) => void;
 
     // pagination (controlled)
     pagination: IPaginationCustomTable;
-    onPageChange?: (page: number) => void;
+    // onPageChange?: (page: number) => void;
+    //
+    // onLimitChange?: (limit: number) => void;  // <-- new
 
-    onLimitChange?: (limit: number) => void;  // <-- new
+    setFilter: React.Dispatch<React.SetStateAction<{
+        search: string
+        page: number
+        limit: number
+        sortBy: keyof T
+        sortOrder: SORT
+    }>>;
+
+    filter: {
+        search: string
+        page: number
+        limit: number
+        sortBy: keyof T
+        sortOrder: SORT
+    }
 }
 
 // @ts-ignore
@@ -60,26 +76,29 @@ export function CustomTable<T extends Record<string, any>>({
                                                                onDelete,
                                                                isDeleting,
 
-                                                               sortBy,
-                                                               sortDirection = 'ASC',
-                                                               onSortChange,
+                                                               // sortBy,
+                                                               // sortDirection = SORT.ASC,
+                                                               // onSortChange,
 
-                                                               pagination, onLimitChange,
-                                                               onPageChange,
+                                                               pagination,
+                                                               // onLimitChange,
+                                                               // onPageChange,
 
-                                                               quickAction
+                                                               quickAction,
+                                                               setFilter,
+                                                               filter
                                                            }: Readonly<DataTableProps<T>>) {
     const [deleteId, setDeleteId] = React.useState<string | null>(null);
     const [deleteItem, setDeleteItem] = React.useState<T | null>(null);
 
     const handleSort = (key: keyof T) => {
 
-        if (!onSortChange) return;
+        if (!filter) return;
 
-        const newDirection: SortDirection =
-            sortBy === key && sortDirection === 'ASC' ? 'DES' : 'ASC';
+        const newDirection: SORT =
+            filter.sortBy === key && filter.sortOrder === SORT.ASC ? SORT.DESC : SORT.ASC;
 
-        onSortChange(key, newDirection);
+        setFilter({...filter, sortBy: key, sortOrder: newDirection, page: 1});
     };
 
     if (isLoading) {
@@ -100,8 +119,8 @@ export function CustomTable<T extends Record<string, any>>({
     const actionColumnStyle = "flex items-center justify-center gap-2";
 
     const handleIconSort = (col: Column<T>) => {
-        if (sortBy && col.key === sortBy) {
-            if (sortDirection === "ASC") {
+        if (filter.sortBy && col.key === filter.sortBy) {
+            if (filter.sortOrder === SORT.ASC) {
                 return <ArrowUp className="h-4 w-4"/>
             }
             return <ArrowDown className="h-4 w-4"/>
@@ -133,7 +152,11 @@ export function CustomTable<T extends Record<string, any>>({
                                     </div>
                                 </TableHead>
                             ))}
-                            <TableHead className={actionColumnStyle}>Actions</TableHead>
+                            {
+                                (onDelete || onEdit || quickAction) &&
+                                <TableHead className={actionColumnStyle}>Actions</TableHead>
+                            }
+
                         </TableRow>
                     </TableHeader>
 
@@ -151,7 +174,6 @@ export function CustomTable<T extends Record<string, any>>({
                                         </TableCell>
                                     );
                                 })}
-
                                 <TableCell>
                                     <div className={actionColumnStyle}>
                                         {onEdit && (
@@ -192,7 +214,8 @@ export function CustomTable<T extends Record<string, any>>({
             </div>
 
             {/* Pagination */}
-            <PaginationCustomTable pagination={pagination} onPageChange={onPageChange} onLimitChange={onLimitChange}/>
+            <PaginationCustomTable pagination={pagination} onPageChange={page => setFilter({...filter, page})}
+                                   onLimitChange={limit => setFilter({...filter, limit, page: 1})}/>
             {/* Delete Dialog */}
             <AlertDialog open={Boolean(deleteId)} onOpenChange={() => setDeleteId(null)}>
                 <AlertDialogContent>

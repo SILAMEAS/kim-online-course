@@ -27,17 +27,14 @@ import VideoRender from "@/components/VideoRender.tsx";
 
 export default function AdminVideosPage() {
     const {
-        setPage,
-        page,
-        limit,
-        setSortDirection,
-        setSortBy,
-        sortBy,
-        sortDirection,
-        setLimit,
-        setOpen, open, setSelectedItem, selectedItem
+        filter,
+        setFilter,
+        setOpen,
+        open,
+        setSelectedItem,
+        selectedItem
     } = useCustomTable<VideoListResponse>();
-    const listAllCoursesQuery = useListAllCoursesQuery({...DefaultPaginationRequest, sortBy, page, limit});
+    const listAllCoursesQuery = useListAllCoursesQuery(filter,{refetchOnMountOrArgChange:true});
     const courses = listAllCoursesQuery?.data?.contents || [];
     //   State management
     const [uploadVideo] = useUploadVideoMutation();
@@ -157,20 +154,16 @@ export default function AdminVideosPage() {
             <Card>
 
                 <CustomTable<VideoListResponse>
+                    filter={filter}
+                    setFilter={setFilter}
                     columns={[
-                        {key: 'id', label: 'ID', sortable: true},
-                        {key: 'title', label: 'Title', sortable: true},
-                        {key: 'publicId', label: 'PublicId', sortable: true},
+                        {key: 'id', label: 'ID', sortable: false},
+                        {key: 'title', label: 'Title', sortable: false},
+                        {key: 'publicId', label: 'PublicId', sortable: false},
                     ]}
                     data={videos}
-                    sortBy={sortBy}
-                    sortDirection={sortDirection}
-                    onSortChange={(key, dir) => {
-                        setSortBy(key);
-                        setSortDirection(dir);
-                    }}
-                    pagination={{page, limit, total: currentData?.total ?? 0}}
-                    onPageChange={setPage}
+
+                    pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
                     onEdit={async (video) => {
                         console.log(video)
                         setSelectedItem(video);
@@ -192,10 +185,6 @@ export default function AdminVideosPage() {
                         }
                     }}
                     isLoading={listAllCoursesQuery?.isLoading || listAllCoursesQuery?.isFetching}
-                    onLimitChange={(newLimit) => {
-                        setLimit(newLimit);
-                        setPage(1);
-                    }}
                     isDeleting={resultDeleteVideo.isLoading}
                 />
             </Card>

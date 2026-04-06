@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {RootState} from "@/lib/redux/store";
 import {
@@ -11,12 +11,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {Button} from "@/components/ui/button";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {BookMarked, LogOut, User} from "lucide-react";
+import {ArrowRightLeft, BookMarked, LogOut, User} from "lucide-react";
 import {useLogout} from "@/hooks/useLogout";
 import {useTranslation} from "react-i18next";
 import {Localization} from "@/i18n/lang";
+import {EnumRole} from "@/lib/enum.ts";
 
 export function ProfileMenu() {
+    const location = useLocation();
     const {t} = useTranslation();
     const currentUser = useSelector((state: RootState) => state.auth.currentUser);
 
@@ -30,6 +32,9 @@ export function ProfileMenu() {
         .join("")
         .toUpperCase()
         .slice(0, 2);
+
+    const isLocalAdmin = location.pathname.startsWith('/admin');
+    const isAdmin = currentUser.role === EnumRole.ADMIN;
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -66,6 +71,20 @@ export function ProfileMenu() {
                         {t(Localization("profile", "my_courses"))}
                     </Link>
                 </DropdownMenuItem>
+
+                {
+                    isAdmin &&
+                    <DropdownMenuItem asChild>
+                        <Link
+                            to={isLocalAdmin ? "/dashboard/my-courses" : "/admin"}
+                            className="flex items-center gap-2 cursor-pointer"
+                        >
+                            <ArrowRightLeft className="w-4 h-4"/>
+                            {`Go to ${isLocalAdmin ? "Student" : "Admin"}`}
+                        </Link>
+                    </DropdownMenuItem>
+                }
+
 
                 <DropdownMenuSeparator/>
 

@@ -5,7 +5,6 @@ import {
     useGetAllPaymentsQuery,
     UserResponse
 } from "@/lib/api/api.generated.ts";
-import {DefaultPaginationRequest} from "@/lib/types.ts";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {Button} from "@/components/ui/button.tsx";
@@ -22,17 +21,16 @@ import {toast} from "sonner";
 
 export default function AdminPaymentsPage() {
     const {
-        setPage,
-        page,
-        limit,
-        setSortDirection,
-        setSortBy,
-        sortBy,
-        sortDirection,
-        setLimit,
+        setFilter,
+        filter,
         currentUser
     } = useCustomTable<ListPaymentResponse>();
-    const {currentData, refetch,isLoading,isFetching} = useGetAllPaymentsQuery(DefaultPaginationRequest);
+    const {
+        currentData,
+        refetch,
+        isLoading,
+        isFetching
+    } = useGetAllPaymentsQuery(filter, {refetchOnMountOrArgChange: true,});
     const [approve, approveResult] = useApproveMutation();
     const payments = currentData?.contents ?? [];
 
@@ -47,6 +45,8 @@ export default function AdminPaymentsPage() {
             </div>
 
             <CustomTable<ListPaymentResponse>
+                setFilter={setFilter}
+                filter={filter}
                 columns={[
                     {key: 'id', label: 'ID', sortable: true},
                     {
@@ -64,16 +64,9 @@ export default function AdminPaymentsPage() {
                     {key: 'status', label: 'Status', sortable: true},
                 ]}
                 data={payments}
-                sortBy={sortBy}
-                sortDirection={sortDirection}
-                onSortChange={(key, dir) => {
-                    setSortBy(key);
-                    setSortDirection(dir);
-                }}
-                pagination={{page, limit, total: currentData?.total ?? 0}}
-                onPageChange={setPage}
+                pagination={{page:filter.page, limit:filter.limit, total: currentData?.total ?? 0}}
                 quickAction={(row) => <Button
-                    disabled={Boolean(currentUser?.role !== EnumRole.ADMIN) || approveResult?.isLoading||row.status==="DONE"}
+                    disabled={Boolean(currentUser?.role !== EnumRole.ADMIN) || approveResult?.isLoading || row.status === "DONE"}
                     variant="outline"
                     size="sm"
                     onClick={async () => {
@@ -87,13 +80,10 @@ export default function AdminPaymentsPage() {
                         }
                     }}
                 >
-                    {approveResult?.isLoading?"Approving ...": "Approve"}
+                    {approveResult?.isLoading ? "Approving ..." : "Approve"}
                 </Button>}
-                isLoading={isLoading||isFetching}
-                onLimitChange={(newLimit) => {
-                    setLimit(newLimit);
-                    setPage(1);
-                }}
+                isLoading={isLoading || isFetching}
+
             />
         </div>
     );

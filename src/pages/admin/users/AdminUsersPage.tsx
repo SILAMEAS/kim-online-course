@@ -13,7 +13,6 @@ import {
     UserResponse,
     useUpdateUserMutation
 } from "@/lib/api/api.generated.ts";
-import {DefaultPaginationRequest} from "@/lib/types.ts";
 import {toast} from "sonner";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
@@ -30,25 +29,13 @@ import {DynamicFormDialog} from "@/components/dialog/DynamicFormDialog.tsx";
 
 export default function AdminUsersPage() {
     const {
-        setPage,
-        page,
-        limit,
-        setSortDirection,
-        setSortBy,
-        sortBy,
-        sortDirection,
-        setLimit,
+        setFilter, filter,
         selectedItem,
         setSelectedItem,
         currentUser,
     } = useCustomTable<UserResponse>();
 
-    const {currentData, refetch, isLoading, isFetching} = useListUsersQuery({
-        ...DefaultPaginationRequest,
-        sortBy,
-        page,
-        limit
-    });
+    const {currentData, refetch, isLoading, isFetching} = useListUsersQuery(filter, {refetchOnMountOrArgChange: true,});
     const users = currentData?.contents ?? []
     const [open, setOpen] = React.useState(false);
     const [createUser] = useCreateUserMutation();
@@ -103,6 +90,8 @@ export default function AdminUsersPage() {
             </div>
 
             <CustomTable<UserResponse>
+                setFilter={setFilter}
+                filter={filter}
                 columns={[
                     {key: 'firstName', label: 'FirstName', sortable: true},
                     {key: 'lastName', label: 'LastName', sortable: true},
@@ -111,14 +100,7 @@ export default function AdminUsersPage() {
                     {key: 'status', label: 'Status', sortable: true},
                 ]}
                 data={users}
-                sortBy={sortBy}
-                sortDirection={sortDirection}
-                onSortChange={(key, dir) => {
-                    setSortBy(key);
-                    setSortDirection(dir);
-                }}
-                pagination={{page, limit, total: currentData?.total ?? 0}}
-                onPageChange={setPage}
+                pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
                 onEdit={async (course) => {
                     setSelectedItem(course);
                     setOpen(true);
@@ -139,10 +121,6 @@ export default function AdminUsersPage() {
                 }}
                 isLoading={isLoading || isFetching}
                 isDeleting={ladingDelete}
-                onLimitChange={(newLimit) => {
-                    setLimit(newLimit);
-                    setPage(1);
-                }}
             />
             {/* Dialog */}
 

@@ -1,65 +1,27 @@
-import {useEffect, useMemo} from "react";
-import {useAppDispatch, useAppSelector} from "@/lib/redux/hooks";
-import {setCourses} from "@/lib/redux/slices/courses.slice";
-import {MOCK_COURSES} from "@/lib/data/courses";
 import {Navbar} from "@/components/navbar.tsx";
 import {Footer} from "@/components/footer.tsx";
 import {CourseFilters} from "@/components/course/course-filters";
-import {CourseCard} from "@/components/course/course-card";
 import {Button} from "@/components/ui/button";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
 import {Filter} from "lucide-react";
-import {DefaultPaginationRequest} from "@/lib/types.ts";
-import {useListAllCoursesQuery} from "@/lib/api/api.generated.ts";
+import {CourseResponse, useListAllCoursesQuery} from "@/lib/api/api.generated.ts";
+import {CustomTable, MODE_TABLE} from "@/components/table/CustomTable.tsx";
+import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
+import {CourseCard} from "@/components/course/course-card.tsx";
 
 export default function CoursesPage() {
-    const dispatch = useAppDispatch();
-    // const courses = useAppSelector((state) => state.courses.items);
-    const filters = useAppSelector((state) => state.courses.filters);
-    const {currentData} = useListAllCoursesQuery(DefaultPaginationRequest);
+    const {
+        filter,
+        setFilter,
+    } = useCustomTable<CourseResponse>();
+    const {
+        currentData,
+        isLoading,
+        isFetching
+    } = useListAllCoursesQuery(filter, {refetchOnMountOrArgChange: true,});
     // console.log("AdminCoursesPage",listCourseQuery?.data)
     const courses = currentData?.contents || [];
-    // Load courses on mount
-    useEffect(() => {
-        if (courses.length === 0) {
-            dispatch(setCourses(MOCK_COURSES));
-        }
-    }, [dispatch, courses.length]);
 
-    // Filter courses based on applied filters
-    const filteredCourses = useMemo(() => {
-        return courses.filter((course) => {
-            // Search filter
-            // if (filters.searchQuery) {
-            //     const query = filters.searchQuery.toLowerCase();
-            //     const matchesSearch =
-            //         course.title.toLowerCase().includes(query) ||
-            //         course.description.toLowerCase().includes(query) ||
-            //         course.category.toLowerCase().includes(query);
-            //     if (!matchesSearch) return false;
-            // }
-
-            // Category filter
-            if (filters.category && course.category !== filters.category)
-                return false;
-
-            // Level filter
-            if (filters.level && course.level !== filters.level) return false;
-
-            // Price range filter
-            // if (
-            //     course.price < filters.priceRange[0] ||
-            //     course.price > filters.priceRange[1]
-            // ) {
-            //     return false;
-            // }
-
-            // Rating filter
-            // if (filters.rating && course.rating < filters.rating) return false;
-
-            return true;
-        });
-    }, [courses, filters]);
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -71,8 +33,8 @@ export default function CoursesPage() {
                     <div className="mb-8">
                         <h1 className="text-4xl md:text-5xl font-bold mb-2">All Courses</h1>
                         <p className="text-lg text-foreground/60">
-                            {filteredCourses.length} course
-                            {filteredCourses.length !== 1 ? "s" : ""} available
+                            {/*{filteredCourses.length} course*/}
+                            {/*{filteredCourses.length !== 1 ? "s" : ""} available*/}
                         </p>
                     </div>
 
@@ -81,7 +43,7 @@ export default function CoursesPage() {
                         {/* Sidebar - Desktop */}
                         <div className="hidden md:block">
                             <div className="sticky top-24">
-                                <CourseFilters/>
+                                <CourseFilters setFilter={setFilter} filter={filter}/>
                             </div>
                         </div>
 
@@ -97,31 +59,28 @@ export default function CoursesPage() {
                                         </Button>
                                     </SheetTrigger>
                                     <SheetContent side="left">
-                                        <CourseFilters/>
+                                        <CourseFilters setFilter={setFilter} filter={filter}/>
                                     </SheetContent>
                                 </Sheet>
                             </div>
 
-                            {/* Courses Grid */}
-                            {filteredCourses.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {filteredCourses.map((course) => (
-                                        <CourseCard key={course.id} course={course}/>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="text-center py-12">
-                                    <p className="text-foreground/60 text-lg mb-4">
-                                        No courses found matching your filters.
-                                    </p>
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => dispatch(setCourses(MOCK_COURSES))}
-                                    >
-                                        Clear Filters
-                                    </Button>
-                                </div>
-                            )}
+                            <CustomTable<CourseResponse>
+                                mode={MODE_TABLE.GRID}
+                                setFilter={setFilter}
+                                filter={filter}
+                                columns={[
+                                    {key: 'title', label: 'Title', sortable: true},
+                                    {key: 'category', label: 'Category', sortable: true},
+                                    {key: 'price', label: 'Price', sortable: true},
+                                    {key: 'status', label: 'Status', sortable: true},
+                                ]}
+                                data={courses}
+                                pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
+                                isLoading={isLoading || isFetching}
+                                customRenderModeContent={row => <CourseCard course={row}/>}
+
+                            />
+
                         </div>
                     </div>
                 </div>

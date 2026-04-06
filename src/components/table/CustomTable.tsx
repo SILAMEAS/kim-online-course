@@ -27,28 +27,21 @@ export interface IPaginationCustomTable {
     total: number;
 }
 
+export enum MODE_TABLE {
+    GRID = "grid",
+    TABLE_PAGINATION = "table-pagination",
+}
+
 interface DataTableProps<T> {
     columns: Column<T>[];
     data: T[];
     isLoading?: boolean;
-
     // actions
     onEdit?: (row: T) => Promise<void>;
     onDelete?: (row: T) => Promise<void>;
     quickAction?: (row: T) => React.ReactNode;
     isDeleting?: boolean;
-
-    // sorting (controlled)
-    // sortBy?: keyof T;
-    // sortDirection?: SORT;
-    // onSortChange?: (key: keyof T, direction: SORT) => void;
-
-    // pagination (controlled)
     pagination: IPaginationCustomTable;
-    // onPageChange?: (page: number) => void;
-    //
-    // onLimitChange?: (limit: number) => void;  // <-- new
-
     setFilter: React.Dispatch<React.SetStateAction<{
         search: string
         page: number
@@ -63,7 +56,9 @@ interface DataTableProps<T> {
         limit: number
         sortBy: keyof T
         sortOrder: SORT
-    }
+    },
+    mode?: MODE_TABLE;
+    customRenderModeContent?: (row: T) => React.ReactNode;
 }
 
 // @ts-ignore
@@ -71,22 +66,15 @@ export function CustomTable<T extends Record<string, any>>({
                                                                columns,
                                                                data,
                                                                isLoading,
-
                                                                onEdit,
                                                                onDelete,
                                                                isDeleting,
-
-                                                               // sortBy,
-                                                               // sortDirection = SORT.ASC,
-                                                               // onSortChange,
-
                                                                pagination,
-                                                               // onLimitChange,
-                                                               // onPageChange,
-
                                                                quickAction,
                                                                setFilter,
-                                                               filter
+                                                               filter,
+                                                               mode = MODE_TABLE.TABLE_PAGINATION,
+                                                               customRenderModeContent
                                                            }: Readonly<DataTableProps<T>>) {
     const [deleteId, setDeleteId] = React.useState<string | null>(null);
     const [deleteItem, setDeleteItem] = React.useState<T | null>(null);
@@ -127,130 +115,156 @@ export function CustomTable<T extends Record<string, any>>({
         }
         return <ArrowRightLeft className="h-4 w-4"/>;
     }
+    const renderMode = () => {
+        switch (mode) {
+            case MODE_TABLE.GRID:
+                return {
+                    contents: <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {data.map((row) => (
+                            customRenderModeContent ? customRenderModeContent(row) :
+                                <div className={'col-span-1 h-40 flex justify-center items-center border-2'}
+                                     key={row?.id}> {row.id}</div>
+                        ))}
+                    </div>,
+                    footer: <></>
+                }
+            case MODE_TABLE.TABLE_PAGINATION:
+                return {
+                    contents: <Table>
+                        <TableHeader>
+                            <TableRow>
+                                {columns.map((col) => (
+                                    <TableHead key={String(col.key)}>
+                                        <div className="flex items-center gap-2">
+                                            {col.label}
+                                            {col.sortable && (
+                                                <button
+                                                    onClick={() => handleSort(col.key)}
+                                                    className="hover:opacity-70"
+                                                >
+                                                    {
+                                                        handleIconSort(col)
+                                                    }
 
-    return (
-        <>
-            <div className="border rounded-lg overflow-hidden">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            {columns.map((col) => (
-                                <TableHead key={String(col.key)}>
-                                    <div className="flex items-center gap-2">
-                                        {col.label}
-                                        {col.sortable && (
-                                            <button
-                                                onClick={() => handleSort(col.key)}
-                                                className="hover:opacity-70"
-                                            >
-                                                {
-                                                    handleIconSort(col)
-                                                }
+                                                </button>
+                                            )}
+                                        </div>
+                                    </TableHead>
+                                ))}
+                                {
+                                    (onDelete || onEdit || quickAction) &&
+                                    <TableHead className={actionColumnStyle}>Actions</TableHead>
+                                }
 
-                                            </button>
-                                        )}
-                                    </div>
-                                </TableHead>
-                            ))}
-                            {
-                                (onDelete || onEdit || quickAction) &&
-                                <TableHead className={actionColumnStyle}>Actions</TableHead>
-                            }
+                            </TableRow>
+                        </TableHeader>
 
-                        </TableRow>
-                    </TableHeader>
+                        <TableBody>
+                            {data.map((row, idx) => (
+                                <TableRow key={row?.id ?? idx}>
+                                    {columns.map((col) => {
+                                        const value = row[col.key];
 
-                    <TableBody>
-                        {data.map((row, idx) => (
-                            <TableRow key={row?.id ?? idx}>
-                                {columns.map((col) => {
-                                    const value = row[col.key];
-
-                                    return (
-                                        <TableCell key={String(col.key)}>
-                                            {col.render
-                                                ? col.render(value, row)
-                                                : (value as React.ReactNode) ?? '-'}
-                                        </TableCell>
-                                    );
-                                })}
-                                <TableCell>
-                                    <div className={actionColumnStyle}>
-                                        {onEdit && (
-                                            <Button
-                                                disabled={Boolean(row?.role === "ADMIN")}
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => onEdit(row)}
-                                            >
-                                                <Edit2 className="h-4 w-4"/>
-                                            </Button>
-                                        )}
-
-
-                                        {onDelete && (
-                                            (isDeleting && row?.id == deleteItem?.id) ?
-                                                <Loader2 className="h-4 w-4 animate-spin"/> :
+                                        return (
+                                            <TableCell key={String(col.key)}>
+                                                {col.render
+                                                    ? col.render(value, row)
+                                                    : (value as React.ReactNode) ?? '-'}
+                                            </TableCell>
+                                        );
+                                    })}
+                                    <TableCell>
+                                        <div className={actionColumnStyle}>
+                                            {onEdit && (
                                                 <Button
                                                     disabled={Boolean(row?.role === "ADMIN")}
                                                     variant="outline"
                                                     size="sm"
-                                                    onClick={() => {
-                                                        setDeleteId(row.id ?? null);
-                                                        setDeleteItem(row);
-                                                    }}
+                                                    onClick={() => onEdit(row)}
                                                 >
-                                                    <Trash2 className="h-4 w-4"/>
+                                                    <Edit2 className="h-4 w-4"/>
                                                 </Button>
-                                        )}
+                                            )}
 
-                                        {quickAction?.(row)}
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
 
-            {/* Pagination */}
-            <PaginationCustomTable pagination={pagination} onPageChange={page => setFilter({...filter, page})}
-                                   onLimitChange={limit => setFilter({...filter, limit, page: 1})}/>
-            {/* Delete Dialog */}
-            <AlertDialog open={Boolean(deleteId)} onOpenChange={() => setDeleteId(null)}>
-                <AlertDialogContent>
-                    <AlertDialogTitle>Delete Item</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        Are you sure you want to delete this item? This action cannot be undone.xxxxx
-                    </AlertDialogDescription>
+                                            {onDelete && (
+                                                (isDeleting && row?.id == deleteItem?.id) ?
+                                                    <Loader2 className="h-4 w-4 animate-spin"/> :
+                                                    <Button
+                                                        disabled={Boolean(row?.role === "ADMIN")}
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => {
+                                                            setDeleteId(row.id ?? null);
+                                                            setDeleteItem(row);
+                                                        }}
+                                                    >
+                                                        <Trash2 className="h-4 w-4"/>
+                                                    </Button>
+                                            )}
 
-                    <div className="flex justify-end gap-3">
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            {quickAction?.(row)}
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>,
+                    footer: <PaginationCustomTable pagination={pagination}
+                                                   onPageChange={page => setFilter({...filter, page})}
+                                                   onLimitChange={limit => setFilter({...filter, limit, page: 1})}/>,
+                    modal: <AlertDialog open={Boolean(deleteId)} onOpenChange={() => setDeleteId(null)}>
+                        <AlertDialogContent>
+                            <AlertDialogTitle>Delete Item</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Are you sure you want to delete this item? This action cannot be undone.xxxxx
+                            </AlertDialogDescription>
 
-                        <AlertDialogAction
-                            onClick={async () => {
-                                try {
-                                    if (onDelete && deleteItem) {
-                                        await onDelete(deleteItem).then(() => {
-                                            setDeleteId(null);
-                                            setDeleteItem(null);
-                                        })
+                            <div className="flex justify-end gap-3">
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                                <AlertDialogAction
+                                    onClick={async () => {
+                                        try {
+                                            if (onDelete && deleteItem) {
+                                                await onDelete(deleteItem).then(() => {
+                                                    setDeleteId(null);
+                                                    setDeleteItem(null);
+                                                })
+                                            }
+                                        } catch (e) {
+                                            console.error("error", e)
+                                        }
                                     }
-                                } catch (e) {
-                                    console.error("error", e)
-                                }
-                            }
-                            }
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                        >
-                            {isDeleting && (
-                                <Loader2 className="h-4 w-4 animate-spin mr-2"/>
-                            )}
-                            Delete
-                        </AlertDialogAction>
-                    </div>
-                </AlertDialogContent>
-            </AlertDialog>
-        </>
+                                    }
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                >
+                                    {isDeleting && (
+                                        <Loader2 className="h-4 w-4 animate-spin mr-2"/>
+                                    )}
+                                    Delete
+                                </AlertDialogAction>
+                            </div>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                }
+            default:
+                return null;
+        }
+
+    }
+
+
+    return (
+        <React.Fragment>
+            <div className="border rounded-lg overflow-hidden ">
+                {/* Content */}
+                {renderMode()?.contents}
+            </div>
+            {/* Footer */}
+            {renderMode()?.footer}
+            {/* Delete Dialog */}
+            {renderMode()?.modal}
+        </React.Fragment>
     );
 }

@@ -23,8 +23,8 @@ export default function CourseDetailPage() {
     const currentUser = useSelector((state: RootState) => state.auth.currentUser);
     const {id: courseId} = useParams<{ id: string }>();
     const courseDetailQuery = useGetCourseDetailQuery({courseId: Number(courseId)}, {skip: !courseId});
-    const enrollmentsByCourseQuery = useGetAllEnrollmentsByCourseQuery({courseId: Number(courseId)}, {skip: !courseDetailQuery?.currentData?.id || currentUser?.role == EnumRole.INSTRUCTOR});
-    const videosByCourseIdQuery=useGetVideosByCourseIdQuery({ ...DefaultPaginationRequest, courseId: Number(courseId)})
+    const enrollmentsByCourseQuery = useGetAllEnrollmentsByCourseQuery({courseId: Number(courseId)}, {skip: !courseDetailQuery?.currentData?.id || currentUser?.role !== EnumRole.STUDENT});
+    const videosByCourseIdQuery=useGetVideosByCourseIdQuery({ ...DefaultPaginationRequest, courseId: Number(courseId)},{skip: currentUser?.role !== EnumRole.STUDENT})
     const [submitPayment, {isLoading: paymentLoading}] = useSubmitPaymentMutation();
     const hasBeenEnrollments = enrollmentsByCourseQuery?.currentData?.contents?.find(d => d.course?.id === Number(courseId))
 
@@ -177,7 +177,7 @@ export default function CourseDetailPage() {
                                                     toast.error(e?.data?.message)
                                                 }
                                             }}
-                                            disabled={[EnumRole.ADMIN, EnumRole.INSTRUCTOR].includes(currentUser?.role as EnumRole) || enrollmentsByCourseQuery?.isLoading}
+                                            disabled={currentUser?.role !== EnumRole.STUDENT || enrollmentsByCourseQuery?.isLoading}
                                         >
                                             <ShoppingCart className="w-4 h-4"/>
                                             {paymentLoading ? "Adding..." : "Add to Cart"}

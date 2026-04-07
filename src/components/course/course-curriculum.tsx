@@ -25,7 +25,7 @@ export function CourseCurriculum({curriculum}: Readonly<CourseCurriculumProps>) 
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg border border-border">
-                <h3 className="font-semibold">Course Curriculum</h3>
+                <h3 className="font-semibold">Course's videos</h3>
                 <div className="flex items-center gap-2 text-sm text-foreground/60">
                     <Clock className="w-4 h-4"/>
                     <span>

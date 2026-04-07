@@ -5,7 +5,8 @@ import {Badge} from "@/components/ui/badge.tsx";
 import {BookMarked, Clock, ShoppingCart, Star, Users} from "lucide-react";
 import {
     useGetAllEnrollmentsByCourseQuery,
-    useGetCourseDetailQuery, useGetVideosByCourseIdQuery,
+    useGetCourseDetailQuery,
+    useGetVideosByCourseIdQuery,
     useSubmitPaymentMutation
 } from "@/lib/api/api.generated.ts";
 import {Avatar, AvatarImage} from "@/components/ui/avatar.tsx";
@@ -130,11 +131,6 @@ export default function CourseDetailPage() {
 
                             {/* Reviews */}
                             <div className="space-y-6">
-                                {/*<ReviewSection*/}
-                                {/*    reviews={[u]}*/}
-                                {/*    courseRating={Number(courseDetailQuery?.currentData?.rating)}*/}
-                                {/*    isLoading={true}*/}
-                                {/*/>*/}
                                 <AddReviewForm courseId={String(courseId)}/>
                             </div>
                         </div>

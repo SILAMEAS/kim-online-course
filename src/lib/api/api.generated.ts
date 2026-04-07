@@ -106,6 +106,28 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.createUserRequest,
       }),
     }),
+    listReviews: build.query<ListReviewsApiResponse, ListReviewsApiArg>({
+      query: (queryArg) => ({
+        url: `/api/reviews/course/${queryArg.courseId}`,
+        params: {
+          search: queryArg.search,
+          page: queryArg.page,
+          limit: queryArg.limit,
+          sortBy: queryArg.sortBy,
+          sortOrder: queryArg.sortOrder,
+        },
+      }),
+    }),
+    createReviews: build.mutation<
+      CreateReviewsApiResponse,
+      CreateReviewsApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/reviews/course/${queryArg.courseId}`,
+        method: "POST",
+        body: queryArg.reviewRequest,
+      }),
+    }),
     approve: build.mutation<ApproveApiResponse, ApproveApiArg>({
       query: (queryArg) => ({
         url: `/api/payments/${queryArg.paymentId}/approve`,
@@ -359,6 +381,22 @@ export type CreateUserApiResponse =
   };
 export type CreateUserApiArg = {
   createUserRequest: CreateUserRequest;
+};
+export type ListReviewsApiResponse =
+  /** status 200 course retrieved successfully */ ReviewsPageResponse;
+export type ListReviewsApiArg = {
+  courseId: number;
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: string;
+};
+export type CreateReviewsApiResponse =
+  /** status 200 course retrieved successfully */ ReviewsPageResponse;
+export type CreateReviewsApiArg = {
+  courseId: number;
+  reviewRequest: ReviewRequest;
 };
 export type ApproveApiResponse =
   /** status 200 Payment approved and enrollment created */ EnrollmentResponse;
@@ -631,6 +669,36 @@ export type ListCourseResponse = {
   title?: string;
   price?: number;
 };
+export type ReviewResponse = {
+  id: number;
+  user: UserResponse;
+  title: string;
+  comment: string;
+  course: ListCourseResponse;
+  rating: number;
+  createdAt: string;
+};
+export type ReviewsPageResponse = {
+  contents?: ReviewResponse[];
+  page?: number;
+  limit?: number;
+  total?: number;
+  totalPage?: number;
+  hasNext?: boolean;
+};
+export type EntityResponseHandlerReviewResponse = {
+  contents?: ReviewResponse[];
+  page?: number;
+  limit?: number;
+  totalPage?: number;
+  total?: number;
+  hasNext?: boolean;
+};
+export type ReviewRequest = {
+  rating?: number;
+  title?: string;
+  comment?: string;
+};
 export type EnrollmentResponse = {
   id?: number;
   status?: "ACTIVE" | "FAILED";
@@ -769,6 +837,8 @@ export const {
   useUploadVideoMutation,
   useListUsersQuery,
   useCreateUserMutation,
+  useListReviewsQuery,
+  useCreateReviewsMutation,
   useApproveMutation,
   useSubmitPaymentMutation,
   useListAllCoursesQuery,

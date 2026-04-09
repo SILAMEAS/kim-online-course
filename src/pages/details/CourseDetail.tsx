@@ -19,6 +19,7 @@ import {Button} from "@/components/ui/button.tsx";
 import {toast} from "sonner";
 import {CourseCurriculum} from "@/components/course/course-curriculum.tsx";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
+import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 
 export default function CourseDetailPage() {
     const currentUser = useSelector((state: RootState) => state.auth.currentUser);
@@ -100,7 +101,7 @@ export default function CourseDetailPage() {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Clock className="w-4 h-4"/>
-                                        <span>{courseDetailQuery?.currentData?.duration} hours</span>
+                                        <span>{formatDurationVideo(Number(courseDetailQuery?.currentData?.duration))}</span>
                                     </div>
                                 </div>
                             </div>
@@ -136,7 +137,10 @@ export default function CourseDetailPage() {
                             {/* Reviews */}
 
                             <div className="space-y-6">
-                                <AddReviewForm courseId={String(courseId)}/>
+                                <AddReviewForm courseId={String(courseId)} onSuccess={() => {
+                                    courseDetailQuery?.refetch();
+
+                                }}/>
                             </div>
 
                         </div>
@@ -189,7 +193,7 @@ export default function CourseDetailPage() {
                                     <div className="space-y-3 text-sm">
                                         <div className="flex items-start gap-3">
                                             <Clock className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary"/>
-                                            <span>{courseDetailQuery?.currentData?.duration} hours of content</span>
+                                            <span>{formatDurationVideo(Number(courseDetailQuery?.currentData?.duration))} of content</span>
                                         </div>
                                         <div className="flex items-start gap-3">
                                             <Star className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary"/>

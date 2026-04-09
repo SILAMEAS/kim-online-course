@@ -290,6 +290,21 @@ const injectedRtkApi = api.injectEndpoints({
     dashboard: build.query<DashboardApiResponse, DashboardApiArg>({
       query: () => ({ url: `/api/dashboard` }),
     }),
+    listAllCoursesStudentEnrollment: build.query<
+      ListAllCoursesStudentEnrollmentApiResponse,
+      ListAllCoursesStudentEnrollmentApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/courses/student/${queryArg.id}`,
+        params: {
+          search: queryArg.search,
+          page: queryArg.page,
+          limit: queryArg.limit,
+          sortBy: queryArg.sortBy,
+          sortOrder: queryArg.sortOrder,
+        },
+      }),
+    }),
     deleteVideo: build.mutation<DeleteVideoApiResponse, DeleteVideoApiArg>({
       query: (queryArg) => ({
         url: `/api/videos/${queryArg.id}/publicId/${queryArg.publicId}`,
@@ -522,6 +537,16 @@ export type DeleteAllByCourseApiArg = {
 export type DashboardApiResponse =
   /** status 200 Users retrieved successfully */ DashboardResponse;
 export type DashboardApiArg = void;
+export type ListAllCoursesStudentEnrollmentApiResponse =
+  /** status 200 Courses retrieved successfully */ CoursePageResponse;
+export type ListAllCoursesStudentEnrollmentApiArg = {
+  id: number;
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: string;
+};
 export type DeleteVideoApiResponse =
   /** status 200 Video deleted successfully */ GeneralResponse;
 export type DeleteVideoApiArg = {
@@ -555,16 +580,16 @@ export type UpdateUserRequest = {
   status?: "ACTIVE" | "INACTIVE";
 };
 export type CourseResponse = {
-  id?: number;
-  title?: string;
-  description?: string;
-  price?: number;
-  updatedBy?: number;
-  createdBy?: number;
-  imageUrl?: string;
-  level?: "BEGINNER" | "INTERMEDIATE" | "ADVANCE";
-  status?: "DRAFT" | "PUBLISHED" | "PREPARE";
-  category?:
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  updatedBy: number;
+  createdBy: number;
+  imageUrl: string;
+  level: "BEGINNER" | "INTERMEDIATE" | "ADVANCE";
+  status: "DRAFT" | "PUBLISHED" | "PREPARE";
+  category:
     | "WEB_DEVELOPMENT"
     | "DATA_SCIENCE"
     | "DESIGN"
@@ -572,11 +597,11 @@ export type CourseResponse = {
     | "CLOUD_COMPUTING"
     | "DEV_OPS"
     | "BUSINESS";
-  rating?: number;
-  reviewsCount?: number;
-  duration?: number;
-  studentsCount?: number;
-  instructor?: UserResponse;
+  rating: number;
+  reviewsCount: number;
+  duration: number;
+  studentsCount: number;
+  instructor: UserResponse;
 };
 export type VideoListResponse = {
   id: number;
@@ -723,12 +748,12 @@ export type PaymentResponse = {
   user?: UserResponse;
 };
 export type CoursePageResponse = {
-  contents?: CourseResponse[];
-  page?: number;
-  limit?: number;
-  total?: number;
-  totalPage?: number;
-  hasNext?: boolean;
+  contents: CourseResponse[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPage: number;
+  hasNext: boolean;
 };
 export type EntityResponseHandlerCourseResponse = {
   contents?: CourseResponse[];
@@ -872,5 +897,6 @@ export const {
   useGetAllEnrollmentsByCourseQuery,
   useDeleteAllByCourseMutation,
   useDashboardQuery,
+  useListAllCoursesStudentEnrollmentQuery,
   useDeleteVideoMutation,
 } = injectedRtkApi;

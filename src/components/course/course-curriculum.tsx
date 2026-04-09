@@ -2,7 +2,7 @@ import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/c
 import {Clock} from "lucide-react";
 import {VideoListResponse} from "@/lib/api/api.generated.ts";
 import React from "react";
-import {formatDuration} from "@/lib/utils/formatDuration.ts";
+import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 import VideoRender from "@/components/VideoRender.tsx";
 import previewCloudinary from "@/components/previewCloudinary.ts";
 
@@ -29,7 +29,7 @@ export function CourseCurriculum({curriculum}: Readonly<CourseCurriculumProps>) 
                 <div className="flex items-center gap-2 text-sm text-foreground/60">
                     <Clock className="w-4 h-4"/>
                     <span>
-            {formatDuration(totalSeconds)} • {curriculum.length} lessons
+            {formatDurationVideo(totalSeconds)} • {curriculum.length} lessons
           </span>
                 </div>
             </div>
@@ -46,7 +46,7 @@ export function CourseCurriculum({curriculum}: Readonly<CourseCurriculumProps>) 
                                 <div className="flex-1">
                                     <p className="font-medium">{video.title}</p>
                                     <p className="text-sm text-foreground/60">
-                                        {formatDuration(video.duration)}
+                                        {formatDurationVideo(video.duration)}
                                     </p>
                                 </div>
                             </div>

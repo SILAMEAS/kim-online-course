@@ -6,6 +6,7 @@ import {AddEditCourseDialog} from "@/pages/admin/courses/add-edit-course-dialog.
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {toast} from "sonner";
+import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 
 
 export default function AdminCoursesPage() {
@@ -49,6 +50,16 @@ export default function AdminCoursesPage() {
                     {key: 'title', label: 'Title', sortable: true},
                     {key: 'category', label: 'Category', sortable: true},
                     {key: 'price', label: 'Price', sortable: true},
+                    {
+                        key: 'duration', label: 'Duration', sortable: false, render: (r) => {
+                            return <p>{formatDurationVideo(Number(r))}</p>
+                        }
+                    },
+                    {
+                        key: 'studentsCount', label: 'Students', sortable: false, render: (r) => {
+                            return <p>{Number(r)}</p>
+                        }
+                    },
                     {key: 'status', label: 'Status', sortable: true},
                 ]}
                 data={courses}

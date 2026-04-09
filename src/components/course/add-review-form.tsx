@@ -23,9 +23,10 @@ import {CustomTable, MODE_TABLE} from "@/components/table/CustomTable.tsx";
 interface AddReviewFormProps {
     courseId: string;
     onReviewAdded?: () => void;
+    onSuccess: () => void;
 }
 
-export function AddReviewForm({onReviewAdded}: Readonly<AddReviewFormProps>) {
+export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormProps>) {
     const {id: courseId} = useParams<{ id: string }>();
     const ratingQuery = useGetRatingQuery({courseId: Number(courseId)}, {skip: !courseId})
     const stats = ratingQuery?.currentData;
@@ -37,7 +38,7 @@ export function AddReviewForm({onReviewAdded}: Readonly<AddReviewFormProps>) {
         filter,
         setFilter,
     } = useCustomTable<ReviewResponse>();
-    const {currentData, isLoading: isLoadingList, refetch} = useListReviewsQuery({
+    const {currentData, isLoading: isLoadingList, refetch:refetchListReview} = useListReviewsQuery({
         ...filter,
         courseId: Number(courseId),
     }, {skip: !courseId, refetchOnMountOrArgChange: true});
@@ -79,7 +80,9 @@ export function AddReviewForm({onReviewAdded}: Readonly<AddReviewFormProps>) {
             toast.success("Review submitted successfully!");
             form.reset();
             onReviewAdded?.();
-            refetch();
+            refetchListReview();
+            ratingQuery?.refetch();
+            onSuccess();
         } catch (error) {
             toast.error("Failed to submit review. Please try again.");
             console.error("Review error:", error);

@@ -23,6 +23,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import {videoFileSchema} from "@/lib/validations/global-schema.ts";
 import VideoRender from "@/components/VideoRender.tsx";
+import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 
 
 export default function AdminVideosPage() {
@@ -34,7 +35,7 @@ export default function AdminVideosPage() {
         setSelectedItem,
         selectedItem
     } = useCustomTable<VideoListResponse>();
-    const listAllCoursesQuery = useListAllCoursesQuery(filter,{refetchOnMountOrArgChange:true});
+    const listAllCoursesQuery = useListAllCoursesQuery(filter, {refetchOnMountOrArgChange: true});
     const courses = listAllCoursesQuery?.data?.contents || [];
     //   State management
     const [uploadVideo] = useUploadVideoMutation();
@@ -160,6 +161,11 @@ export default function AdminVideosPage() {
                         {key: 'id', label: 'ID', sortable: false},
                         {key: 'title', label: 'Title', sortable: false},
                         {key: 'publicId', label: 'PublicId', sortable: false},
+                        {
+                            key: 'duration', label: 'Duration', sortable: false, render: (r) => {
+                                return <p>{formatDurationVideo(Number(r))}</p>
+                            }
+                        },
                     ]}
                     data={videos}
 
@@ -268,6 +274,7 @@ export default function AdminVideosPage() {
                                                     const reader =
                                                         new FileReader();
                                                     reader.onloadend = () => {
+                                                        console.log("reader result", reader.result);
                                                         setPreview(
                                                             reader.result as string
                                                         );

@@ -1,28 +1,14 @@
 import {Link} from "react-router-dom";
 import {useAppSelector} from "@/lib/redux/hooks";
-import {MOCK_COURSES} from "@/lib/data/courses";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
-import {Progress} from "@/components/ui/progress";
 import {ArrowRight, BookMarked} from "lucide-react";
+import {useListAllCoursesStudentEnrollmentQuery} from "@/lib/api/api.generated.ts";
 
 export default function MyCoursesPage() {
-    // const sadf=useGetAllEnrollmentsByCourseQuery({courseId:})
     const currentUser = useAppSelector((state) => state.auth.currentUser);
-    const enrolledCourseIds = currentUser?.enrolled_courses || [];
-
-    // Get enrolled courses
-    const enrolledCourses = MOCK_COURSES.filter((course) =>
-        enrolledCourseIds.includes(course.id),
-    );
-
-    // Mock progress data
-    const courseProgress: Record<string, number> = {
-        "1": 45,
-        "2": 20,
-        "3": 90,
-        "4": 0,
-    };
+    const {currentData} = useListAllCoursesStudentEnrollmentQuery({id: Number(currentUser?.id)}, {skip: !currentUser?.id})
+    const enrolledCourse = currentData?.contents || [];
 
     return (
         <div className="space-y-8">
@@ -30,12 +16,11 @@ export default function MyCoursesPage() {
             <div>
                 <h1 className="text-4xl font-bold mb-2">My Courses</h1>
                 <p className="text-foreground/60">
-                    {enrolledCourses.length} course
-                    {enrolledCourses.length !== 1 ? "s" : ""} enrolled
+                    {`You have ${enrolledCourse?.length} course(s) enrolled.`}
                 </p>
             </div>
 
-            {enrolledCourses.length === 0 ? (
+            {enrolledCourse?.length === 0 ? (
                 <Card className="p-12 border border-border text-center">
                     <BookMarked className="w-16 h-16 mx-auto text-foreground/30 mb-4"/>
                     <h2 className="text-2xl font-semibold mb-2">No courses yet</h2>
@@ -51,8 +36,7 @@ export default function MyCoursesPage() {
                 </Card>
             ) : (
                 <div className="grid grid-cols-1 gap-6">
-                    {enrolledCourses.map((course) => {
-                        const progress = courseProgress[course.id] || 0;
+                    {enrolledCourse?.map((course) => {
                         return (
                             <Card
                                 key={course.id}
@@ -63,7 +47,7 @@ export default function MyCoursesPage() {
                                     <div
                                         className="relative w-full md:w-40 h-32 flex-shrink-0 rounded-lg overflow-hidden">
                                         <img
-                                            src={course.image}
+                                            src={course.imageUrl}
                                             alt={course.title}
                                             className="w-full h-full object-cover"
                                         />
@@ -76,25 +60,15 @@ export default function MyCoursesPage() {
                                                 {course.title}
                                             </h3>
                                             <p className="text-sm text-foreground/60 mb-3">
-                                                by {course.instructor.name}
+                                                by {course.instructor.firstName} {course.instructor.lastName}
                                             </p>
 
-                                            {/* Progress */}
-                                            <div className="mb-3">
-                                                <div className="flex justify-between items-center mb-2">
-                                                    <span className="text-sm font-medium">Progress</span>
-                                                    <span className="text-sm text-foreground/60">
-                            {progress}%
-                          </span>
-                                                </div>
-                                                <Progress value={progress} className="h-2"/>
-                                            </div>
                                         </div>
 
                                         {/* Button */}
                                         <Link to={`/courses/${course.id}`}>
                                             <Button variant="outline" size="sm" className="gap-2">
-                                                {progress === 100 ? "Review" : "Continue Learning"}
+                                                Continue Learning
                                                 <ArrowRight className="w-4 h-4"/>
                                             </Button>
                                         </Link>

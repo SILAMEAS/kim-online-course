@@ -12,6 +12,7 @@ import {
 import {ArrowDown, ArrowRightLeft, ArrowUp, Edit2, Loader2, Trash2} from 'lucide-react';
 import PaginationCustomTable from "@/components/table/commons/PaginationCustomTable.tsx";
 import {SORT} from "@/lib/enum.ts";
+import {cn} from "@/lib/utils.ts";
 
 
 interface Column<T> {
@@ -33,7 +34,7 @@ export enum MODE_TABLE {
 }
 
 interface DataTableProps<T> {
-    columns: Column<T>[];
+    columns?: Column<T>[];
     data: T[];
     isLoading?: boolean;
     // actions
@@ -59,6 +60,7 @@ interface DataTableProps<T> {
     },
     mode?: MODE_TABLE;
     customRenderModeContent?: (row: T) => React.ReactNode;
+    styles?: { classNameGrid?:string }
 }
 
 // @ts-ignore
@@ -74,7 +76,8 @@ export function CustomTable<T extends Record<string, any>>({
                                                                setFilter,
                                                                filter,
                                                                mode = MODE_TABLE.TABLE_PAGINATION,
-                                                               customRenderModeContent
+                                                               customRenderModeContent,
+                                                               styles
                                                            }: Readonly<DataTableProps<T>>) {
     const [deleteId, setDeleteId] = React.useState<string | null>(null);
     const [deleteItem, setDeleteItem] = React.useState<T | null>(null);
@@ -119,21 +122,23 @@ export function CustomTable<T extends Record<string, any>>({
         switch (mode) {
             case MODE_TABLE.GRID:
                 return {
-                    contents: <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    contents: <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-6", styles?.classNameGrid)}>
                         {data.map((row) => (
                             customRenderModeContent ? customRenderModeContent(row) :
                                 <div className={'col-span-1 h-40 flex justify-center items-center border-2'}
                                      key={row?.id}> {row.id}</div>
                         ))}
                     </div>,
-                    footer: <></>
+                    footer: <PaginationCustomTable pagination={pagination}
+                                                   onPageChange={page => setFilter({...filter, page})}
+                                                   onLimitChange={limit => setFilter({...filter, limit, page: 1})}/>
                 }
             case MODE_TABLE.TABLE_PAGINATION:
                 return {
                     contents: <Table>
                         <TableHeader>
                             <TableRow>
-                                {columns.map((col) => (
+                                {columns?.map((col) => (
                                     <TableHead key={String(col.key)}>
                                         <div className="flex items-center gap-2">
                                             {col.label}
@@ -162,7 +167,7 @@ export function CustomTable<T extends Record<string, any>>({
                         <TableBody>
                             {data.map((row, idx) => (
                                 <TableRow key={row?.id ?? idx}>
-                                    {columns.map((col) => {
+                                    {columns?.map((col) => {
                                         const value = row[col.key];
 
                                         return (

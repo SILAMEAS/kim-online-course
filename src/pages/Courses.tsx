@@ -78,6 +78,9 @@ export default function CoursesPage() {
                                 pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
                                 isLoading={isLoading || isFetching}
                                 customRenderModeContent={row => <CourseCard course={row}/>}
+                                styles={{
+                                    classNameGrid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                                }}
 
                             />
 

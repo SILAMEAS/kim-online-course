@@ -57,7 +57,7 @@ export function ReviewSection({reviews,isLoading}: Readonly<ReviewSectionProps>)
 
 // --- Sub-components ---
 
-function RatingSummary({average, total, distribution}: any) {
+export function RatingSummary({average, total, distribution}: any) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-secondary/10 p-6 rounded-xl">
             <div>
@@ -89,7 +89,7 @@ function RatingSummary({average, total, distribution}: any) {
     );
 }
 
-function ReviewCard({review}: Readonly<{ review: any }>) {
+export function ReviewCard({review}: Readonly<{ review: any }>) {
     const userName = review?.user?.firstName ?? "Anonymous";
     const dateLabel = review?.createdAt
         ? formatDistanceToNow(new Date(review.createdAt), {addSuffix: true})

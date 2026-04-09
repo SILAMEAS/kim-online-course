@@ -25,7 +25,10 @@ export default function CourseDetailPage() {
     const {id: courseId} = useParams<{ id: string }>();
     const courseDetailQuery = useGetCourseDetailQuery({courseId: Number(courseId)}, {skip: !courseId});
     const enrollmentsByCourseQuery = useGetAllEnrollmentsByCourseQuery({courseId: Number(courseId)}, {skip: !courseDetailQuery?.currentData?.id || currentUser?.role !== EnumRole.STUDENT});
-    const videosByCourseIdQuery=useGetVideosByCourseIdQuery({ ...DefaultPaginationRequest, courseId: Number(courseId)},{skip: currentUser?.role !== EnumRole.STUDENT})
+    const videosByCourseIdQuery = useGetVideosByCourseIdQuery({
+        ...DefaultPaginationRequest,
+        courseId: Number(courseId)
+    }, {skip: currentUser?.role !== EnumRole.STUDENT})
     const [submitPayment, {isLoading: paymentLoading}] = useSubmitPaymentMutation();
     const hasBeenEnrollments = enrollmentsByCourseQuery?.currentData?.contents?.find(d => d.course?.id === Number(courseId))
 
@@ -125,14 +128,17 @@ export default function CourseDetailPage() {
 
                             {/* Curriculum */}
                             {
-                                videosByCourseIdQuery?.currentData?.contents&&videosByCourseIdQuery?.currentData?.contents?.length > 0 && <CourseCurriculum curriculum={ videosByCourseIdQuery?.currentData?.contents}/>
+                                videosByCourseIdQuery?.currentData?.contents && videosByCourseIdQuery?.currentData?.contents?.length > 0 &&
+                                <CourseCurriculum curriculum={videosByCourseIdQuery?.currentData?.contents}/>
                             }
 
 
                             {/* Reviews */}
+
                             <div className="space-y-6">
                                 <AddReviewForm courseId={String(courseId)}/>
                             </div>
+
                         </div>
 
                         {/* Sidebar */}

@@ -1,6 +1,4 @@
-"use client";
-
-import {useMemo, useState} from "react";
+import {useState} from "react";
 import {useAppSelector} from "@/lib/redux/hooks";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -11,7 +9,12 @@ import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {Loader2, Star} from "lucide-react";
 import {toast} from "sonner";
-import {ReviewResponse, useCreateReviewsMutation, useListReviewsQuery} from "@/lib/api/api.generated.ts";
+import {
+    ReviewResponse,
+    useCreateReviewsMutation,
+    useGetRatingQuery,
+    useListReviewsQuery
+} from "@/lib/api/api.generated.ts";
 import {useParams} from "react-router-dom";
 import {RatingSummary, ReviewCard} from "@/components/course/review-section.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
@@ -23,11 +26,13 @@ interface AddReviewFormProps {
 }
 
 export function AddReviewForm({onReviewAdded}: Readonly<AddReviewFormProps>) {
+    const {id: courseId} = useParams<{ id: string }>();
+    const ratingQuery = useGetRatingQuery({courseId: Number(courseId)}, {skip: !courseId})
+    const stats = ratingQuery?.currentData;
     const currentUser = useAppSelector((state) => state.auth.currentUser);
     const [isLoading, setIsLoading] = useState(false);
     const [hoveredRating, setHoveredRating] = useState(0);
     const [addReview] = useCreateReviewsMutation();
-    const {id: courseId} = useParams<{ id: string }>();
     const {
         filter,
         setFilter,
@@ -48,19 +53,6 @@ export function AddReviewForm({onReviewAdded}: Readonly<AddReviewFormProps>) {
     });
 
     const currentRating = form.watch("rating");
-    const stats = useMemo(() => {
-        const total = reviews.length;
-        const distribution = [5, 4, 3, 2, 1].map((star) => ({
-            star,
-            count: reviews.filter((r) => r.rating === star).length,
-        }));
-
-        const avg = total > 0
-            ? (reviews.reduce((acc, r) => acc + r.rating, 0) / total).toFixed(1)
-            : "0";
-
-        return {total, distribution, avg};
-    }, [reviews]);
 
     async function onSubmit(data: ReviewFormData) {
         if (!currentUser) {
@@ -110,19 +102,21 @@ export function AddReviewForm({onReviewAdded}: Readonly<AddReviewFormProps>) {
 
     return (
         <div className={'space-y-6'}>
-            {/*<ReviewSection reviews={reviews} isLoading={isLoadingList}/>*/}
-            <RatingSummary
-                average={stats.avg}
-                total={stats.total}
-                distribution={stats.distribution}
-            />
+            {
+                stats &&
+                <RatingSummary
+                    average={stats.average}
+                    total={stats.total}
+                    breakdown={stats.breakdown}
+                />
+            }
             <CustomTable<ReviewResponse>
                 mode={MODE_TABLE.GRID}
                 setFilter={setFilter}
                 filter={filter}
                 data={reviews}
                 pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
-                isLoading={isLoading||isLoadingList}
+                isLoading={isLoading || isLoadingList}
                 customRenderModeContent={review => <ReviewCard key={review.id} review={review}/>}
 
             />

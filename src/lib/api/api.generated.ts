@@ -216,6 +216,11 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
+    getRating: build.query<GetRatingApiResponse, GetRatingApiArg>({
+      query: (queryArg) => ({
+        url: `/api/reviews/course/${queryArg.courseId}/rating`,
+      }),
+    }),
     getAllPayments: build.query<
       GetAllPaymentsApiResponse,
       GetAllPaymentsApiArg
@@ -464,6 +469,11 @@ export type ListTeachersApiArg = {
   limit?: number;
   sortBy?: string;
   sortOrder?: string;
+};
+export type GetRatingApiResponse =
+  /** status 200 course retrieved successfully */ CourseRatingDto;
+export type GetRatingApiArg = {
+  courseId: number;
 };
 export type GetAllPaymentsApiResponse =
   /** status 200 Payments retrieved successfully */ PaymentsPageResponse;
@@ -753,6 +763,13 @@ export type EntityResponseHandlerVideoListResponse = {
   total?: number;
   hasNext?: boolean;
 };
+export type CourseRatingDto = {
+  average?: number;
+  total?: number;
+  breakdown?: {
+    [key: string]: number;
+  };
+};
 export type ListPaymentResponse = {
   id?: number;
   amount?: number;
@@ -848,6 +865,7 @@ export const {
   useGetVideosByCourseIdQuery,
   useDeleteVideosByCourseIdMutation,
   useListTeachersQuery,
+  useGetRatingQuery,
   useGetAllPaymentsQuery,
   useListImagesQuery,
   useGetAllEnrollmentsQuery,

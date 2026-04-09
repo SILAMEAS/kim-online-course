@@ -1,63 +1,9 @@
-import {useMemo} from 'react';
 import {Star} from 'lucide-react';
 import {formatDistanceToNow} from 'date-fns';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import {ReviewResponse} from "@/lib/api/api.generated.ts";
+import {CourseRatingDto} from "@/lib/api/api.generated.ts";
 
-interface ReviewSectionProps {
-    reviews: Array<ReviewResponse>;
-    isLoading: boolean
-}
-
-export function ReviewSection({reviews,isLoading}: Readonly<ReviewSectionProps>) {
-
-
-    // --- Derived State ---
-    const stats = useMemo(() => {
-        const total = reviews.length;
-        const distribution = [5, 4, 3, 2, 1].map((star) => ({
-            star,
-            count: reviews.filter((r) => r.rating === star).length,
-        }));
-
-        const avg = total > 0
-            ? (reviews.reduce((acc, r) => acc + r.rating, 0) / total).toFixed(1)
-            : "0";
-
-        return {total, distribution, avg};
-    }, [reviews]);
-
-    if (isLoading) return <div className="text-center py-12 text-foreground/60">Loading reviews...</div>;
-
-    return (
-        <div className="space-y-12">
-            <RatingSummary
-                average={stats.avg}
-                total={stats.total}
-                distribution={stats.distribution}
-            />
-
-            <div className="space-y-6">
-                <h3 className="text-2xl font-bold">Student Reviews</h3>
-                {reviews.length > 0 ? (
-                    <div className="grid gap-6">
-                        {reviews.map((review) => (
-                            <ReviewCard key={review.id} review={review}/>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="text-center py-8 text-foreground/60 border rounded-lg border-dashed">
-                        No reviews yet. Be the first to review this course!
-                    </p>
-                )}
-            </div>
-        </div>
-    );
-}
-
-// --- Sub-components ---
-
-export function RatingSummary({average, total, distribution}: any) {
+export function RatingSummary({average, total, breakdown}: Readonly<CourseRatingDto>) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-secondary/10 p-6 rounded-xl">
             <div>
@@ -71,17 +17,17 @@ export function RatingSummary({average, total, distribution}: any) {
             </div>
 
             <div className="space-y-2">
-                {distribution.map(({star, count}: any) => (
-                    <div key={star} className="flex items-center gap-3 text-sm">
-                        <span className="w-4">{star}</span>
+                {breakdown && Object.entries(breakdown).map(([key, value]) => (
+                    <div key={key} className="flex items-center gap-3 text-sm">
+                        <span className="w-4">{key}</span>
                         <Star className="w-3 h-3 fill-yellow-400 text-yellow-400"/>
                         <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
                             <div
                                 className="h-full bg-yellow-400 transition-all"
-                                style={{width: total > 0 ? `${(count / total) * 100}%` : 0}}
+                                style={{width: value > 0 && total ? `${(value / total) * 100}%` : 0}}
                             />
                         </div>
-                        <span className="w-8 text-right text-foreground/60">{count}</span>
+                        <span className="w-8 text-right text-foreground/60">{value}</span>
                     </div>
                 ))}
             </div>

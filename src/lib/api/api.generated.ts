@@ -59,6 +59,25 @@ const injectedRtkApi = api.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    updateCategory: build.mutation<
+      UpdateCategoryApiResponse,
+      UpdateCategoryApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/category/${queryArg.id}`,
+        method: "PUT",
+        body: queryArg.createCategoryRequest,
+      }),
+    }),
+    deleteCategory: build.mutation<
+      DeleteCategoryApiResponse,
+      DeleteCategoryApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/category/${queryArg.id}`,
+        method: "DELETE",
+      }),
+    }),
     signUp: build.mutation<SignUpApiResponse, SignUpApiArg>({
       query: (queryArg) => ({
         url: `/auths/sign-up`,
@@ -163,6 +182,31 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/courses`,
         method: "POST",
         body: queryArg.createCourseRequest,
+      }),
+    }),
+    listCategories: build.query<
+      ListCategoriesApiResponse,
+      ListCategoriesApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/category`,
+        params: {
+          search: queryArg.search,
+          page: queryArg.page,
+          limit: queryArg.limit,
+          sortBy: queryArg.sortBy,
+          sortOrder: queryArg.sortOrder,
+        },
+      }),
+    }),
+    createCategory: build.mutation<
+      CreateCategoryApiResponse,
+      CreateCategoryApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/category`,
+        method: "POST",
+        body: queryArg.createCategoryRequest,
       }),
     }),
     getVideos: build.query<GetVideosApiResponse, GetVideosApiArg>({
@@ -362,6 +406,17 @@ export type DeleteCourseByIdApiArg = {
   /** ID of the course */
   courseId: number;
 };
+export type UpdateCategoryApiResponse =
+  /** status 200 update categories response successfully */ GeneralResponse;
+export type UpdateCategoryApiArg = {
+  id: number;
+  createCategoryRequest: CreateCategoryRequest;
+};
+export type DeleteCategoryApiResponse =
+  /** status 200 delete categories response successfully */ GeneralResponse;
+export type DeleteCategoryApiArg = {
+  id: number;
+};
 export type SignUpApiResponse = /** status 200 Account created successfully */ {
   [key: string]: string;
 };
@@ -444,8 +499,22 @@ export type CreateCourseApiResponse =
 export type CreateCourseApiArg = {
   createCourseRequest: CreateCourseRequest;
 };
+export type ListCategoriesApiResponse =
+  /** status 200 list categories response successfully */ CategoryPageResponse;
+export type ListCategoriesApiArg = {
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: string;
+};
+export type CreateCategoryApiResponse =
+  /** status 200 create categories response successfully */ Category;
+export type CreateCategoryApiArg = {
+  createCategoryRequest: CreateCategoryRequest;
+};
 export type GetVideosApiResponse =
-  /** status 200 Videos retrieved successfully */ EntityResponseHandlerVideoListResponse;
+  /** status 200 Videos retrieved successfully */ ResponsePaginationHandlerVideoListResponse;
 export type GetVideosApiArg = {
   search?: string;
   page?: number;
@@ -460,7 +529,7 @@ export type WatchVideoApiArg = {
   publicId: string;
 };
 export type GetVideosByCourseIdApiResponse =
-  /** status 200 Videos retrieved successfully */ EntityResponseHandlerVideoListResponse;
+  /** status 200 Videos retrieved successfully */ ResponsePaginationHandlerVideoListResponse;
 export type GetVideosByCourseIdApiArg = {
   /** Course ID */
   courseId: number;
@@ -477,7 +546,7 @@ export type DeleteVideosByCourseIdApiArg = {
   courseId: number;
 };
 export type ListTeachersApiResponse =
-  /** status 200 OK */ EntityResponseHandlerUserResponse;
+  /** status 200 OK */ ResponsePaginationHandlerUserResponse;
 export type ListTeachersApiArg = {
   search?: string;
   page?: number;
@@ -579,6 +648,14 @@ export type UpdateUserRequest = {
   role?: "STUDENT" | "INSTRUCTOR" | "ADMIN";
   status?: "ACTIVE" | "INACTIVE";
 };
+export type Category = {
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
+  id?: number;
+  name?: string;
+};
 export type CourseResponse = {
   id: number;
   title: string;
@@ -589,14 +666,7 @@ export type CourseResponse = {
   imageUrl: string;
   level: "BEGINNER" | "INTERMEDIATE" | "ADVANCE";
   status: "DRAFT" | "PUBLISHED" | "PREPARE";
-  category:
-    | "WEB_DEVELOPMENT"
-    | "DATA_SCIENCE"
-    | "DESIGN"
-    | "MOBILE_DEVELOPMENT"
-    | "CLOUD_COMPUTING"
-    | "DEV_OPS"
-    | "BUSINESS";
+  category: Category;
   rating: number;
   reviewsCount: number;
   duration: number;
@@ -619,14 +689,7 @@ export type CourseDetailResponse = {
   imageUrl?: string;
   level?: "BEGINNER" | "INTERMEDIATE" | "ADVANCE";
   status?: "DRAFT" | "PUBLISHED" | "PREPARE";
-  category?:
-    | "WEB_DEVELOPMENT"
-    | "DATA_SCIENCE"
-    | "DESIGN"
-    | "MOBILE_DEVELOPMENT"
-    | "CLOUD_COMPUTING"
-    | "DEV_OPS"
-    | "BUSINESS";
+  category?: Category;
   rating?: number;
   reviewsCount?: number;
   duration?: number;
@@ -640,14 +703,10 @@ export type UpdateCourseRequest = {
   status?: "DRAFT" | "PUBLISHED" | "PREPARE";
   instructorId?: number;
   file?: Blob;
-  category?:
-    | "WEB_DEVELOPMENT"
-    | "DATA_SCIENCE"
-    | "DESIGN"
-    | "MOBILE_DEVELOPMENT"
-    | "CLOUD_COMPUTING"
-    | "DEV_OPS"
-    | "BUSINESS";
+  categoryId?: number;
+};
+export type CreateCategoryRequest = {
+  name: string;
 };
 export type SignUpRequest = {
   email: string;
@@ -684,7 +743,7 @@ export type ListUserPageResponse = {
   totalPage?: number;
   hasNext?: boolean;
 };
-export type EntityResponseHandlerUserResponse = {
+export type ResponsePaginationHandlerUserResponse = {
   contents?: UserResponse[];
   page?: number;
   limit?: number;
@@ -721,7 +780,7 @@ export type ReviewsPageResponse = {
   totalPage?: number;
   hasNext?: boolean;
 };
-export type EntityResponseHandlerReviewResponse = {
+export type ResponsePaginationHandlerReviewResponse = {
   contents?: ReviewResponse[];
   page?: number;
   limit?: number;
@@ -755,7 +814,7 @@ export type CoursePageResponse = {
   totalPage: number;
   hasNext: boolean;
 };
-export type EntityResponseHandlerCourseResponse = {
+export type ResponsePaginationHandlerCourseResponse = {
   contents?: CourseResponse[];
   page?: number;
   limit?: number;
@@ -771,16 +830,25 @@ export type CreateCourseRequest = {
   level: "BEGINNER" | "INTERMEDIATE" | "ADVANCE";
   instructorId: number;
   file: Blob;
-  category:
-    | "WEB_DEVELOPMENT"
-    | "DATA_SCIENCE"
-    | "DESIGN"
-    | "MOBILE_DEVELOPMENT"
-    | "CLOUD_COMPUTING"
-    | "DEV_OPS"
-    | "BUSINESS";
+  categoryId: number;
 };
-export type EntityResponseHandlerVideoListResponse = {
+export type CategoryPageResponse = {
+  contents: Category[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPage: number;
+  hasNext: boolean;
+};
+export type ResponsePaginationHandlerCategory = {
+  contents?: Category[];
+  page?: number;
+  limit?: number;
+  totalPage?: number;
+  total?: number;
+  hasNext?: boolean;
+};
+export type ResponsePaginationHandlerVideoListResponse = {
   contents?: VideoListResponse[];
   page?: number;
   limit?: number;
@@ -811,7 +879,7 @@ export type PaymentsPageResponse = {
   totalPage?: number;
   hasNext?: boolean;
 };
-export type EntityResponseHandlerListPaymentResponse = {
+export type ResponsePaginationHandlerListPaymentResponse = {
   contents?: ListPaymentResponse[];
   page?: number;
   limit?: number;
@@ -832,7 +900,7 @@ export type ImagesPageResponse = {
   totalPage?: number;
   hasNext?: boolean;
 };
-export type EntityResponseHandlerImageListResponse = {
+export type ResponsePaginationHandlerImageListResponse = {
   contents?: ImageListResponse[];
   page?: number;
   limit?: number;
@@ -848,7 +916,7 @@ export type EnrollmentsPageResponse = {
   totalPage?: number;
   hasNext?: boolean;
 };
-export type EntityResponseHandlerEnrollmentResponse = {
+export type ResponsePaginationHandlerEnrollmentResponse = {
   contents?: EnrollmentResponse[];
   page?: number;
   limit?: number;
@@ -873,6 +941,8 @@ export const {
   useGetCourseDetailQuery,
   useUpdateCourseMutation,
   useDeleteCourseByIdMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
   useSignUpMutation,
   useSignInMutation,
   useRefreshTokenMutation,
@@ -885,6 +955,8 @@ export const {
   useSubmitPaymentMutation,
   useListAllCoursesQuery,
   useCreateCourseMutation,
+  useListCategoriesQuery,
+  useCreateCategoryMutation,
   useGetVideosQuery,
   useWatchVideoQuery,
   useGetVideosByCourseIdQuery,

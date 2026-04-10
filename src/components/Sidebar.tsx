@@ -2,10 +2,11 @@ import {useState} from "react";
 import {Button} from "@/components/ui/button";
 import {
     BookOpen,
-    CreditCard, Image,
+    CreditCard,
+    Image,
     LayoutDashboard,
     PanelLeftClose,
-    PanelLeftOpen,
+    PanelLeftOpen, Shapes,
     UserCheck,
     Users,
     Video
@@ -58,6 +59,11 @@ const navItemsDefault = [
         href: '/admin/images',
         label: 'Images',
         icon: Image,
+    },
+    {
+        href: '/admin/categories',
+        label: 'Categories',
+        icon: Shapes,
     },
 ];
 

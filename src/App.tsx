@@ -1,5 +1,6 @@
-import { Suspense, lazy } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {lazy, Suspense} from "react";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+
 
 // Lazy load pages for better code splitting
 const Home = lazy(() => import("./pages/Home"));
@@ -20,6 +21,7 @@ const DashboardOverview = lazy(() => import("./pages/dashboard/DashboardOverview
 const MyCoursesPage = lazy(() => import("./pages/dashboard/MyCourses"));
 const ProfilePage = lazy(() => import("./pages/dashboard/Profile"));
 const WishlistPage = lazy(() => import("./pages/dashboard/Wishlist"));
+const AdminCategoriesPage = lazy(() => import("@/pages/admin/categories/AdminCategoriesPage.tsx"));
 
 // Lazy load admin pages
 const AdminLayout = lazy(() => import("./components/layout/AdminLayout"));
@@ -46,61 +48,62 @@ function LoadingFallback() {
 function App() {
     return (
         <Router>
-            <Suspense fallback={<LoadingFallback />}>
+            <Suspense fallback={<LoadingFallback/>}>
                 <Routes>
                     {/** PUBLIC ROUTES */}
-                    <Route path="/" element={<Home />} />
-                    <Route path="/courses" element={<CoursesPage />} />
-                    <Route path="/courses/:id" element={<CourseDetailPage />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/contact" element={<ContactPage />} />
-                    <Route path="/cart" element={<CartPage />} />
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/courses" element={<CoursesPage/>}/>
+                    <Route path="/courses/:id" element={<CourseDetailPage/>}/>
+                    <Route path="/about" element={<AboutPage/>}/>
+                    <Route path="/contact" element={<ContactPage/>}/>
+                    <Route path="/cart" element={<CartPage/>}/>
                     <Route
                         element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <AuthLayout />
+                            <Suspense fallback={<LoadingFallback/>}>
+                                <AuthLayout/>
                             </Suspense>
                         }
                     >
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/login" element={<LoginPage/>}/>
+                        <Route path="/register" element={<RegisterPage/>}/>
                     </Route>
 
                     {/** STUDENT ROUTES */}
                     <Route
                         path="/dashboard"
                         element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <StudentLayout />
+                            <Suspense fallback={<LoadingFallback/>}>
+                                <StudentLayout/>
                             </Suspense>
                         }
                     >
-                        <Route index element={<DashboardOverview />} />
-                        <Route path="my-courses" element={<MyCoursesPage />} />
-                        <Route path="profile" element={<ProfilePage />} />
-                        <Route path="wishlist" element={<WishlistPage />} />
+                        <Route index element={<DashboardOverview/>}/>
+                        <Route path="my-courses" element={<MyCoursesPage/>}/>
+                        <Route path="profile" element={<ProfilePage/>}/>
+                        <Route path="wishlist" element={<WishlistPage/>}/>
                     </Route>
 
                     {/** ADMIN TEACHER ROUTES */}
                     <Route
                         path="/admin"
                         element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <AdminLayout />
+                            <Suspense fallback={<LoadingFallback/>}>
+                                <AdminLayout/>
                             </Suspense>
                         }
                     >
-                        <Route index element={<AdminDashboardPage />} />
-                        <Route path="users" element={<AdminUsersPage />} />
-                        <Route path="courses" element={<AdminCoursesPage />} />
-                        <Route path="videos" element={<AdminVideosPage />} />
-                        <Route path="payments" element={<AdminPaymentsPage />} />
-                        <Route path="enrollments" element={<AdminEnrollmentsPage />} />
-                        <Route path="images" element={<AdminImagesPage />} />
+                        <Route index element={<AdminDashboardPage/>}/>
+                        <Route path="users" element={<AdminUsersPage/>}/>
+                        <Route path="courses" element={<AdminCoursesPage/>}/>
+                        <Route path="videos" element={<AdminVideosPage/>}/>
+                        <Route path="payments" element={<AdminPaymentsPage/>}/>
+                        <Route path="enrollments" element={<AdminEnrollmentsPage/>}/>
+                        <Route path="images" element={<AdminImagesPage/>}/>
+                        <Route path="categories" element={<AdminCategoriesPage/>}/>
                     </Route>
 
                     {/** Fallback route */}
-                    <Route path="*" element={<NotFoundPage />} />
+                    <Route path="*" element={<NotFoundPage/>}/>
                 </Routes>
             </Suspense>
         </Router>

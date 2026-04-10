@@ -23,6 +23,10 @@ const useCustomTable = <T, >() => {
         page: 1,
         sortOrder: SORT.DESC
     });
+    const handleAdd = () => {
+        setSelectedItem(null);
+        setOpen(true);
+    };
     return {
         sortBy,
         setSortBy,
@@ -38,7 +42,8 @@ const useCustomTable = <T, >() => {
         setSelectedItem,
         filter,
         setFilter,
-        currentUser
+        currentUser,
+        handleAdd
     }
 };
 

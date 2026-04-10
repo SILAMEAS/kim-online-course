@@ -3,6 +3,7 @@ import {Card} from '@/components/ui/card';
 import {Loader2, Plus} from 'lucide-react';
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import {
+    CourseResponse,
     UploadVideoApiArg,
     useDeleteVideoMutation,
     useGetVideosQuery,
@@ -161,6 +162,11 @@ export default function AdminVideosPage() {
                         {key: 'id', label: 'ID', sortable: false},
                         {key: 'title', label: 'Title', sortable: false},
                         {key: 'publicId', label: 'PublicId', sortable: false},
+                        {
+                            key: 'course', label: 'Course', sortable: false, render: (r) => {
+                                return <p>{(r as CourseResponse).title}</p>
+                            }
+                        },
                         {
                             key: 'duration', label: 'Duration', sortable: false, render: (r) => {
                                 return <p>{formatDurationVideo(Number(r))}</p>

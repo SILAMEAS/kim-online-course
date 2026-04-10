@@ -3,6 +3,7 @@ import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {Clock, Star, Users} from "lucide-react";
 import {CourseResponse} from "@/lib/api/api.generated.ts";
+import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 
 
 export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
@@ -37,7 +38,7 @@ export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
                     {/* Category and Level */}
                     <div className="flex items-center gap-2 mb-2">
                         <Badge variant="outline" className="text-xs">
-                            {course.category}
+                            {course?.category?.name}
                         </Badge>
                         {
                             course?.level &&
@@ -92,7 +93,7 @@ export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
                         </div>
                         <div className="flex items-center gap-1">
                             <Clock className="w-4 h-4"/>
-                            <span className="text-xs">{course.duration}h</span>
+                            <span className="text-xs">{formatDurationVideo(Number(course.duration))}</span>
                         </div>
                     </div>
 

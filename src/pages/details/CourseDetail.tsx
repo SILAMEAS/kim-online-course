@@ -72,7 +72,7 @@ export default function CourseDetailPage() {
                             {/* Header */}
                             <div>
                                 <div className="flex flex-wrap items-center gap-2 mb-4">
-                                    <Badge>{courseDetailQuery?.currentData?.category}</Badge>
+                                    <Badge>{courseDetailQuery?.currentData?.category?.name}</Badge>
                                     <Badge variant="secondary">{courseDetailQuery?.currentData?.level}</Badge>
                                 </div>
                                 <h1 className="text-4xl font-bold mb-4">

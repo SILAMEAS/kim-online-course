@@ -1,0 +1,1 @@
+import{j as e}from"./ui-vendor-C0_O5JAL.js";import{T as a,a as t}from"./TriggerLanguage-B-sTIAiG.js";import{c as m}from"./utils-BLSKlp9E.js";const c=({className:r,...s})=>e.jsxs("div",{...s,className:m("space-x-2.5 flex justify-center items-center",r),children:[e.jsx(a,{}),e.jsx(t,{})]});export{c as T};

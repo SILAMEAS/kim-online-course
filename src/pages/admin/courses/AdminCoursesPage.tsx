@@ -1,7 +1,12 @@
 import React from 'react';
 import {Button} from '@/components/ui/button';
 import {Plus} from 'lucide-react';
-import {CourseResponse, useDeleteCourseByIdMutation, useListAllCoursesQuery} from "@/lib/api/api.generated.ts";
+import {
+    Category,
+    CourseResponse,
+    useDeleteCourseByIdMutation,
+    useListAllCoursesQuery
+} from "@/lib/api/api.generated.ts";
 import {AddEditCourseDialog} from "@/pages/admin/courses/add-edit-course-dialog.tsx";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
@@ -48,7 +53,11 @@ export default function AdminCoursesPage() {
                 filter={filter}
                 columns={[
                     {key: 'title', label: 'Title', sortable: true},
-                    {key: 'category', label: 'Category', sortable: true},
+                    {
+                        key: 'category', label: 'Category', sortable: true, render: (r) => {
+                            return <p>{(r as Category)?.name}</p>
+                        }
+                    },
                     {key: 'price', label: 'Price', sortable: true},
                     {
                         key: 'duration', label: 'Duration', sortable: false, render: (r) => {

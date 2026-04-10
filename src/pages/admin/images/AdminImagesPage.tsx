@@ -1,5 +1,3 @@
-import {Button} from '@/components/ui/button';
-import {Plus} from 'lucide-react';
 import {ImageListResponse, useListImagesQuery} from "@/lib/api/api.generated.ts";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
@@ -23,11 +21,6 @@ export default function AdminImagesPage() {
                     <h1 className="text-3xl font-bold">Images</h1>
                     <p className="text-muted-foreground mt-1">Manage uploaded images</p>
                 </div>
-                <Button onClick={() => {
-                }}>
-                    <Plus className="mr-2 h-4 w-4"/>
-                    Add Image
-                </Button>
             </div>
 
             <CustomTable<ImageListResponse>

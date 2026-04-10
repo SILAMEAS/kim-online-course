@@ -10,6 +10,7 @@ import {
     CourseResponse,
     CreateCourseRequest,
     useCreateCourseMutation,
+    useListCategoriesQuery,
     useListTeachersQuery,
     useUpdateCourseMutation
 } from "@/lib/api/api.generated.ts";
@@ -19,14 +20,14 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
 import {z} from "zod";
 import {
-    categorySchema,
     courseStatusSchema,
     courseTitleSchema,
     descriptionSchema,
     fileOrUrlSchema,
     instructorIdSchema,
     levelSchema,
-    priceSchema
+    priceSchema,
+    quantitySchema
 } from "@/lib/validations/global-schema.ts";
 
 interface CourseDialogProps {
@@ -36,15 +37,6 @@ interface CourseDialogProps {
     handleSuccess: () => void
 }
 
-enum CategoryStatus {
-    WEB_DEVELOPMENT = "WEB_DEVELOPMENT",
-    DATA_SCIENCE = "DATA_SCIENCE",
-    DESIGN = "DESIGN",
-    MOBILE_DEVELOPMENT = "MOBILE_DEVELOPMENT",
-    CLOUD_COMPUTING = "CLOUD_COMPUTING",
-    DEV_OPS = "DEV_OPS",
-    BUSINESS = "BUSINESS",
-}
 
 enum levelStatus {
     BEGINNER = "BEGINNER",
@@ -57,15 +49,6 @@ const levelStatusLabels: Record<levelStatus, string> = {
     INTERMEDIATE: "intermediate",
     ADVANCE: "advance",
 };
-const categoryLabels: Record<CategoryStatus, string> = {
-    WEB_DEVELOPMENT: "Web Development",
-    DATA_SCIENCE: "Data Science",
-    DESIGN: "Design",
-    MOBILE_DEVELOPMENT: "Mobile Development",
-    CLOUD_COMPUTING: "Cloud Computing",
-    DEV_OPS: "DevOps",
-    BUSINESS: "Business",
-};
 
 
 export function AddEditCourseDialog({
@@ -75,15 +58,19 @@ export function AddEditCourseDialog({
                                         handleSuccess
                                     }: Readonly<CourseDialogProps>) {
     const [preview, setPreview] = useState<string | null>(null);
-    const {currentData, refetch, isLoading} = useListTeachersQuery(DefaultPaginationRequest);
+    const {currentData, refetch, isLoading} = useListTeachersQuery({
+        ...DefaultPaginationRequest,
+        limit: 100
+    }, {skip: !open});
+    const categoriesQuery = useListCategoriesQuery({...DefaultPaginationRequest, limit: 100}, {skip: !open,refetchOnMountOrArgChange: true});
     const teachers = currentData?.contents || [];
+    const categories = categoriesQuery?.currentData?.contents || [];
     const [addCourse] = useCreateCourseMutation();
     const [updateCourse] = useUpdateCourseMutation();
-
     const form = useForm<CreateCourseRequest>({
         resolver: zodResolver(z.object({
             title: courseTitleSchema,
-            category: categorySchema,
+            categoryId: quantitySchema,
             file: fileOrUrlSchema,
             description: descriptionSchema,
             instructorId: instructorIdSchema,
@@ -91,6 +78,17 @@ export function AddEditCourseDialog({
             price: priceSchema,
             status: courseStatusSchema,
         })),
+        // Add these default values:
+        defaultValues: {
+            title: "",
+            description: "",
+            instructorId: 0,
+            categoryId: 0,
+            price: 0,
+            status: "DRAFT",
+            level: "BEGINNER",
+            file: "",
+        }
     });
 
     React.useEffect(() => {
@@ -99,7 +97,7 @@ export function AddEditCourseDialog({
             form.reset({
                 title: selectedCourse.title,
                 instructorId: selectedCourse?.instructor?.id ?? undefined,
-                category: selectedCourse.category,
+                categoryId: selectedCourse.category?.id ?? undefined,
                 price: selectedCourse.price,
                 status: selectedCourse.status,
                 description: selectedCourse.description,
@@ -125,6 +123,20 @@ export function AddEditCourseDialog({
         ))
     }
 
+    const handleSelectCategories = () => {
+        if (categoriesQuery.isLoading) {
+            return <option disabled>Loading...</option>
+        }
+        if (categories.length === 0) {
+            return <option disabled>No category found</option>
+        }
+        return categories?.map((c) => (
+            <option key={c.id} value={c.id}>
+                {c.name}
+            </option>
+        ))
+    }
+
 
     async function onSubmit(data: CreateCourseRequest) {
         try {
@@ -137,7 +149,9 @@ export function AddEditCourseDialog({
             formData.append("status", data.status);
             formData.append("level", data.level);
             formData.append("instructorId", String(data.instructorId));
-            formData.append("category", data.category);
+            formData.append("categoryId", String(data.categoryId));
+            console.log("data.categoryId", data)
+
 
             // ✅ Only append file if user actually selects a new one
             if (data.file instanceof File) {
@@ -245,7 +259,7 @@ export function AddEditCourseDialog({
                             {/* Category */}
                             <FormField
                                 control={form.control}
-                                name="category"
+                                name="categoryId"
                                 render={({field}) => (
                                     <FormItem>
                                         <FormLabel>Category</FormLabel>
@@ -253,11 +267,7 @@ export function AddEditCourseDialog({
                                             <select {...field}
                                                     className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
                                                 <option value="">Select category</option>
-                                                {Object.values(CategoryStatus).map((c) => (
-                                                    <option key={c} value={c}>
-                                                        {categoryLabels[c]}
-                                                    </option>
-                                                ))}
+                                                {handleSelectCategories()}
                                             </select>
                                         </FormControl>
                                         <FormMessage/>

@@ -8,7 +8,7 @@ import {Checkbox} from '@/components/ui/checkbox';
 import {Label} from '@/components/ui/label';
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from '@/components/ui/accordion';
 import {Search, X} from 'lucide-react';
-import {Dispatch, SetStateAction} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {CourseResponse} from "@/lib/api/api.generated.ts";
 import {SORT} from "@/lib/enum.ts";
 
@@ -29,6 +29,8 @@ export function CourseFilters({filter, setFilter}: Readonly<{
     }
 }>) {
     const dispatch = useAppDispatch();
+    // 1. Create a local state for the immediate input value
+    const [searchTerm, setSearchTerm] = useState(filter.search);
     const filters = useAppSelector(state => state.courses.filters);
 
     const handleResetFilters = () => {
@@ -43,6 +45,24 @@ export function CourseFilters({filter, setFilter}: Readonly<{
         filters.priceRange[0] > 0 ||
         filters.priceRange[1] < 200;
 
+    // 2. Effect to handle the debounce logic
+    useEffect(() => {
+        // If the local searchTerm is already equal to the parent filter, do nothing
+        if (searchTerm === filter.search) return;
+
+        const timer = setTimeout(() => {
+            setFilter(prev => ({...prev, search: searchTerm, page: 1})); // Reset page to 1 on new search
+        }, 500); // 3 seconds
+
+        return () => clearTimeout(timer);
+    }, [searchTerm, setFilter, filter.search]);
+
+    // 3. Sync local state if parent filter changes (e.g., on Clear Filters)
+    useEffect(() => {
+        setSearchTerm(filter.search);
+    }, [filter.search]);
+
+
     return (
         <div className="space-y-4">
             {/* Search */}
@@ -51,10 +71,8 @@ export function CourseFilters({filter, setFilter}: Readonly<{
                 <Input
                     placeholder="Search courses..."
                     className="pl-10"
-                    value={filter.search}
-                    onChange={e => {
-                        setFilter({...filter, search: e.target.value})
-                    }}
+                    value={searchTerm} // Use local state here
+                    onChange={e => setSearchTerm(e.target.value)} // Update local state immediately
                 />
             </div>
 

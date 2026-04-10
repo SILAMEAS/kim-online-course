@@ -1,6 +1,6 @@
-import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
-import {resetFilters, setCategory, setLevel, setPriceRange, setRating,} from '@/lib/redux/slices/courses.slice';
-import {COURSE_CATEGORIES, COURSE_LEVELS} from '@/lib/data/courses';
+import {useAppDispatch} from '@/lib/redux/hooks';
+import {setRating,} from '@/lib/redux/slices/courses.slice';
+import {COURSE_LEVELS} from '@/lib/data/courses';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Slider} from '@/components/ui/slider';
@@ -9,58 +9,78 @@ import {Label} from '@/components/ui/label';
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from '@/components/ui/accordion';
 import {Search, X} from 'lucide-react';
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {CourseResponse} from "@/lib/api/api.generated.ts";
 import {SORT} from "@/lib/enum.ts";
+import {useListCategoriesQuery} from "@/lib/api/api.generated.ts";
+import {DefaultPaginationRequest} from "@/lib/types.ts";
 
-export function CourseFilters({filter, setFilter}: Readonly<{
-    setFilter: Dispatch<SetStateAction<{
-        search: string
-        page: number
-        limit: number
-        sortBy: keyof CourseResponse
-        sortOrder: SORT
+export function CourseFilters<T>({filters, setFilters}: Readonly<{
+    setFilters: Dispatch<SetStateAction<{
+        search: string,
+        page: number,
+        limit: number,
+        sortBy: keyof T,
+        sortOrder: SORT,
+        maxPrice?: number,
+        minPrice?: number,
+        categoryId?: number,
+        rating?: number,
+        levelStatus?: "BEGINNER" | "INTERMEDIATE" | "ADVANCE"
     }>>,
-    filter: {
-        search: string
-        page: number
-        limit: number
-        sortBy: keyof CourseResponse
-        sortOrder: SORT
+    filters: {
+        search: string,
+        page: number,
+        limit: number,
+        sortBy: keyof T,
+        sortOrder: SORT,
+        maxPrice?: number,
+        minPrice?: number,
+        categoryId?: number,
+        rating?: number,
+        levelStatus?: "BEGINNER" | "INTERMEDIATE" | "ADVANCE"
     }
 }>) {
     const dispatch = useAppDispatch();
-    // 1. Create a local state for the immediate input value
-    const [searchTerm, setSearchTerm] = useState(filter.search);
-    const filters = useAppSelector(state => state.courses.filters);
+    const [searchTerm, setSearchTerm] = useState(filters.search);
+    const {currentData} = useListCategoriesQuery(DefaultPaginationRequest, {refetchOnMountOrArgChange: true});
 
     const handleResetFilters = () => {
-        dispatch(resetFilters());
+        setFilters({
+            ...filters,
+            search: '',
+            page: 1,
+            categoryId: undefined,
+            rating: undefined,
+            levelStatus: undefined,
+            minPrice: undefined,
+            maxPrice: undefined,
+            sortBy: 'id' as any,
+            sortOrder: SORT.DESC,
+        })
     };
 
     const hasActiveFilters =
-        filters.searchQuery ||
-        filters.category ||
-        filters.level ||
+        filters.search ||
+        filters.categoryId ||
+        filters.levelStatus ||
         filters.rating ||
-        filters.priceRange[0] > 0 ||
-        filters.priceRange[1] < 200;
+        (filters?.minPrice && (filters?.minPrice > 0)) ||
+        (filters?.maxPrice && (filters?.maxPrice < 200));
 
-    // 2. Effect to handle the debounce logic
     useEffect(() => {
         // If the local searchTerm is already equal to the parent filter, do nothing
-        if (searchTerm === filter.search) return;
+        if (searchTerm === filters.search) return;
 
         const timer = setTimeout(() => {
-            setFilter(prev => ({...prev, search: searchTerm, page: 1})); // Reset page to 1 on new search
+            setFilters(prev => ({...prev, search: searchTerm, page: 1})); // Reset page to 1 on new search
         }, 500); // 3 seconds
 
         return () => clearTimeout(timer);
-    }, [searchTerm, setFilter, filter.search]);
+    }, [searchTerm, setFilters, filters.search]);
 
     // 3. Sync local state if parent filter changes (e.g., on Clear Filters)
     useEffect(() => {
-        setSearchTerm(filter.search);
-    }, [filter.search]);
+        setSearchTerm(filters.search);
+    }, [filters.search]);
 
 
     return (
@@ -95,16 +115,20 @@ export function CourseFilters({filter, setFilter}: Readonly<{
                     <AccordionTrigger>Price Range</AccordionTrigger>
                     <AccordionContent className="space-y-4">
                         <Slider
-                            value={filters.priceRange}
-                            onValueChange={(value: [number, number]) => dispatch(setPriceRange(value))}
+                            value={[filters?.minPrice ?? 0, filters?.maxPrice ?? 0]}
+                            onValueChange={(value: [number, number]) => setFilters(pre => ({
+                                ...pre,
+                                minPrice: value[0],
+                                maxPrice: value[1]
+                            }))}
                             min={0}
-                            max={200}
-                            step={10}
+                            max={1000}
+                            step={50}
                             className="mt-2"
                         />
                         <div className="flex justify-between text-sm">
-                            <span>${filters.priceRange[0]}</span>
-                            <span>${filters.priceRange[1]}</span>
+                            <span>${filters?.minPrice ?? 0}</span>
+                            <span>${filters?.maxPrice ?? 0}</span>
                         </div>
                     </AccordionContent>
                 </AccordionItem>
@@ -113,20 +137,19 @@ export function CourseFilters({filter, setFilter}: Readonly<{
                 <AccordionItem value="category">
                     <AccordionTrigger>Category</AccordionTrigger>
                     <AccordionContent className="space-y-3">
-                        {COURSE_CATEGORIES.map(category => (
-                            <div key={category} className="flex items-center space-x-2">
+                        {currentData?.contents?.map(category => (
+                            <div key={category.id} className="flex items-center space-x-2">
                                 <Checkbox
-                                    id={category}
-                                    checked={filters.category === category}
-                                    onCheckedChange={() =>
-                                        dispatch(setCategory(filters.category === category ? null : category))
+                                    id={String(category.id)}
+                                    checked={filters.categoryId === category.id}
+                                    onCheckedChange={() => setFilters(prev => ({...prev, categoryId: category?.id}))
                                     }
                                 />
                                 <Label
-                                    htmlFor={category}
+                                    htmlFor={category?.name}
                                     className="text-sm font-normal cursor-pointer"
                                 >
-                                    {category}
+                                    {category?.name}
                                 </Label>
                             </div>
                         ))}
@@ -141,9 +164,8 @@ export function CourseFilters({filter, setFilter}: Readonly<{
                             <div key={level} className="flex items-center space-x-2">
                                 <Checkbox
                                     id={level}
-                                    checked={filters.level === level}
-                                    onCheckedChange={() =>
-                                        dispatch(setLevel(filters.level === level ? null : level))
+                                    checked={filters.levelStatus === level}
+                                    onCheckedChange={() => setFilters(pre => ({...pre, levelStatus: level as any}))
                                     }
                                 />
                                 <Label

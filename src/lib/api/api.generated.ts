@@ -169,6 +169,11 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/courses`,
         params: {
+          rating: queryArg.rating,
+          levelStatus: queryArg.levelStatus,
+          categoryId: queryArg.categoryId,
+          minPrice: queryArg.minPrice,
+          maxPrice: queryArg.maxPrice,
           search: queryArg.search,
           page: queryArg.page,
           limit: queryArg.limit,
@@ -488,6 +493,16 @@ export type SubmitPaymentApiArg = {
 export type ListAllCoursesApiResponse =
   /** status 200 Courses retrieved successfully */ CoursePageResponse;
 export type ListAllCoursesApiArg = {
+  /** Filter by minimum rating (1-5) */
+  rating?: number;
+  /** Filter by course difficulty level */
+  levelStatus?: "BEGINNER" | "INTERMEDIATE" | "ADVANCE";
+  /** The unique ID of the category */
+  categoryId?: number;
+  /** Minimum price for the course */
+  minPrice?: number;
+  /** Maximum price for the course */
+  maxPrice?: number;
   search?: string;
   page?: number;
   limit?: number;
@@ -653,8 +668,8 @@ export type Category = {
   updatedAt?: string;
   createdBy?: number;
   updatedBy?: number;
-  id?: number;
-  name?: string;
+  id: number;
+  name: string;
 };
 export type CourseResponse = {
   id: number;

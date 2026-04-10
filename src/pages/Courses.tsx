@@ -18,7 +18,7 @@ export default function CoursesPage() {
         currentData,
         isLoading,
         isFetching
-    } = useListAllCoursesQuery(filter, {refetchOnMountOrArgChange: true,});
+    } = useListAllCoursesQuery({...filter}, {refetchOnMountOrArgChange: true,});
     // console.log("AdminCoursesPage",listCourseQuery?.data)
     const courses = currentData?.contents || [];
 
@@ -43,7 +43,7 @@ export default function CoursesPage() {
                         {/* Sidebar - Desktop */}
                         <div className="hidden md:block">
                             <div className="sticky top-24">
-                                <CourseFilters setFilter={setFilter} filter={filter}/>
+                                <CourseFilters<CourseResponse> setFilters={setFilter} filters={filter}/>
                             </div>
                         </div>
 
@@ -59,7 +59,7 @@ export default function CoursesPage() {
                                         </Button>
                                     </SheetTrigger>
                                     <SheetContent side="left">
-                                        <CourseFilters setFilter={setFilter} filter={filter}/>
+                                        <CourseFilters<CourseResponse> setFilters={setFilter} filters={filter}/>
                                     </SheetContent>
                                 </Sheet>
                             </div>

@@ -14,8 +14,14 @@ const useCustomTable = <T, >() => {
         search: string,
         page: number,
         limit: number,
-        sortBy: keyof T ,
+        sortBy: keyof T,
         sortOrder: SORT,
+        maxPrice?: number,
+        minPrice?: number,
+        categoryId?: number,
+        rating?: number,
+        levelStatus?: "BEGINNER" | "INTERMEDIATE" | "ADVANCE"
+
     }>({
         search: "",
         limit: 10,

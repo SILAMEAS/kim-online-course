@@ -23,8 +23,8 @@ import previewCloudinary from "@/components/previewCloudinary.ts";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import {videoFileSchema} from "@/lib/validations/global-schema.ts";
-import VideoRender from "@/components/VideoRender.tsx";
 import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
+import {useFilePreview} from "@/lib/utils/usePreviewFile.tsx";
 
 
 export default function AdminVideosPage() {
@@ -63,6 +63,9 @@ export default function AdminVideosPage() {
             })
         }))
     });
+    const file = form.watch("uploadVideoRequest.file");
+
+    const previewUrl = useFilePreview(file, preview);
 
     async function onSubmit(data: UploadVideoApiArg) {
         try {
@@ -76,6 +79,7 @@ export default function AdminVideosPage() {
             }
 
             if (selectedItem?.id) {
+                formData.append("publicId", selectedItem.publicId);
                 await updateVideo({
                     id: selectedItem.id,
                     updateVideoRequest: formData as any
@@ -308,8 +312,12 @@ export default function AdminVideosPage() {
                                 )}
                             />
                             {/* PREVIEW */}
-                            {preview && (
-                                <VideoRender preview={preview}/>
+                            {previewUrl && (
+                                <video
+                                    src={previewUrl}
+                                    controls
+                                    className="w-60"
+                                />
                             )}
                             <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                                 {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}

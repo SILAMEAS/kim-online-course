@@ -19,9 +19,9 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     updateVideo: build.mutation<UpdateVideoApiResponse, UpdateVideoApiArg>({
       query: (queryArg) => ({
-        url: `/api/videos/${queryArg.publicId}`,
+        url: `/api/videos/${queryArg.id}`,
         method: "PUT",
-        body: queryArg.body,
+        body: queryArg.updateVideoRequest,
       }),
     }),
     updateUser: build.mutation<UpdateUserApiResponse, UpdateUserApiArg>({
@@ -372,14 +372,10 @@ export type UpdateProfileApiArg = {
   userRequest: UserRequest;
 };
 export type UpdateVideoApiResponse =
-  /** status 200 Video updated successfully */ string;
+  /** status 200 Video updated successfully */ GeneralResponse;
 export type UpdateVideoApiArg = {
-  /** Public ID of the existing video in Cloudinary */
-  publicId: string;
-  body: {
-    /** New video file */
-    file: Blob;
-  };
+  id: number;
+  updateVideoRequest: UpdateVideoRequest;
 };
 export type UpdateUserApiResponse =
   /** status 200 User updated successfully */ GeneralResponse;
@@ -656,6 +652,12 @@ export type UserRequest = {
 export type GeneralResponse = {
   message?: string;
   status?: number;
+};
+export type UpdateVideoRequest = {
+  title?: string;
+  file?: Blob;
+  publicId?: string;
+  courseId?: number;
 };
 export type UpdateUserRequest = {
   firstName: string;

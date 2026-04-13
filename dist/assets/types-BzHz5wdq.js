@@ -1,0 +1,1 @@
+import{S as i}from"./index-e6QnwMRo.js";const e=t=>{if(!t)return"0m";const o=Math.floor(t/3600),r=Math.floor(t%3600/60),a=Math.floor(t%60);return o>0?`${o}h ${r}m`:r>0?`${r}m ${a}s`:`${a}s`},n={search:"",limit:10,sortBy:"id",page:1,sortOrder:i.DESC};export{n as D,e as f};

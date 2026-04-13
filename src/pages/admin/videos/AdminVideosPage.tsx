@@ -1,5 +1,4 @@
 import {Button} from '@/components/ui/button';
-import {Card} from '@/components/ui/card';
 import {Loader2, Plus} from 'lucide-react';
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import {
@@ -8,6 +7,7 @@ import {
     useDeleteVideoMutation,
     useGetVideosQuery,
     useListAllCoursesQuery,
+    useUpdateVideoMutation,
     useUploadVideoMutation,
     VideoListResponse
 } from "@/lib/api/api.generated.ts";
@@ -40,6 +40,7 @@ export default function AdminVideosPage() {
     const courses = listAllCoursesQuery?.data?.contents || [];
     //   State management
     const [uploadVideo] = useUploadVideoMutation();
+    const [updateVideo] = useUpdateVideoMutation();
     const [deleteVideo, resultDeleteVideo] = useDeleteVideoMutation();
     const {currentData, refetch} = useGetVideosQuery(DefaultPaginationRequest);
     const videos = currentData?.contents || [];
@@ -65,25 +66,30 @@ export default function AdminVideosPage() {
 
     async function onSubmit(data: UploadVideoApiArg) {
         try {
-            console.log("data", data)
             const formData = new FormData();
             formData.append("title", String(data.uploadVideoRequest.title));
             const file = data.uploadVideoRequest.file;
+
 
             if (file instanceof File) {
                 formData.append("file", file);
             }
 
-
-            if (!data.uploadVideoRequest.file) {
-                toast.error("Please select a video file");
-                return;
+            if (selectedItem?.id) {
+                await updateVideo({
+                    id: selectedItem.id,
+                    updateVideoRequest: formData as any
+                }).unwrap();
+            } else {
+                if (!file) {
+                    toast.error("Please select a video file");
+                    return;
+                }
+                await uploadVideo({
+                    courseId: data.courseId,
+                    uploadVideoRequest: formData as any
+                }).unwrap();
             }
-
-            await uploadVideo({
-                courseId: data.courseId,
-                uploadVideoRequest: formData as any
-            }).unwrap();
 
             toast.success("Video uploaded successfully");
             refetch();
@@ -104,14 +110,24 @@ export default function AdminVideosPage() {
                 courseId: selectedItem?.course?.id,
                 uploadVideoRequest: {
                     title: selectedItem.title,
-                    file: selectedItem.publicId,
+                    file: undefined,
                 }
             });
             if (selectedItem.publicId) {
                 setPreview(previewCloudinary({type: 'video', url: selectedItem.publicId}));
             }
+        } else {
+            form.reset({
+                courseId: undefined,
+                uploadVideoRequest: {
+                    title: undefined,
+                    file: undefined,
+                }
+            });
+            setPreview(null);
+
         }
-    }, [selectedItem, form]);
+    }, [selectedItem, form, open]);
 
     const handleSelectCourse = () => {
         if (listAllCoursesQuery?.isLoading) {
@@ -153,53 +169,50 @@ export default function AdminVideosPage() {
                 </Button>
             </div>
 
-            <Card>
-
-                <CustomTable<VideoListResponse>
-                    filter={filter}
-                    setFilter={setFilter}
-                    columns={[
-                        {key: 'id', label: 'ID', sortable: false},
-                        {key: 'title', label: 'Title', sortable: false},
-                        {key: 'publicId', label: 'PublicId', sortable: false},
-                        {
-                            key: 'course', label: 'Course', sortable: false, render: (r) => {
-                                return <p>{(r as CourseResponse).title}</p>
-                            }
-                        },
-                        {
-                            key: 'duration', label: 'Duration', sortable: false, render: (r) => {
-                                return <p>{formatDurationVideo(Number(r))}</p>
-                            }
-                        },
-                    ]}
-                    data={videos}
-
-                    pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
-                    onEdit={async (video) => {
-                        console.log(video)
-                        setSelectedItem(video);
-                        setOpen(true);
-                    }}
-                    onDelete={async (video) => {
-                        try {
-                            if (video?.publicId && video.id) {
-                                console.log("video.id", video.id);
-                                await deleteVideo({id: video.id, publicId: video.publicId}).unwrap();
-
-                                toast.success("success to delete video");
-                                refetch();
-                                setSelectedItem(null);
-
-                            }
-                        } catch (e: any) {
-                            toast.error("Failed to delete video. Please try again later." + e?.data?.message);
+            <CustomTable<VideoListResponse>
+                filter={filter}
+                setFilter={setFilter}
+                columns={[
+                    {key: 'id', label: 'ID', sortable: false},
+                    {key: 'title', label: 'Title', sortable: false},
+                    {key: 'publicId', label: 'PublicId', sortable: false},
+                    {
+                        key: 'course', label: 'Course', sortable: false, render: (r) => {
+                            return <p>{(r as CourseResponse).title}</p>
                         }
-                    }}
-                    isLoading={listAllCoursesQuery?.isLoading || listAllCoursesQuery?.isFetching}
-                    isDeleting={resultDeleteVideo.isLoading}
-                />
-            </Card>
+                    },
+                    {
+                        key: 'duration', label: 'Duration', sortable: false, render: (r) => {
+                            return <p>{formatDurationVideo(Number(r))}</p>
+                        }
+                    },
+                ]}
+                data={videos}
+
+                pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
+                onEdit={async (video) => {
+                    console.log(video)
+                    setSelectedItem(video);
+                    setOpen(true);
+                }}
+                onDelete={async (video) => {
+                    try {
+                        if (video?.publicId && video.id) {
+                            console.log("video.id", video.id);
+                            await deleteVideo({id: video.id, publicId: video.publicId}).unwrap();
+
+                            toast.success("success to delete video");
+                            refetch();
+                            setSelectedItem(null);
+
+                        }
+                    } catch (e: any) {
+                        toast.error("Failed to delete video. Please try again later." + e?.data?.message);
+                    }
+                }}
+                isLoading={listAllCoursesQuery?.isLoading || listAllCoursesQuery?.isFetching}
+                isDeleting={resultDeleteVideo.isLoading}
+            />
 
             {/* Add/Edit Dialog */}
             <Dialog open={open} onOpenChange={setOpen}>
@@ -225,9 +238,9 @@ export default function AdminVideosPage() {
                                 name="uploadVideoRequest.title"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Course Title</FormLabel>
+                                        <FormLabel>Video Title</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter course title" {...field} />
+                                            <Input placeholder="Enter video title" {...field} />
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -264,7 +277,7 @@ export default function AdminVideosPage() {
                                 name="uploadVideoRequest.file"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Image</FormLabel>
+                                        <FormLabel>File</FormLabel>
                                         <FormControl>
                                             <Input
                                                 type="file"

@@ -75,10 +75,11 @@ export const imageFileSchema = fileSchema
 
 // Video
 export const videoFileSchema = fileSchema
-    .refine((file) => file.type.startsWith("video/"), {
+    .optional()
+    .refine(file => !file || file.type.startsWith("video/"), {
         message: "Only videos allowed",
     })
-    .refine((file) => file.size <= 50 * 1024 * 1024, {
+    .refine(file => !file || file.size <= 50 * 1024 * 1024, {
         message: "Max size 50MB",
     });
 

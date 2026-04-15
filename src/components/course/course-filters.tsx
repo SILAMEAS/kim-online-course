@@ -1,7 +1,4 @@
-import {useAppDispatch} from '@/lib/redux/hooks';
-import {setRating,} from '@/lib/redux/slices/courses.slice';
 import {COURSE_LEVELS} from '@/lib/data/courses';
-import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Slider} from '@/components/ui/slider';
 import {Checkbox} from '@/components/ui/checkbox';
@@ -12,6 +9,8 @@ import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {SORT} from "@/lib/enum.ts";
 import {useListCategoriesQuery} from "@/lib/api/api.generated.ts";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
+import {Badge} from "@/components/ui/badge.tsx";
+import {Button} from "@/components/ui/button.tsx";
 
 export function CourseFilters<T>({filters, setFilters}: Readonly<{
     setFilters: Dispatch<SetStateAction<{
@@ -39,7 +38,6 @@ export function CourseFilters<T>({filters, setFilters}: Readonly<{
         levelStatus?: "BEGINNER" | "INTERMEDIATE" | "ADVANCE"
     }
 }>) {
-    const dispatch = useAppDispatch();
     const [searchTerm, setSearchTerm] = useState(filters.search);
     const {currentData} = useListCategoriesQuery(DefaultPaginationRequest, {refetchOnMountOrArgChange: true});
 
@@ -82,7 +80,38 @@ export function CourseFilters<T>({filters, setFilters}: Readonly<{
         setSearchTerm(filters.search);
     }, [filters.search]);
 
-
+    const activeChips = [
+        filters.search && {
+            key: "search",
+            label: `Search: ${filters.search}`,
+            onRemove: () => setFilters(p => ({...p, search: ""}))
+        },
+        filters.categoryId && {
+            key: "categoryId",
+            label: `Category: ${filters.categoryId}`,
+            onRemove: () => setFilters(p => ({...p, categoryId: undefined}))
+        },
+        filters.levelStatus && {
+            key: "levelStatus",
+            label: `Level: ${filters.levelStatus}`,
+            onRemove: () => setFilters(p => ({...p, levelStatus: undefined}))
+        },
+        filters.rating && {
+            key: "rating",
+            label: `Rating: ${filters.rating}+`,
+            onRemove: () => setFilters(p => ({...p, rating: undefined}))
+        },
+        (filters.minPrice || filters.maxPrice) && {
+            key: "price",
+            label: `Price: $${filters.minPrice ?? 0} - $${filters.maxPrice ?? 1000}`,
+            onRemove: () =>
+                setFilters(p => ({
+                    ...p,
+                    minPrice: undefined,
+                    maxPrice: undefined
+                }))
+        }
+    ].filter(Boolean)
     return (
         <div className="space-y-4">
             {/* Search */}
@@ -94,6 +123,23 @@ export function CourseFilters<T>({filters, setFilters}: Readonly<{
                     value={searchTerm} // Use local state here
                     onChange={e => setSearchTerm(e.target.value)} // Update local state immediately
                 />
+            </div>
+            <div className="flex flex-wrap gap-2">
+                {activeChips.map((chip: any) => (
+                    <Badge
+                        key={chip.key}
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                    >
+                        {chip.label}
+                        <button
+                            onClick={chip.onRemove}
+                            className="ml-1 rounded-full hover:bg-muted p-0.5"
+                        >
+                            <X size={14}/>
+                        </button>
+                    </Badge>
+                ))}
             </div>
 
             {/* Reset Filters */}
@@ -149,7 +195,7 @@ export function CourseFilters<T>({filters, setFilters}: Readonly<{
                                     htmlFor={category?.name}
                                     className="text-sm font-normal cursor-pointer"
                                 >
-                                    {category?.name}
+                                    {category?.name} ({category.id})
                                 </Label>
                             </div>
                         ))}
@@ -183,13 +229,13 @@ export function CourseFilters<T>({filters, setFilters}: Readonly<{
                 <AccordionItem value="rating">
                     <AccordionTrigger>Rating</AccordionTrigger>
                     <AccordionContent className="space-y-3">
-                        {[5, 4, 3].map(rating => (
+                        {[5, 4, 3, 2, 1].map(rating => (
                             <div key={rating} className="flex items-center space-x-2">
                                 <Checkbox
                                     id={`rating-${rating}`}
                                     checked={filters.rating === rating}
                                     onCheckedChange={() =>
-                                        dispatch(setRating(filters.rating === rating ? null : rating))
+                                        setFilters(pre => ({...pre, rating: rating as any}))
                                     }
                                 />
                                 <Label

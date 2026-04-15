@@ -19,7 +19,7 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     updateVideo: build.mutation<UpdateVideoApiResponse, UpdateVideoApiArg>({
       query: (queryArg) => ({
-        url: `/api/videos/${queryArg.id}`,
+        url: `/api/videos/${queryArg.id}/${queryArg.courseId}`,
         method: "PUT",
         body: queryArg.updateVideoRequest,
       }),
@@ -375,6 +375,7 @@ export type UpdateVideoApiResponse =
   /** status 200 Video updated successfully */ GeneralResponse;
 export type UpdateVideoApiArg = {
   id: number;
+  courseId: number;
   updateVideoRequest: UpdateVideoRequest;
 };
 export type UpdateUserApiResponse =
@@ -656,8 +657,7 @@ export type GeneralResponse = {
 export type UpdateVideoRequest = {
   title?: string;
   file?: Blob;
-  publicId?: string;
-  courseId?: number;
+  duration?: number;
 };
 export type UpdateUserRequest = {
   firstName: string;

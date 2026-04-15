@@ -25,6 +25,7 @@ import {z} from "zod";
 import {videoFileSchema} from "@/lib/validations/global-schema.ts";
 import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 import {useFilePreview} from "@/lib/utils/usePreviewFile.tsx";
+import {getVideoDuration} from "@/lib/utils/getVideoDuration.ts";
 
 
 export default function AdminVideosPage() {
@@ -45,6 +46,7 @@ export default function AdminVideosPage() {
     const {currentData, refetch} = useGetVideosQuery(DefaultPaginationRequest);
     const videos = currentData?.contents || [];
     const [preview, setPreview] = useState<string | null>(null);
+    const [duration, setDuration] = useState<number | null>(null);
     //  Form management
     const form = useForm<UploadVideoApiArg>({
         resolver: zodResolver(z.object({
@@ -80,7 +82,9 @@ export default function AdminVideosPage() {
 
             if (selectedItem?.id) {
                 formData.append("publicId", selectedItem.publicId);
+                duration && formData.append("duration", Math.floor(duration).toString());
                 await updateVideo({
+                    courseId: data.courseId,
                     id: selectedItem.id,
                     updateVideoRequest: formData as any
                 }).unwrap();
@@ -157,7 +161,6 @@ export default function AdminVideosPage() {
         }
 
     }, [open])
-
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -303,6 +306,10 @@ export default function AdminVideosPage() {
                                                         );
                                                     };
                                                     reader.readAsDataURL(file);
+
+
+                                                    // ✅ GET DURATION HERE
+                                                    getVideoDuration(file).then(r => setDuration(r));
                                                 }}
                                             />
 

@@ -25,6 +25,8 @@ import {
     statusSchema
 } from "@/lib/validations/global-schema.ts";
 import {DynamicFormDialog} from "@/components/dialog/DynamicFormDialog.tsx";
+import {formatWord} from "@/lib/utils/FormatWord.ts";
+import {Badge} from "@/components/ui/badge.tsx";
 
 
 export default function AdminUsersPage() {
@@ -96,8 +98,21 @@ export default function AdminUsersPage() {
                     {key: 'firstName', label: 'FirstName', sortable: true},
                     {key: 'lastName', label: 'LastName', sortable: true},
                     {key: 'email', label: 'Email', sortable: true},
-                    {key: 'role', label: 'Role', sortable: true},
-                    {key: 'status', label: 'Status', sortable: true},
+                    {
+                        key: 'role',
+                        label: 'Role',
+                        sortable: true,
+                        render: (r) => <Badge key={r?.toString()}
+                                              variant={'outline'}>{formatWord(r?.toString())}</Badge>
+                    },
+                    {
+                        key: 'status',
+                        label: 'Status',
+                        sortable: true,
+                        render: (r => <Badge key={r?.toString()} variant={r === "ACTIVE" ? "default" : "destructive"}>
+                            {formatWord(r.toString())}
+                        </Badge>)
+                    },
                 ]}
                 data={users}
                 pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}

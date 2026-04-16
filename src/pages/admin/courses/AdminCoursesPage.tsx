@@ -12,6 +12,8 @@ import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {toast} from "sonner";
 import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
+import {Badge} from "@/components/ui/badge.tsx";
+import {formatWord} from "@/lib/utils/FormatWord.ts";
 
 
 export default function AdminCoursesPage() {
@@ -58,18 +60,32 @@ export default function AdminCoursesPage() {
                             return <p>{(r as Category)?.name}</p>
                         }
                     },
+                    {
+                        key: 'level', label: 'Level', sortable: true, render: (r) => {
+                            return <p>{formatWord(r as string)}</p>
+                        }
+                    },
                     {key: 'price', label: 'Price', sortable: true},
                     {
-                        key: 'duration', label: 'Duration', sortable: false, render: (r) => {
+                        key: 'duration', label: 'Duration', sortable: true, render: (r) => {
                             return <p>{formatDurationVideo(Number(r))}</p>
                         }
                     },
                     {
-                        key: 'studentsCount', label: 'Students', sortable: false, render: (r) => {
+                        key: 'studentsCount', label: 'Students', sortable: true, render: (r) => {
                             return <p>{Number(r)}</p>
                         }
                     },
-                    {key: 'status', label: 'Status', sortable: true},
+                    {
+                        key: 'status', label: 'Status', sortable: true, render: (r) => {
+                            return <Badge
+                                key={r as string}
+                                variant={r === "DRAFT" ? "destructive" : "outline"}
+                            >
+                                {formatWord((r as string))}
+                            </Badge>
+                        }
+                    },
                 ]}
                 data={courses}
                 pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
@@ -81,7 +97,6 @@ export default function AdminCoursesPage() {
                     try {
                         if (course?.id) {
                             await deleteCourse({courseId: course.id}).unwrap();
-
                         }
                     } catch (e: any) {
                         if (e?.originalStatus !== 200) {

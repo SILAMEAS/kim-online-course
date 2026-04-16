@@ -721,6 +721,7 @@ export type UpdateCourseRequest = {
   instructorId?: number;
   file?: Blob;
   categoryId?: number;
+  level?: "BEGINNER" | "INTERMEDIATE" | "ADVANCE";
 };
 export type CreateCategoryRequest = {
   name: string;

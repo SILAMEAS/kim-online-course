@@ -6,8 +6,7 @@ import {BookMarked, Clock, ShoppingCart, Star, Users} from "lucide-react";
 import {
     useGetAllEnrollmentsByCourseQuery,
     useGetCourseDetailQuery,
-    useGetVideosByCourseIdQuery,
-    useSubmitPaymentMutation
+    useGetVideosByCourseIdQuery
 } from "@/lib/api/api.generated.ts";
 import {Avatar, AvatarImage} from "@/components/ui/avatar.tsx";
 import {AvatarFallback} from "@radix-ui/react-avatar";
@@ -16,21 +15,23 @@ import {useSelector} from "react-redux";
 import {RootState} from "@/lib/redux/store.ts";
 import {EnumRole} from "@/lib/enum.ts";
 import {Button} from "@/components/ui/button.tsx";
-import {toast} from "sonner";
 import {CourseCurriculum} from "@/components/course/course-curriculum.tsx";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
 import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
+import {useAppDispatch} from "@/lib/redux/hooks.ts";
+import {addToCart} from "@/lib/redux/slices/cart.slice.ts";
 
 export default function CourseDetailPage() {
+    const dispatch = useAppDispatch();
     const currentUser = useSelector((state: RootState) => state.auth.currentUser);
     const {id: courseId} = useParams<{ id: string }>();
+
     const courseDetailQuery = useGetCourseDetailQuery({courseId: Number(courseId)}, {skip: !courseId});
     const enrollmentsByCourseQuery = useGetAllEnrollmentsByCourseQuery({courseId: Number(courseId)}, {skip: !courseDetailQuery?.currentData?.id || currentUser?.role !== EnumRole.STUDENT});
     const videosByCourseIdQuery = useGetVideosByCourseIdQuery({
         ...DefaultPaginationRequest,
         courseId: Number(courseId)
     }, {skip: currentUser?.role !== EnumRole.STUDENT})
-    const [submitPayment, {isLoading: paymentLoading}] = useSubmitPaymentMutation();
     const hasBeenEnrollments = enrollmentsByCourseQuery?.currentData?.contents?.find(d => d.course?.id === Number(courseId))
 
     if ((courseDetailQuery?.isLoading || courseDetailQuery?.isFetching) && !courseDetailQuery?.currentData) {
@@ -176,17 +177,26 @@ export default function CourseDetailPage() {
                                             size="lg"
                                             className="w-full gap-2"
                                             onClick={async () => {
-                                                try {
-                                                    courseId &&
-                                                    await submitPayment({courseId: Number(courseId)}).unwrap();
-                                                } catch (e: any) {
-                                                    toast.error(e?.data?.message)
-                                                }
+
+                                                courseId &&
+                                                courseDetailQuery?.currentData?.title &&
+                                                courseDetailQuery?.currentData?.imageUrl &&
+                                                courseDetailQuery?.currentData?.price &&
+                                                courseDetailQuery?.currentData?.instructor?.firstName &&
+                                                dispatch(addToCart({
+                                                    course_id: courseId,
+                                                    course_title: courseDetailQuery?.currentData?.title,
+                                                    id: courseId,
+                                                    price: courseDetailQuery?.currentData?.price,
+                                                    image: courseDetailQuery?.currentData?.imageUrl,
+                                                    instructor_name: courseDetailQuery?.currentData?.instructor?.firstName,
+                                                }))
+
                                             }}
-                                            disabled={currentUser?.role !== EnumRole.STUDENT || enrollmentsByCourseQuery?.isLoading}
+
                                         >
                                             <ShoppingCart className="w-4 h-4"/>
-                                            {paymentLoading ? "Adding..." : "Add to Cart"}
+
                                         </Button>
                                     )}
 

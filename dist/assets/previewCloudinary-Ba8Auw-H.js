@@ -1,1 +1,0 @@
-import{q as o}from"./index-DKVRC2r7.js";const t=({type:r,url:e})=>{switch(r){case"video":return`https://res.cloudinary.com/${o.CLOUDINARY_NAME}/video/upload/${e}.mp4`;case"image":return`https://res.cloudinary.com/${o.CLOUDINARY_NAME}/image/upload/${e}.jpg`;default:return e}};export{t as p};

@@ -3,6 +3,7 @@ import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {BookOpen, DollarSign, Image as ImageIcon, UserCheck, Users, Video} from 'lucide-react';
 import Link from "@/components/Link.tsx";
 import {useDashboardQuery} from "@/lib/api/api.generated.ts";
+import {EnumRole} from "@/lib/enum.ts";
 
 interface StatCardProps {
     title: string;
@@ -64,6 +65,22 @@ export default function AdminDashboardPage() {
                     isLoading={isLoading}
                 />
                 <StatCard
+                    title="Total Teachers"
+                    value={currentData?.totalTeachers || 'Loading...'}
+                    icon={<Users className="h-4 w-4"/>}
+                    description="Active user accounts"
+                    href={`/admin/users?role=${EnumRole.INSTRUCTOR}`}
+                    isLoading={isLoading}
+                />
+                <StatCard
+                    title="Total Students"
+                    value={currentData?.totalStudents || 'Loading...'}
+                    icon={<Users className="h-4 w-4"/>}
+                    description="Active user accounts"
+                    href={`/admin/users?role=${EnumRole.STUDENT}`}
+                    isLoading={isLoading}
+                />
+                <StatCard
                     title="Courses"
                     value={currentData?.totalCourses || 'Loading...'}
                     icon={<BookOpen className="h-4 w-4"/>}
@@ -101,6 +118,14 @@ export default function AdminDashboardPage() {
                     icon={<ImageIcon className="h-4 w-4"/>}
                     description="Uploaded images"
                     href="/admin/images"
+                    isLoading={isLoading}
+                />
+                <StatCard
+                    title="Catogies"
+                    value={currentData?.totalCategories || 'Loading...'}
+                    icon={<ImageIcon className="h-4 w-4"/>}
+                    description="Uploaded images"
+                    href="/admin/categories"
                     isLoading={isLoading}
                 />
             </div>

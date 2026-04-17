@@ -175,6 +175,7 @@ export default function CourseDetailPage() {
                                     ) : (
                                         <Button
                                             size="lg"
+                                            disabled={currentUser?.role !== EnumRole.STUDENT}
                                             className="w-full gap-2"
                                             onClick={async () => {
 

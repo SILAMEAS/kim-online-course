@@ -52,7 +52,7 @@ export function CourseCurriculum({curriculum}: Readonly<CourseCurriculumProps>) 
                             </div>
                         </AccordionTrigger>
                         <AccordionContent className="pl-11 pt-0">
-                            <VideoRender preview={previewCloudinary({type: "video", url: `${video.publicId}`})}/>
+                            <VideoRender preview={previewCloudinary({type: "video", publicId: `${video.publicId}`})}/>
                         </AccordionContent>
                     </AccordionItem>
                 ))}

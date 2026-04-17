@@ -110,6 +110,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/users`,
         params: {
+          role: queryArg.role,
           search: queryArg.search,
           page: queryArg.page,
           limit: queryArg.limit,
@@ -339,6 +340,12 @@ const injectedRtkApi = api.injectEndpoints({
     dashboard: build.query<DashboardApiResponse, DashboardApiArg>({
       query: () => ({ url: `/api/dashboard` }),
     }),
+    dashboardStudent: build.query<
+      DashboardStudentApiResponse,
+      DashboardStudentApiArg
+    >({
+      query: () => ({ url: `/api/dashboard/students` }),
+    }),
     listAllCoursesStudentEnrollment: build.query<
       ListAllCoursesStudentEnrollmentApiResponse,
       ListAllCoursesStudentEnrollmentApiArg
@@ -446,6 +453,7 @@ export type UploadVideoApiArg = {
 export type ListUsersApiResponse =
   /** status 200 Users retrieved successfully */ ListUserPageResponse;
 export type ListUsersApiArg = {
+  role?: "STUDENT" | "INSTRUCTOR" | "ADMIN";
   search?: string;
   page?: number;
   limit?: number;
@@ -618,6 +626,9 @@ export type DeleteAllByCourseApiArg = {
 export type DashboardApiResponse =
   /** status 200 Users retrieved successfully */ DashboardResponse;
 export type DashboardApiArg = void;
+export type DashboardStudentApiResponse =
+  /** status 200 Users retrieved successfully */ DashboardUserResponse;
+export type DashboardStudentApiArg = void;
 export type ListAllCoursesStudentEnrollmentApiResponse =
   /** status 200 Courses retrieved successfully */ CoursePageResponse;
 export type ListAllCoursesStudentEnrollmentApiArg = {
@@ -944,11 +955,20 @@ export type ResponsePaginationHandlerEnrollmentResponse = {
 };
 export type DashboardResponse = {
   totalUsers: number;
+  totalStudents: number;
+  totalTeachers: number;
   totalCourses: number;
   totalVideos: number;
   totalRevenues: string;
   totalEnrollments: number;
   totalImages: number;
+  totalCategories: number;
+};
+export type DashboardUserResponse = {
+  enrolled: number;
+  certificates: number;
+  timeComplete: number;
+  learningStreak: number;
 };
 export const {
   useGetUserByJwtTokenQuery,
@@ -987,6 +1007,7 @@ export const {
   useGetAllEnrollmentsByCourseQuery,
   useDeleteAllByCourseMutation,
   useDashboardQuery,
+  useDashboardStudentQuery,
   useListAllCoursesStudentEnrollmentQuery,
   useDeleteVideoMutation,
 } = injectedRtkApi;

@@ -27,9 +27,12 @@ import {
 import {DynamicFormDialog} from "@/components/dialog/DynamicFormDialog.tsx";
 import {formatWord} from "@/lib/utils/FormatWord.ts";
 import {Badge} from "@/components/ui/badge.tsx";
+import {useSearchParams} from "react-router-dom";
 
 
 export default function AdminUsersPage() {
+    const [searchParams] = useSearchParams();
+    const role = searchParams.get('role') as EnumRole | undefined;
     const {
         setFilter, filter,
         selectedItem,
@@ -37,7 +40,7 @@ export default function AdminUsersPage() {
         currentUser,
     } = useCustomTable<UserResponse>();
 
-    const {currentData, refetch, isLoading, isFetching} = useListUsersQuery(filter, {refetchOnMountOrArgChange: true,});
+    const {currentData, refetch, isLoading, isFetching} = useListUsersQuery({...filter, role:role??undefined}, {refetchOnMountOrArgChange: true,});
     const users = currentData?.contents ?? []
     const [open, setOpen] = React.useState(false);
     const [createUser] = useCreateUserMutation();

@@ -122,7 +122,7 @@ export default function AdminVideosPage() {
                 }
             });
             if (selectedItem.publicId) {
-                setPreview(previewCloudinary({type: 'video', url: selectedItem.publicId}));
+                setPreview(previewCloudinary({type: 'video', publicId: selectedItem.publicId}));
             }
         } else {
             form.reset({

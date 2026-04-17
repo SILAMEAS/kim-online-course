@@ -122,7 +122,7 @@ export default function CartPage() {
                             <TabsTrigger
                                 value="payments"
                             >
-                                {`Payment (${currentData?.total})`}
+                                {`Payment (${currentData?.total??0})`}
                             </TabsTrigger>
                         </TabsList>
 
@@ -234,7 +234,7 @@ export default function CartPage() {
                                 }
                             }}
 
-                                    disabled={currentUser?.role !== EnumRole.STUDENT || cart?.items?.length === 0}> {paymentLoading ? "Payment..." : "Already Payment"}</Button>
+                                    disabled={currentUser?.role !== EnumRole.STUDENT || cart?.items?.length === 0}> {paymentLoading ? "Payment..." : "Payment"}</Button>
                         </TabsContent>
 
                         {/*    Payments Tab*/}

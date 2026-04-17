@@ -219,6 +219,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/videos`,
         params: {
+          courseId: queryArg.courseId,
           search: queryArg.search,
           page: queryArg.page,
           limit: queryArg.limit,
@@ -536,6 +537,7 @@ export type CreateCategoryApiArg = {
 export type GetVideosApiResponse =
   /** status 200 Videos retrieved successfully */ ResponsePaginationHandlerVideoListResponse;
 export type GetVideosApiArg = {
+  courseId?: number;
   search?: string;
   page?: number;
   limit?: number;

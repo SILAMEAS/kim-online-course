@@ -40,12 +40,12 @@ export default function AdminImagesPage() {
                 setFilter={setFilter}
                 columns={[
                     {key: 'title', label: 'Title', sortable: true},
-                    {key: 'publicId', label: 'PublicId', sortable: true},
+                    {key: 'publicId', label: 'PublicId', sortable: false},
                 ]}
                 data={images}
                 pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
                 quickAction={(r) => {
-                    return <Button onClick={() => r.publicId && setPreviewImage(r?.publicId)}><EyeIcon/> </Button>
+                    return <Button variant={"outline"} onClick={() => r.publicId && setPreviewImage(r?.publicId)}><EyeIcon/> </Button>
                 }}
 
                 isLoading={isLoading || isFetching}

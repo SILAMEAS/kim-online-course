@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from '@/components/ui/button';
-import {Plus} from 'lucide-react';
+import {Plus, Video} from 'lucide-react';
 import {
     Category,
     CourseResponse,
@@ -14,9 +14,11 @@ import {toast} from "sonner";
 import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 import {Badge} from "@/components/ui/badge.tsx";
 import {formatWord} from "@/lib/utils/FormatWord.ts";
+import {useNavigate} from "react-router-dom";
 
 
 export default function AdminCoursesPage() {
+    const navigate = useNavigate();
     const {
         filter,
         setFilter,
@@ -106,6 +108,8 @@ export default function AdminCoursesPage() {
                         refetch();
                     }
                 }}
+                quickAction={(row) => <Button
+                    onClick={() => navigate(`/admin/videos?courseId=${row.id}`)} variant={"outline"}><Video/></Button>}
                 isLoading={isLoading || isFetching}
                 isDeleting={resultDeleteCourse.isLoading}
 

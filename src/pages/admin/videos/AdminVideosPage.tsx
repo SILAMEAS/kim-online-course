@@ -13,7 +13,6 @@ import {
 } from "@/lib/api/api.generated.ts";
 import {toast} from "sonner";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
-import {DefaultPaginationRequest} from "@/lib/types.ts";
 import React, {useEffect, useState} from 'react';
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,} from '@/components/ui/dialog';
 import {Input} from '@/components/ui/input';
@@ -26,6 +25,8 @@ import {videoFileSchema} from "@/lib/validations/global-schema.ts";
 import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 import {useFilePreview} from "@/lib/utils/usePreviewFile.tsx";
 import {getVideoDuration} from "@/lib/utils/getVideoDuration.ts";
+import {useSearchParams} from "react-router-dom";
+import {EnumRole} from "@/lib/enum.ts";
 
 
 export default function AdminVideosPage() {
@@ -37,13 +38,17 @@ export default function AdminVideosPage() {
         setSelectedItem,
         selectedItem
     } = useCustomTable<VideoListResponse>();
-    const listAllCoursesQuery = useListAllCoursesQuery(filter, {refetchOnMountOrArgChange: true});
+    const [searchParams] = useSearchParams();
+    const courseId = searchParams.get('courseId') as EnumRole | undefined;
+    const listAllCoursesQuery = useListAllCoursesQuery(filter, {refetchOnMountOrArgChange: true, skip: !open});
     const courses = listAllCoursesQuery?.data?.contents || [];
     //   State management
     const [uploadVideo] = useUploadVideoMutation();
     const [updateVideo] = useUpdateVideoMutation();
     const [deleteVideo, resultDeleteVideo] = useDeleteVideoMutation();
-    const {currentData, refetch} = useGetVideosQuery(DefaultPaginationRequest);
+    const {currentData, refetch} = useGetVideosQuery({...filter, courseId: courseId ? Number(courseId) : undefined}, {
+        refetchOnMountOrArgChange: true,
+    });
     const videos = currentData?.contents || [];
     const [preview, setPreview] = useState<string | null>(null);
     const [duration, setDuration] = useState<number | null>(null);
@@ -100,10 +105,10 @@ export default function AdminVideosPage() {
             }
 
             toast.success("Video uploaded successfully");
-            refetch();
             form.reset();
             setPreview(null);
             setOpen(false);
+            refetch();
         } catch (err: any) {
             console.error(err);
             toast.error(
@@ -181,7 +186,7 @@ export default function AdminVideosPage() {
                 setFilter={setFilter}
                 columns={[
                     {key: 'id', label: 'ID', sortable: false},
-                    {key: 'title', label: 'Title', sortable: false},
+                    {key: 'title', label: 'Title', sortable: true},
                     {key: 'publicId', label: 'PublicId', sortable: false},
                     {
                         key: 'course', label: 'Course', sortable: false, render: (r) => {
@@ -189,7 +194,7 @@ export default function AdminVideosPage() {
                         }
                     },
                     {
-                        key: 'duration', label: 'Duration', sortable: false, render: (r) => {
+                        key: 'duration', label: 'Duration', sortable: true, render: (r) => {
                             return <p>{formatDurationVideo(Number(r))}</p>
                         }
                     },

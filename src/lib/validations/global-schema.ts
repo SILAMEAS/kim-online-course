@@ -182,7 +182,7 @@ export const instructorIdSchema = z
     .min(1, "Instructor must be selected");
 
 // 🔹 Level
-export const COURSE_LEVELS = ["BEGINNER", "INTERMEDIATE", "ADVANCED"] as const;
+export const COURSE_LEVELS = ["BEGINNER", "INTERMEDIATE", "ADVANCE"] as const;
 export const levelSchema = z.enum(COURSE_LEVELS);
 
 // 🔹 Price

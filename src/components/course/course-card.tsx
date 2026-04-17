@@ -1,23 +1,61 @@
 import {Link} from "react-router-dom";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
-import {Clock, Star, Users} from "lucide-react";
-import {CourseResponse} from "@/lib/api/api.generated.ts";
+import {Clock, Heart, Loader, Star, Users} from "lucide-react";
+import {
+    CourseResponse,
+    useAddToWishlistMutation,
+    useGetUserWishlistQuery,
+    useRemoveFromWishlistMutation
+} from "@/lib/api/api.generated.ts";
 import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
+import {useAppSelector} from "@/lib/redux/hooks.ts";
+import {cn} from "@/lib/utils.ts";
 
 
 export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
+    const {currentUser} = useAppSelector(state => state.auth)
+    const [addWishlist, reAdd] = useAddToWishlistMutation();
+    const [removeWishlist, reRemove] = useRemoveFromWishlistMutation();
+    const wishlistQuery = useGetUserWishlistQuery({userId: Number(currentUser?.id)}, {skip: !currentUser?.id});
     const levelColors = {
         BEGINNER: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
         INTERMEDIATE:
             "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
         ADVANCE: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
     };
+    const checkedWishlist = () => {
+        return wishlistQuery?.currentData?.contents?.find((item) => item.course.id === course.id);
+    }
+    const isLoading = wishlistQuery.isLoading || reAdd.isLoading || reRemove.isLoading;
     return (
-        <Link to={`/courses/${course.id}`}>
-            <div
-                className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer h-full flex flex-col">
-                {/* Course Image */}
+        <div
+            className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer h-full flex flex-col relative">
+            {/* Course Image */}
+            <Button variant="outline" className={'absolute left-1 top-1 z-20 bg-green-200'} onClick={async (e) => {
+                if (!currentUser) {
+                    alert("You must be logged in to add courses to your wishlist.");
+                    return;
+                }
+                if (checkedWishlist()) {
+                    await removeWishlist({
+                        courseId: course.id,
+                    });
+                } else {
+                    await addWishlist({
+                        courseId: course.id
+                    });
+                }
+                wishlistQuery.refetch();
+                e.preventDefault();
+                e.stopPropagation();
+            }}>{
+                isLoading ? <Loader/> :
+                    <Heart
+                        className={cn(checkedWishlist() ? 'fill-red-500' : '')}/>
+            }
+            </Button>
+            <Link to={`/courses/${course.id}`}>
                 {
                     course.imageUrl &&
                     <div className="relative w-full h-48 bg-secondary overflow-hidden">
@@ -102,7 +140,7 @@ export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
                         View Course
                     </Button>
                 </div>
-            </div>
-        </Link>
+            </Link>
+        </div>
     );
 }

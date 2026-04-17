@@ -99,6 +99,30 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.body,
       }),
     }),
+    addToWishlist: build.mutation<
+      AddToWishlistApiResponse,
+      AddToWishlistApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/wishlists`,
+        method: "POST",
+        params: {
+          courseId: queryArg.courseId,
+        },
+      }),
+    }),
+    removeFromWishlist: build.mutation<
+      RemoveFromWishlistApiResponse,
+      RemoveFromWishlistApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/wishlists`,
+        method: "DELETE",
+        params: {
+          courseId: queryArg.courseId,
+        },
+      }),
+    }),
     uploadVideo: build.mutation<UploadVideoApiResponse, UploadVideoApiArg>({
       query: (queryArg) => ({
         url: `/api/videos/upload/${queryArg.courseId}`,
@@ -214,6 +238,30 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/category`,
         method: "POST",
         body: queryArg.createCategoryRequest,
+      }),
+    }),
+    getUserWishlist: build.query<
+      GetUserWishlistApiResponse,
+      GetUserWishlistApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/wishlists/${queryArg.userId}`,
+        params: {
+          search: queryArg.search,
+          page: queryArg.page,
+          limit: queryArg.limit,
+          sortBy: queryArg.sortBy,
+          sortOrder: queryArg.sortOrder,
+        },
+      }),
+    }),
+    exists: build.query<ExistsApiResponse, ExistsApiArg>({
+      query: (queryArg) => ({
+        url: `/api/wishlists/exists`,
+        params: {
+          userId: queryArg.userId,
+          courseId: queryArg.courseId,
+        },
       }),
     }),
     getVideos: build.query<GetVideosApiResponse, GetVideosApiArg>({
@@ -462,6 +510,14 @@ export type RefreshTokenApiArg = {
   /** Pass the refresh token in JSON: {"refreshToken":"<token>"} */
   body: string;
 };
+export type AddToWishlistApiResponse = /** status 200 OK */ GeneralResponse;
+export type AddToWishlistApiArg = {
+  courseId: number;
+};
+export type RemoveFromWishlistApiResponse = unknown;
+export type RemoveFromWishlistApiArg = {
+  courseId: number;
+};
 export type UploadVideoApiResponse =
   /** status 200 Video uploaded successfully */ GeneralResponse;
 export type UploadVideoApiArg = {
@@ -552,6 +608,21 @@ export type CreateCategoryApiResponse =
   /** status 200 create categories response successfully */ Category;
 export type CreateCategoryApiArg = {
   createCategoryRequest: CreateCategoryRequest;
+};
+export type GetUserWishlistApiResponse =
+  /** status 200 Users retrieved successfully */ ListWishlistPageResponse;
+export type GetUserWishlistApiArg = {
+  userId: number;
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: string;
+};
+export type ExistsApiResponse = /** status 200 OK */ boolean;
+export type ExistsApiArg = {
+  userId: number;
+  courseId: number;
 };
 export type GetVideosApiResponse =
   /** status 200 Videos retrieved successfully */ ResponsePaginationHandlerVideoListResponse;
@@ -909,6 +980,27 @@ export type ResponsePaginationHandlerCategory = {
   total?: number;
   hasNext?: boolean;
 };
+export type WishlistResponse = {
+  id: number;
+  course: CourseResponse;
+  user: UserResponse;
+};
+export type ListWishlistPageResponse = {
+  contents?: WishlistResponse[];
+  page?: number;
+  limit?: number;
+  total?: number;
+  totalPage?: number;
+  hasNext?: boolean;
+};
+export type ResponsePaginationHandlerWishlistResponse = {
+  contents?: WishlistResponse[];
+  page?: number;
+  limit?: number;
+  totalPage?: number;
+  total?: number;
+  hasNext?: boolean;
+};
 export type ResponsePaginationHandlerVideoListResponse = {
   contents?: VideoListResponse[];
   page?: number;
@@ -1016,6 +1108,8 @@ export const {
   useSignUpMutation,
   useSignInMutation,
   useRefreshTokenMutation,
+  useAddToWishlistMutation,
+  useRemoveFromWishlistMutation,
   useUploadVideoMutation,
   useListUsersQuery,
   useCreateUserMutation,
@@ -1027,6 +1121,8 @@ export const {
   useCreateCourseMutation,
   useListCategoriesQuery,
   useCreateCategoryMutation,
+  useGetUserWishlistQuery,
+  useExistsQuery,
   useGetVideosQuery,
   useWatchVideoQuery,
   useGetVideosByCourseIdQuery,

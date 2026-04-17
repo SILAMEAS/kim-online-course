@@ -19,7 +19,7 @@ const SIDEBAR_ITEMS: Array<ISidebarItem> = [
         to: "/dashboard",
         label: "Dashboard",
         icon: LayoutDashboard,
-        rolesAccess: [EnumRole.ADMIN, EnumRole.INSTRUCTOR, EnumRole.STUDENT]
+        rolesAccess: [EnumRole.STUDENT]
     },
     {
         to: "/dashboard/my-courses",
@@ -44,7 +44,7 @@ const SIDEBAR_ITEMS: Array<ISidebarItem> = [
 
 
 export default function StudentLayout() {
-    const {currentUser} = useAppSelector(state => state.auth)
+    const {currentUser} = useAppSelector(state => state.auth);
 
     return (
         <CustomLayout>

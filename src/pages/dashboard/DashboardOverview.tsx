@@ -2,12 +2,15 @@ import {useAppSelector} from "@/lib/redux/hooks";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import {BookMarked} from "lucide-react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useListAllCoursesStudentEnrollmentQuery} from "@/lib/api/api.generated.ts";
+import {useEffect} from "react";
+import {EnumRole} from "@/lib/enum.ts";
 
 export default function DashboardOverview() {
     const currentUser = useAppSelector((state) => state.auth.currentUser);
-    const {currentData} = useListAllCoursesStudentEnrollmentQuery({id: Number(currentUser?.id)}, {skip: !currentUser?.id})
+    const {currentData} = useListAllCoursesStudentEnrollmentQuery({id: Number(currentUser?.id)}, {skip: !currentUser?.id});
+    const navigate = useNavigate();
 
     const stats = [
         {
@@ -19,6 +22,13 @@ export default function DashboardOverview() {
             bgColor: "bg-blue-500/10",
         }
     ];
+    useEffect(() => {
+        if (currentUser?.role !== EnumRole.STUDENT) {
+            console.log("redirecting to instructor dashboard")
+            navigate('/dashboard/my-courses')
+        }
+
+    }, [])
 
     return (
         <div className="space-y-8">

@@ -2,19 +2,25 @@ import {Link} from "react-router-dom";
 import {useAppSelector} from "@/lib/redux/hooks";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
-import {ArrowRight, BookMarked} from "lucide-react";
+import {ArrowRight, BookMarked, Loader} from "lucide-react";
 import {useListAllCoursesQuery, useListAllCoursesStudentEnrollmentQuery} from "@/lib/api/api.generated.ts";
 import {EnumRole} from "@/lib/enum.ts";
 import {cn} from "@/lib/utils.ts";
 
 export default function MyCoursesPage() {
     const currentUser = useAppSelector((state) => state.auth.currentUser);
-    const {currentData: currentDataStudent} = useListAllCoursesStudentEnrollmentQuery({id: Number(currentUser?.id)}, {skip: !currentUser?.id || currentUser?.role !== EnumRole.STUDENT})
-    const {currentData: currentDataTeacher} = useListAllCoursesQuery({instructorId: Number(currentUser?.id)}, {skip: !currentUser?.id || currentUser?.role !== EnumRole.INSTRUCTOR})
+    const {currentData: currentDataStudent, isLoading: isLoadingStudent} = useListAllCoursesStudentEnrollmentQuery({id: Number(currentUser?.id)}, {skip: !currentUser?.id || currentUser?.role !== EnumRole.STUDENT})
+    const {currentData: currentDataTeacher, isLoading: isLoadingTeacher} = useListAllCoursesQuery({instructorId: Number(currentUser?.id)}, {skip: !currentUser?.id || currentUser?.role !== EnumRole.INSTRUCTOR})
     const enrolledCourse = (currentUser?.role === EnumRole.STUDENT ? currentDataStudent?.contents : currentDataTeacher?.contents) ?? [];
 
     const isTeacher = currentUser?.role === EnumRole.INSTRUCTOR;
 
+    const isLoading=isLoadingStudent||isLoadingTeacher;
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-screen">
+            <Loader/>
+        </div>
+    }
     return (
         <div className="space-y-8">
             {/* Header */}

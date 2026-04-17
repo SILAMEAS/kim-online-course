@@ -2,11 +2,13 @@ import {useParams} from "react-router-dom";
 import {Navbar} from "@/components/navbar.tsx";
 import {Footer} from "@/components/footer.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
-import {BookMarked, Clock, ShoppingCart, Star, Users} from "lucide-react";
+import {BookMarked, Clock, ShoppingCart, Star, User, Users} from "lucide-react";
 import {
     useGetAllEnrollmentsByCourseQuery,
     useGetCourseDetailQuery,
-    useGetVideosByCourseIdQuery
+    useGetVideosByCourseIdQuery,
+    useListStudentInCourseQuery,
+    UserResponse
 } from "@/lib/api/api.generated.ts";
 import {Avatar, AvatarImage} from "@/components/ui/avatar.tsx";
 import {AvatarFallback} from "@radix-ui/react-avatar";
@@ -20,6 +22,16 @@ import {DefaultPaginationRequest} from "@/lib/types.ts";
 import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 import {useAppDispatch} from "@/lib/redux/hooks.ts";
 import {addToCart} from "@/lib/redux/slices/cart.slice.ts";
+import {useState} from "react";
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogTitle
+} from "@/components/ui/alert-dialog.tsx";
+import {CustomTable} from "@/components/table/CustomTable.tsx";
+import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 
 export default function CourseDetailPage() {
     const dispatch = useAppDispatch();
@@ -33,6 +45,12 @@ export default function CourseDetailPage() {
         courseId: Number(courseId)
     }, {skip: currentUser?.role !== EnumRole.STUDENT})
     const hasBeenEnrollments = enrollmentsByCourseQuery?.currentData?.contents?.find(d => d.course?.id === Number(courseId))
+    const studentInCourseQuery = useListStudentInCourseQuery({courseId: Number(courseId)}, {skip: !courseId || currentUser?.role === EnumRole.STUDENT});
+    const {
+        setFilter, filter,
+    } = useCustomTable<UserResponse>();
+    const [modalStudent, setModalStudent] = useState<boolean>(false);
+
 
     if ((courseDetailQuery?.isLoading || courseDetailQuery?.isFetching) && !courseDetailQuery?.currentData) {
         return (
@@ -47,8 +65,6 @@ export default function CourseDetailPage() {
             </div>
         );
     }
-
-    // console.log("videosByCourseIdQuery",videosByCourseIdQuery?.currentData)
     return (
         <div className="min-h-screen flex flex-col">
             <Navbar/>
@@ -201,6 +217,18 @@ export default function CourseDetailPage() {
                                         </Button>
                                     )}
 
+                                    {
+                                        studentInCourseQuery?.currentData?.contents && currentUser?.role !== EnumRole.STUDENT &&
+                                        <Button
+                                            variant="outline"
+                                            className="w-full"
+                                            onClick={() => setModalStudent(true)}
+                                        >
+                                            <User className="w-4 h-4"/>
+                                            <span>View students</span>
+                                        </Button>
+                                    }
+
                                     <div className="space-y-3 text-sm">
                                         <div className="flex items-start gap-3">
                                             <Clock className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary"/>
@@ -229,6 +257,36 @@ export default function CourseDetailPage() {
             </main>
 
             <Footer/>
+
+            <AlertDialog open={modalStudent} onOpenChange={() => {
+                setModalStudent(false)
+            }}>
+                <AlertDialogContent className="w-[90vw] max-w-6xl">
+                    <AlertDialogTitle>List students</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        <CustomTable<UserResponse>
+                            setFilter={setFilter}
+                            filter={filter}
+                            columns={[
+                                {key: 'firstName', label: 'FirstName', sortable: true},
+                                {key: 'lastName', label: 'LastName', sortable: true},
+                                {key: 'email', label: 'Email', sortable: true},
+                            ]}
+                            data={studentInCourseQuery?.currentData?.contents ?? []}
+                            pagination={{
+                                page: filter.page,
+                                limit: filter.limit,
+                                total: studentInCourseQuery?.currentData?.total ?? 0
+                            }}
+                            isLoading={studentInCourseQuery.isLoading}
+                        />
+                    </AlertDialogDescription>
+
+                    <div className="flex justify-end gap-3">
+                        <AlertDialogCancel>Back</AlertDialogCancel>
+                    </div>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import {BookOpen, DollarSign, Image as ImageIcon, UserCheck, Users, Video} from 'lucide-react';
+import {BookOpen, DollarSign, Image as ImageIcon, QrCodeIcon, UserCheck, Users, Video} from 'lucide-react';
 import Link from "@/components/Link.tsx";
 import {useDashboardQuery} from "@/lib/api/api.generated.ts";
 import {EnumRole} from "@/lib/enum.ts";
@@ -68,7 +68,7 @@ export default function AdminDashboardPage() {
                     title="Total Teachers"
                     value={currentData?.totalTeachers || 'Loading...'}
                     icon={<Users className="h-4 w-4"/>}
-                    description="Active user accounts"
+                    description="Teachers accounts"
                     href={`/admin/users?role=${EnumRole.INSTRUCTOR}`}
                     isLoading={isLoading}
                 />
@@ -76,7 +76,7 @@ export default function AdminDashboardPage() {
                     title="Total Students"
                     value={currentData?.totalStudents || 'Loading...'}
                     icon={<Users className="h-4 w-4"/>}
-                    description="Active user accounts"
+                    description="Students accounts"
                     href={`/admin/users?role=${EnumRole.STUDENT}`}
                     isLoading={isLoading}
                 />
@@ -123,8 +123,8 @@ export default function AdminDashboardPage() {
                 <StatCard
                     title="Catogies"
                     value={currentData?.totalCategories || 'Loading...'}
-                    icon={<ImageIcon className="h-4 w-4"/>}
-                    description="Uploaded images"
+                    icon={<QrCodeIcon className="h-4 w-4"/>}
+                    description="Total catogies"
                     href="/admin/categories"
                     isLoading={isLoading}
                 />

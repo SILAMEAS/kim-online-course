@@ -3,19 +3,24 @@ import {useAppSelector} from "@/lib/redux/hooks";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import {ArrowRight, BookMarked} from "lucide-react";
-import {useListAllCoursesStudentEnrollmentQuery} from "@/lib/api/api.generated.ts";
+import {useListAllCoursesQuery, useListAllCoursesStudentEnrollmentQuery} from "@/lib/api/api.generated.ts";
+import {EnumRole} from "@/lib/enum.ts";
+import {cn} from "@/lib/utils.ts";
 
 export default function MyCoursesPage() {
     const currentUser = useAppSelector((state) => state.auth.currentUser);
-    const {currentData} = useListAllCoursesStudentEnrollmentQuery({id: Number(currentUser?.id)}, {skip: !currentUser?.id})
-    const enrolledCourse = currentData?.contents || [];
+    const {currentData: currentDataStudent} = useListAllCoursesStudentEnrollmentQuery({id: Number(currentUser?.id)}, {skip: !currentUser?.id || currentUser?.role !== EnumRole.STUDENT})
+    const {currentData: currentDataTeacher} = useListAllCoursesQuery({instructorId: Number(currentUser?.id)}, {skip: !currentUser?.id || currentUser?.role !== EnumRole.INSTRUCTOR})
+    const enrolledCourse = (currentUser?.role === EnumRole.STUDENT ? currentDataStudent?.contents : currentDataTeacher?.contents) ?? [];
+
+    const isTeacher = currentUser?.role === EnumRole.INSTRUCTOR;
 
     return (
         <div className="space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-4xl font-bold mb-2">My Courses</h1>
-                <p className="text-foreground/60">
+                <h1 className="text-4xl font-bold mb-2">{`My Courses ${isTeacher ? "to teach.":""}`}</h1>
+                <p className={cn("text-foreground/60",isTeacher&&"hidden")}>
                     {`You have ${enrolledCourse?.length} course(s) enrolled.`}
                 </p>
             </div>
@@ -68,7 +73,7 @@ export default function MyCoursesPage() {
                                         {/* Button */}
                                         <Link to={`/courses/${course.id}`}>
                                             <Button variant="outline" size="sm" className="gap-2">
-                                                Continue Learning
+                                                Continue {isTeacher ? "Teaching" : "Learning"}
                                                 <ArrowRight className="w-4 h-4"/>
                                             </Button>
                                         </Link>

@@ -175,6 +175,7 @@ const injectedRtkApi = api.injectEndpoints({
           categoryId: queryArg.categoryId,
           minPrice: queryArg.minPrice,
           maxPrice: queryArg.maxPrice,
+          instructorId: queryArg.instructorId,
           search: queryArg.search,
           page: queryArg.page,
           limit: queryArg.limit,
@@ -259,6 +260,22 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/users/teachers`,
         params: {
+          search: queryArg.search,
+          page: queryArg.page,
+          limit: queryArg.limit,
+          sortBy: queryArg.sortBy,
+          sortOrder: queryArg.sortOrder,
+        },
+      }),
+    }),
+    listStudentInCourse: build.query<
+      ListStudentInCourseApiResponse,
+      ListStudentInCourseApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/users/courses/${queryArg.courseId}/users`,
+        params: {
+          role: queryArg.role,
           search: queryArg.search,
           page: queryArg.page,
           limit: queryArg.limit,
@@ -509,6 +526,8 @@ export type ListAllCoursesApiArg = {
   minPrice?: number;
   /** Maximum price for the course */
   maxPrice?: number;
+  /** The unique ID of the instructorId */
+  instructorId?: number;
   search?: string;
   page?: number;
   limit?: number;
@@ -570,6 +589,17 @@ export type DeleteVideosByCourseIdApiArg = {
 export type ListTeachersApiResponse =
   /** status 200 OK */ ResponsePaginationHandlerUserResponse;
 export type ListTeachersApiArg = {
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: string;
+};
+export type ListStudentInCourseApiResponse =
+  /** status 200 Users retrieved successfully */ ListUserPageResponse;
+export type ListStudentInCourseApiArg = {
+  courseId: number;
+  role?: "STUDENT" | "INSTRUCTOR" | "ADMIN";
   search?: string;
   page?: number;
   limit?: number;
@@ -1002,6 +1032,7 @@ export const {
   useGetVideosByCourseIdQuery,
   useDeleteVideosByCourseIdMutation,
   useListTeachersQuery,
+  useListStudentInCourseQuery,
   useGetRatingQuery,
   useGetAllPaymentsQuery,
   useListImagesQuery,

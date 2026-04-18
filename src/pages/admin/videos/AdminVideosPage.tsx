@@ -185,7 +185,6 @@ export default function AdminVideosPage() {
                 filter={filter}
                 setFilter={setFilter}
                 columns={[
-                    {key: 'id', label: 'ID', sortable: false},
                     {key: 'title', label: 'Title', sortable: true},
                     {key: 'publicId', label: 'PublicId', sortable: false},
                     {

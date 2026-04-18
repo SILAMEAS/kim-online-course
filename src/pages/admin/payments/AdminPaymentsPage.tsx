@@ -48,7 +48,6 @@ export default function AdminPaymentsPage() {
                 setFilter={setFilter}
                 filter={filter}
                 columns={[
-                    {key: 'id', label: 'ID', sortable: true},
                     {
                         key: 'user', label: 'Email', sortable: false, render: (r) => {
                             const user = (r as UserResponse);
@@ -64,7 +63,7 @@ export default function AdminPaymentsPage() {
                     {key: 'status', label: 'Status', sortable: true},
                 ]}
                 data={payments}
-                pagination={{page:filter.page, limit:filter.limit, total: currentData?.total ?? 0}}
+                pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
                 quickAction={(row) => <Button
                     disabled={Boolean(currentUser?.role !== EnumRole.ADMIN) || approveResult?.isLoading || row.status === "DONE"}
                     variant="outline"

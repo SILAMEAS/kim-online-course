@@ -6,7 +6,6 @@ import {Navbar} from "@/components/navbar.tsx";
 import {Footer} from "@/components/footer.tsx";
 import {CartItem} from "@/components/cart/cart-item";
 import {CartSummary} from "@/components/cart/cart-summary";
-import {CheckoutForm} from "@/components/cart/checkout-form";
 import {Button} from "@/components/ui/button";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {ShoppingCart} from "lucide-react";
@@ -21,6 +20,14 @@ import {
 import {EnumRole} from "@/lib/enum.ts";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogTitle
+} from "@/components/ui/alert-dialog.tsx";
 
 export default function CartPage() {
     const [submitPayment, {isLoading: paymentLoading}] = useSubmitPaymentMutation();
@@ -28,7 +35,7 @@ export default function CartPage() {
     const dispatch = useAppDispatch();
     const {cart} = useAppSelector((state) => state);
     const [activeTab, setActiveTab] = useState("cart");
-    const [, setIsCheckingOut] = useState(false);
+    const [verifyPayment, setVerifyPayment] = useState<boolean>(false)
 
     const {
         setFilter,
@@ -61,12 +68,6 @@ export default function CartPage() {
         setActiveTab("checkout");
     };
 
-    const handleCheckoutSuccess = () => {
-        setIsCheckingOut(true);
-        setTimeout(() => {
-            dispatch(clearCart());
-        }, 500);
-    };
 
     const TAX_RATE = 0.1;
     const tax = cart.total * TAX_RATE;
@@ -122,7 +123,7 @@ export default function CartPage() {
                             <TabsTrigger
                                 value="payments"
                             >
-                                {`Payment (${currentData?.total??0})`}
+                                {`Payment (${currentData?.total ?? 0})`}
                             </TabsTrigger>
                         </TabsList>
 
@@ -164,19 +165,10 @@ export default function CartPage() {
                         {/* Checkout Tab */}
                         <TabsContent value="checkout" className="space-y-6">
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                {/* Form */}
-                                <div className="lg:col-span-2 bg-card border border-border rounded-lg p-6 hidden">
-                                    <h2 className="text-2xl font-bold mb-6">
-                                        Billing Information
-                                    </h2>
-                                    <CheckoutForm
-                                        total={finalTotal}
-                                        onSuccess={handleCheckoutSuccess}
-                                    />
-                                </div>
 
 
                                 {/* Order Summary */}
+
                                 <div className="bg-card border border-border rounded-lg p-6 h-fit sticky top-24">
                                     <h3 className="text-xl font-semibold mb-6">
                                         Order Summary
@@ -216,23 +208,20 @@ export default function CartPage() {
                       </span>
                                     </div>
                                 </div>
+                                {/* Form */}
+                                <div className="lg:col-span-2 bg-card  rounded-lg  ">
+                                    <img src={"/qr.webp"} alt="example" loading="lazy" className={'w-72 h-auto'}/>
+                                </div>
+
                             </div>
-                            <Button onClick={async () => {
-                                try {
-                                    if (!cart?.items) return;
-
-                                    await Promise.all(
-                                        cart.items.map((item) =>
-                                            submitPayment({courseId: Number(item.course_id)}).unwrap()
-                                        )
-                                    );
-
-                                    handleClearCart()
-
-                                } catch (e: any) {
-                                    toast.error(e?.data?.message);
-                                }
-                            }}
+                            <p className={'text-gray-500 text-sm'}> you must pay with this QR before you
+                                click
+                                payment</p>
+                            <p className={'text-gray-500 text-sm'}>
+                                contact us :
+                                <a className={'text-blue-500'}
+                                   href={"https://t.me/moeurkkimsour"}> https://t.me/moeurkkimsour</a></p>
+                            <Button onClick={() => setVerifyPayment(true)}
 
                                     disabled={currentUser?.role !== EnumRole.STUDENT || cart?.items?.length === 0}> {paymentLoading ? "Payment..." : "Payment"}</Button>
                         </TabsContent>
@@ -271,6 +260,45 @@ export default function CartPage() {
                     </Tabs>
                 </div>
             </main>
+
+            <AlertDialog open={verifyPayment} onOpenChange={() => setVerifyPayment(false)}>
+                <AlertDialogContent>
+                    <AlertDialogTitle>Verify Payment</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Are you sure you ready pay this QR ?
+                    </AlertDialogDescription>
+
+                    <div className="flex justify-end gap-3">
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                        <AlertDialogAction
+                            onClick={async () => {
+                                try {
+                                    if (!cart?.items) return;
+
+                                    toast.warning("Are you pay with this QR ?");
+
+                                    await Promise.all(
+                                        cart.items.map((item) =>
+                                            submitPayment({courseId: Number(item.course_id)}).unwrap()
+                                        )
+                                    );
+
+                                    handleClearCart()
+
+                                } catch (e: any) {
+                                    toast.error(e?.data?.message);
+                                }
+                            }
+                            }
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+
+                            Yes
+                        </AlertDialogAction>
+                    </div>
+                </AlertDialogContent>
+            </AlertDialog>
 
             <Footer/>
         </div>

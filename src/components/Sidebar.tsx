@@ -6,7 +6,8 @@ import {
     Image,
     LayoutDashboard,
     PanelLeftClose,
-    PanelLeftOpen, Shapes,
+    PanelLeftOpen,
+    Shapes,
     UserCheck,
     Users,
     Video
@@ -136,13 +137,6 @@ export const Sidebar = ({navItems, pathname}: SidebarProps) => {
                             })}
                         </div>
                     </nav>
-
-                    {/* Footer */}
-                    <div className="p-4 border-t border-border">
-                        <Button variant="outline" className="w-full">
-                            Logout
-                        </Button>
-                    </div>
                 </div>
             </aside>
         </>

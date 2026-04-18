@@ -11,6 +11,7 @@ import {
 import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 import {useAppSelector} from "@/lib/redux/hooks.ts";
 import {cn} from "@/lib/utils.ts";
+import {toast} from "sonner";
 
 
 export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
@@ -34,7 +35,7 @@ export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
             {/* Course Image */}
             <Button variant="outline" className={'absolute left-1 top-1 z-20 bg-green-200'} onClick={async (e) => {
                 if (!currentUser) {
-                    alert("You must be logged in to add courses to your wishlist.");
+                    toast.warning("You must be logged in to add courses to your wishlist.");
                     return;
                 }
                 if (checkedWishlist()) {

@@ -112,15 +112,27 @@
     "edit": "កែប្រែ",
     "delete": "លុប",
     "cancel": "បោះបង់",
-    "submit": "ដាក់ស្នើ"
+    "submit": "ដាក់ស្នើ",
+    "title": "សកម្មភាព"
   },
   "tableHeaders": {
-    "firstName": "ឈ្មោះដើម",
-    "lastName": "ឈ្មោះត្រកូល",
+    "firstname": "ឈ្មោះដើម",
+    "lastname": "ឈ្មោះត្រកូល",
     "email": "អ៊ីមែល",
     "role": "តួនាទី",
+    "actions": "សកម្មភាព",
+    "title": "ចំណងជើង",
+    "category": "ប្រភេទ",
+    "level": "កម្រិត",
+    "price": "តម្លៃ",
+    "duration": "រយៈពេល",
+    "students": "សិស្ស",
     "status": "ស្ថានភាព",
-    "actions": "សកម្មភាព"
+    "publicid": "លេខសម្គាល់សាធារណៈ",
+    "course": "វគ្គសិក្សា",
+    "amount": "ចំនួន",
+    "id": "លេខសម្គាល់",
+    "name": "ឈ្មោះ"
   },
   "roles": {
     "student": "និស្សិត",

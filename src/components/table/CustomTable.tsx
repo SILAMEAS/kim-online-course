@@ -13,6 +13,8 @@ import {ArrowDown, ArrowRightLeft, ArrowUp, Edit2, Loader2, Trash2} from 'lucide
 import PaginationCustomTable from "@/components/table/commons/PaginationCustomTable.tsx";
 import {SORT} from "@/lib/enum.ts";
 import {cn} from "@/lib/utils.ts";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 
 interface Column<T> {
@@ -60,7 +62,7 @@ interface DataTableProps<T> {
     },
     mode?: MODE_TABLE;
     customRenderModeContent?: (row: T) => React.ReactNode;
-    styles?: { classNameGrid?:string }
+    styles?: { classNameGrid?: string }
 }
 
 // @ts-ignore
@@ -81,6 +83,7 @@ export function CustomTable<T extends Record<string, any>>({
                                                            }: Readonly<DataTableProps<T>>) {
     const [deleteId, setDeleteId] = React.useState<string | null>(null);
     const [deleteItem, setDeleteItem] = React.useState<T | null>(null);
+    const {t} = useTranslation();
 
     const handleSort = (key: keyof T) => {
 
@@ -141,7 +144,8 @@ export function CustomTable<T extends Record<string, any>>({
                                 {columns?.map((col) => (
                                     <TableHead key={String(col.key)}>
                                         <div className="flex items-center gap-2">
-                                            {col.label}
+                                            {t(Localization('tableHeaders', col.label?.toLowerCase() as any))}
+
                                             {col.sortable && (
                                                 <button
                                                     onClick={() => handleSort(col.key)}
@@ -158,7 +162,8 @@ export function CustomTable<T extends Record<string, any>>({
                                 ))}
                                 {
                                     (onDelete || onEdit || quickAction) &&
-                                    <TableHead className={actionColumnStyle}>Actions</TableHead>
+                                    <TableHead
+                                        className={actionColumnStyle}>{t(Localization("actions", "title"))}</TableHead>
                                 }
 
                             </TableRow>
@@ -222,11 +227,11 @@ export function CustomTable<T extends Record<string, any>>({
                         <AlertDialogContent>
                             <AlertDialogTitle>Delete Item</AlertDialogTitle>
                             <AlertDialogDescription>
-                                Are you sure you want to delete this item? This action cannot be undone.xxxxx
+                                Are you sure you want to delete this item? This action cannot be undone.
                             </AlertDialogDescription>
 
                             <div className="flex justify-end gap-3">
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogCancel>{t(Localization('actions', "cancel"))}</AlertDialogCancel>
 
                                 <AlertDialogAction
                                     onClick={async () => {

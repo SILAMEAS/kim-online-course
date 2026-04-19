@@ -138,7 +138,8 @@ export function DynamicFormDialog<TFormValues extends FieldValues>({
                                 name={field.name}
                                 render={({field: hookField}) => (
                                     <FormItem>
-                                        <FormLabel>{field.label}</FormLabel>
+                                        <FormLabel>{
+                                            t(Localization("tableHeaders", field.label as any))}</FormLabel>
                                         <FormControl>
                                             {renderField(field, hookField, preview, setPreview)}
                                         </FormControl>

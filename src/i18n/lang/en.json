@@ -117,15 +117,27 @@
     "edit": "Edit",
     "delete": "Delete",
     "cancel": "cancel",
-    "submit": "submit"
+    "submit": "submit",
+    "title": "Actions"
   },
   "tableHeaders": {
-    "firstName": "First Name",
-    "lastName": "Last Name",
+    "firstname": "First Name",
+    "lastname": "Last Name",
     "email": "Email",
     "role": "Role",
     "status": "Status",
-    "actions": "Actions"
+    "actions": "Actions",
+    "title": "Title",
+    "category": "Category",
+    "level": "Level",
+    "price": "Price",
+    "duration": "Duration",
+    "students": "Students",
+    "publicid": "Public ID",
+    "course": "Course",
+    "amount": "Amount",
+    "id": "ID",
+    "name": "Name"
   },
   "roles": {
     "student": "Student",

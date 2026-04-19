@@ -104,19 +104,19 @@ export default function AdminUsersPage() {
                 setFilter={setFilter}
                 filter={filter}
                 columns={[
-                    {key: 'firstName', label: t(Localization("tableHeaders", "firstName")), sortable: true},
-                    {key: 'lastName', label: t(Localization("tableHeaders", "lastName")), sortable: true},
-                    {key: 'email', label: t(Localization("tableHeaders", "email")), sortable: true},
+                    {key: 'firstName', label: "firstName", sortable: true},
+                    {key: 'lastName', label: "lastName", sortable: true},
+                    {key: 'email', label: "email", sortable: true},
                     {
                         key: 'role',
-                        label: t(Localization("tableHeaders", "role")),
+                        label: "role",
                         sortable: true,
                         render: (r) => <Badge key={r?.toString()}
                                               variant={'outline'}>{formatWord(r?.toString())}</Badge>
                     },
                     {
                         key: 'status',
-                        label: t(Localization("tableHeaders", "status")),
+                        label: "status",
                         sortable: true,
                         render: (r => <Badge key={r?.toString()} variant={r === "ACTIVE" ? "default" : "destructive"}>
                             {formatWord(r.toString())}
@@ -157,23 +157,23 @@ export default function AdminUsersPage() {
                 fields={[
                     {
                         name: "firstName",
-                        label: t(Localization("tableHeaders", "firstName")),
+                        label: "firstname",
                         type: "text",
                         placeholder: "John"
                     },
                     {
                         name: "lastName",
-                        label: t(Localization("tableHeaders", "lastName")),
+                        label: "lastname",
                         type: "text",
                         placeholder: "Doe"
                     },
                     {
-                        name: "email", label: t(Localization("tableHeaders", "email")),
+                        name: "email", label: 'email',
                         type: "email", placeholder: "john@example.com"
                     },
                     {
                         name: "role",
-                        label: t(Localization("tableHeaders", "role")),
+                        label: "role",
                         type: "select",
                         options: [
                             {label: "Student", value: "STUDENT"},
@@ -183,7 +183,7 @@ export default function AdminUsersPage() {
                     },
                     {
                         name: "status",
-                        label: t(Localization("tableHeaders", "status")),
+                        label: "status",
                         type: "select",
                         options: [
                             {label: "Active", value: "ACTIVE"},

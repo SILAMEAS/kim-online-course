@@ -28,9 +28,12 @@ import {DynamicFormDialog} from "@/components/dialog/DynamicFormDialog.tsx";
 import {formatWord} from "@/lib/utils/FormatWord.ts";
 import {Badge} from "@/components/ui/badge.tsx";
 import {useSearchParams} from "react-router-dom";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 
 export default function AdminUsersPage() {
+    const {t} = useTranslation();
     const [searchParams] = useSearchParams();
     const role = searchParams.get('role') as EnumRole | undefined;
     const {
@@ -40,7 +43,10 @@ export default function AdminUsersPage() {
         currentUser,
     } = useCustomTable<UserResponse>();
 
-    const {currentData, refetch, isLoading, isFetching} = useListUsersQuery({...filter, role:role??undefined}, {refetchOnMountOrArgChange: true,});
+    const {currentData, refetch, isLoading, isFetching} = useListUsersQuery({
+        ...filter,
+        role: role ?? undefined
+    }, {refetchOnMountOrArgChange: true,});
     const users = currentData?.contents ?? []
     const [open, setOpen] = React.useState(false);
     const [createUser] = useCreateUserMutation();
@@ -82,15 +88,15 @@ export default function AdminUsersPage() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold">Users</h1>
-                    <p className="text-muted-foreground mt-1">Manage system users</p>
+                    <h1 className="text-3xl font-bold">{t(Localization("admin_user", "title"))}</h1>
+                    <p className="text-muted-foreground mt-1">{t(Localization("admin_user", "subtitle"))}</p>
                 </div>
                 <Button onClick={() => {
                     setSelectedItem(null);
                     setOpen(true);
                 }}>
                     <Plus className="mr-2 h-4 w-4"/>
-                    Add User
+                    {t(Localization("actions", "addUser"))}
                 </Button>
             </div>
 
@@ -98,19 +104,19 @@ export default function AdminUsersPage() {
                 setFilter={setFilter}
                 filter={filter}
                 columns={[
-                    {key: 'firstName', label: 'FirstName', sortable: true},
-                    {key: 'lastName', label: 'LastName', sortable: true},
-                    {key: 'email', label: 'Email', sortable: true},
+                    {key: 'firstName', label: t(Localization("tableHeaders", "firstName")), sortable: true},
+                    {key: 'lastName', label: t(Localization("tableHeaders", "lastName")), sortable: true},
+                    {key: 'email', label: t(Localization("tableHeaders", "email")), sortable: true},
                     {
                         key: 'role',
-                        label: 'Role',
+                        label: t(Localization("tableHeaders", "role")),
                         sortable: true,
                         render: (r) => <Badge key={r?.toString()}
                                               variant={'outline'}>{formatWord(r?.toString())}</Badge>
                     },
                     {
                         key: 'status',
-                        label: 'Status',
+                        label: t(Localization("tableHeaders", "status")),
                         sortable: true,
                         render: (r => <Badge key={r?.toString()} variant={r === "ACTIVE" ? "default" : "destructive"}>
                             {formatWord(r.toString())}
@@ -131,9 +137,9 @@ export default function AdminUsersPage() {
                         }
                     } catch (e: any) {
                         if (e?.originalStatus !== 200) {
-                            toast.error("Failed to delete course. Please try again later." + e?.data?.message);
+                            toast.error(`${t(Localization('error_message', "failed_delete_course"))}` + e?.data?.message);
                         }
-                        toast.success("success to delete course");
+                        toast.success(`${t(Localization('success_message', "success_delete_course"))}`);
                         refetch();
                     }
                 }}
@@ -145,16 +151,29 @@ export default function AdminUsersPage() {
             <DynamicFormDialog
                 open={open}
                 setOpen={setOpen}
-                title={selectedItem ? "Edit User" : "Add User"}
-                description={selectedItem ? "Update user information" : "Create a new user account"}
+                title={t(Localization('admin_user', selectedItem ? "edit_user" : "add_user"))}
+                description={`${t(Localization('admin_user', selectedItem ? "update_user_information" : "create_new_user_account"))}`}
                 form={form}
                 fields={[
-                    {name: "firstName", label: "First Name", type: "text", placeholder: "John"},
-                    {name: "lastName", label: "Last Name", type: "text", placeholder: "Doe"},
-                    {name: "email", label: "Email", type: "email", placeholder: "john@example.com"},
+                    {
+                        name: "firstName",
+                        label: t(Localization("tableHeaders", "firstName")),
+                        type: "text",
+                        placeholder: "John"
+                    },
+                    {
+                        name: "lastName",
+                        label: t(Localization("tableHeaders", "lastName")),
+                        type: "text",
+                        placeholder: "Doe"
+                    },
+                    {
+                        name: "email", label: t(Localization("tableHeaders", "email")),
+                        type: "email", placeholder: "john@example.com"
+                    },
                     {
                         name: "role",
-                        label: "Role",
+                        label: t(Localization("tableHeaders", "role")),
                         type: "select",
                         options: [
                             {label: "Student", value: "STUDENT"},
@@ -164,7 +183,7 @@ export default function AdminUsersPage() {
                     },
                     {
                         name: "status",
-                        label: "Status",
+                        label: t(Localization("tableHeaders", "status")),
                         type: "select",
                         options: [
                             {label: "Active", value: "ACTIVE"},

@@ -12,7 +12,9 @@ import {
     Users,
     Video
 } from "lucide-react";
-import Link from "@/components/Link.tsx"; // Example close icon
+import Link from "@/components/Link.tsx";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang"; // Example close icon
 
 interface NavItem {
     href: string;
@@ -71,6 +73,7 @@ const navItemsDefault = [
 export const Sidebar = ({navItems, pathname}: SidebarProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const renderItems = navItems ?? navItemsDefault;
+    const {t} = useTranslation();
 
     return (
         <>
@@ -104,8 +107,8 @@ export const Sidebar = ({navItems, pathname}: SidebarProps) => {
                     {/* Header */}
                     <div className="p-6 border-b border-border flex justify-between items-center">
                         <div>
-                            <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
-                            <p className="text-sm text-muted-foreground mt-1">Course Management</p>
+                            <h1 className="text-2xl font-bold text-foreground">{t(Localization("admin", "admin_panel"))}</h1>
+                            <p className="text-sm text-muted-foreground mt-1">{t(Localization("admin", "course_management"))}</p>
                         </div>
                         {/* Close button for small screens */}
 
@@ -131,7 +134,7 @@ export const Sidebar = ({navItems, pathname}: SidebarProps) => {
                                         isActive={pathname === item.href}
                                     >
                                         <Icon className="h-5 w-5"/>
-                                        {item.label}
+                                        {t(Localization("admin_nav", item.label as any))}
                                     </Link>
                                 );
                             })}

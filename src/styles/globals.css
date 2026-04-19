@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "KhmerOS_battambang"
 }
 
 @layer utilities {
@@ -119,4 +119,25 @@ body {
     body {
         @apply bg-background text-foreground;
     }
+}
+
+
+@font-face {
+    font-family: KhmerOS_battambang;
+    src: url(./font/KhmerOS_battambang.ttf);
+}
+
+@font-face {
+    font-family: KhmerOS_muollight;
+    src: url(./font/KhmerOS_muollight.ttf);
+}
+
+@font-face {
+    font-family: BattambangBold;
+    src: url(./font/Battambang-Bold.ttf);
+}
+
+@font-face {
+    font-family: BattambangRegular;
+    src: url(./font/Battambang-Regular.ttf);
 }

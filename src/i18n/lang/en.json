@@ -8,8 +8,7 @@
     "login_continue_learning": "Sign in to your account to continue learning",
     "not_have_acc": "Don't have an account?",
     "start_your_learning": "Start your learning journey with Learning outcomes today",
-    "already_have_an_account":"Already have an account?"
-
+    "already_have_an_account": "Already have an account?"
   },
   "form": {
     "form_email": "Email Address",
@@ -35,15 +34,15 @@
   },
   "contactPage": {
     "have_questions": "Have questions? Feedback? Want to become an instructor? We'd love to hear from you.",
-    "contact_information" : "Contact Information",
+    "contact_information": "Contact Information",
     "remote_first_team": "We're a remote-first team",
     "response_time": "Response Time",
     "usually_within": "Usually within 24–48 hours",
     "subject": "Subject",
     "massage": "Massage",
     "send_massage": "Send Massage",
-    "thank_you":"Thank you! We'll get back to you soon.",
-    "please_try_again":"Something went wrong. Please try again.",
+    "thank_you": "Thank you! We'll get back to you soon.",
+    "please_try_again": "Something went wrong. Please try again.",
     "mon_sunday": "Mon - Sunday 8:00 - 21:00 (GMT+7)",
     "phone": "Phone",
     "location": "Cambodia, Battambang City",
@@ -52,7 +51,9 @@
   },
   "profile": {
     "dashboard": "Dashboard",
-    "my_courses": "My Courses"
+    "my_courses": "My Courses",
+    "go_admin": "Go to Admin",
+    "go_student": "Go to Student"
   },
   "cart": {
     "tax_10": "Tax (10%)",
@@ -61,5 +62,90 @@
     "continue_shopping": "Continue Shopping",
     "guarantee_on_all_courses": "30-day money-back guarantee on all courses",
     "order_summary": "Order Summary"
+  },
+  "admin": {
+    "admin_panel": "Admin Panel",
+    "course_management": "Course Management",
+    "welcome_admin_panel": "Welcome to the admin panel"
+  },
+  "admin_nav": {
+    "Dashboard": "Dashboard",
+    "Users": "Users",
+    "Courses": "Courses",
+    "Videos": "Videos",
+    "Payments": "Payments",
+    "Enrollments": "Enrollments",
+    "Images": "Images",
+    "Categories": "Categories"
+  },
+  "dashboard": {
+    "total_users": "Total users",
+    "active_users": "Active users",
+    "total_teachers": "Total teachers",
+    "teachers_accounts": "Teachers accounts",
+    "total_students": "Total students",
+    "students_accounts": "Students accounts",
+    "courses": "Courses",
+    "published_courses": "Published courses",
+    "videos": "Videos",
+    "total_videos": "Total videos",
+    "revenue": "Revenue",
+    "completed_payments": "Completed payments",
+    "enrollments": "Enrollments",
+    "active_enrollments": "Active enrollments",
+    "images": "Images",
+    "uploaded_images": "Uploaded images",
+    "categories": "Categories",
+    "total_categories": "Total categories"
+  },
+  "quick_actions": {
+    "title": "Quick actions",
+    "manage_users": "Manage users",
+    "manage_courses": "Manage courses",
+    "view_payments": "View payments"
+  },
+  "admin_user": {
+    "title": "Users",
+    "subtitle": "Manage system users",
+    "add_user": "Add user",
+    "create_new_user_account": "Create new user account",
+    "edit_user": "Edit user",
+    "update_user_information": "Update user information"
+  },
+  "actions": {
+    "addUser": "Add User",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "cancel",
+    "submit": "submit"
+  },
+  "tableHeaders": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "role": "Role",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "roles": {
+    "student": "Student",
+    "instructor": "Instructor",
+    "admin": "Admin"
+  },
+  "status": {
+    "active": "Active"
+  },
+  "pagination": {
+    "page": "Page",
+    "of": "of",
+    "prev": "Prev",
+    "next": "Next",
+    "itemsPerPage": "Items per page: "
+  },
+  "error_message": {
+    "failed_delete_course": "Failed to delete course. Please try again later."
+  },
+  "success_message": {
+    "success_delete_course": "Success to delete course"
   }
 }

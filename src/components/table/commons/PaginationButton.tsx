@@ -1,5 +1,7 @@
 import {IPaginationCustomTable} from "@/components/table/CustomTable.tsx";
 import {Button} from "@/components/ui/button.tsx";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 export const PaginationButton = ({
                                      pagination,
@@ -10,6 +12,7 @@ export const PaginationButton = ({
 }) => {
     // Use Math.ceil to ensure partial pages count as a page
     const totalPages = Math.ceil(pagination.total / pagination.limit);
+    const {t} = useTranslation();
 
     return (
         <div className="flex items-center gap-1">
@@ -19,7 +22,7 @@ export const PaginationButton = ({
                 disabled={pagination.page <= 1}
                 onClick={() => onPageChange?.(pagination.page - 1)}
             >
-                Prev
+                {t(Localization("pagination", "prev"))}
             </Button>
 
             {[...Array(totalPages || 1).keys()].map((p) => (
@@ -39,7 +42,7 @@ export const PaginationButton = ({
                 disabled={pagination.page >= totalPages}
                 onClick={() => onPageChange?.(pagination.page + 1)}
             >
-                Next
+                {t(Localization("pagination", "next"))}
             </Button>
         </div>
     );

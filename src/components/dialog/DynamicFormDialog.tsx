@@ -12,12 +12,14 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {FieldValues, Path, UseFormReturn} from "react-hook-form";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 export type FieldType = "text" | "email" | "select" | "file";
 
 export type FieldOption = {
     label: string;
-    value: string|number;
+    value: string | number;
     disabled?: boolean;
 };
 
@@ -54,6 +56,7 @@ export function DynamicFormDialog<TFormValues extends FieldValues>({
                                                                        cancelLabel = "Cancel",
                                                                    }: Readonly<DynamicFormDialogProps<TFormValues>>) {
     const [preview, setPreview] = useState<string | null>(null);
+    const {t} = useTranslation();
 
     const renderField = <TFormValues extends FieldValues>(
         field: DynamicField<TFormValues>,
@@ -70,7 +73,7 @@ export function DynamicFormDialog<TFormValues extends FieldValues>({
                 return (
                     <Select onValueChange={hookField.onChange} defaultValue={hookField.value as string}>
                         <SelectTrigger>
-                            <SelectValue placeholder={`Select ${field.label}`} />
+                            <SelectValue placeholder={`Select ${field.label}`}/>
                         </SelectTrigger>
                         <SelectContent>
                             {field.options?.map((opt) => (
@@ -102,10 +105,10 @@ export function DynamicFormDialog<TFormValues extends FieldValues>({
                             }}
                         />
                         {preview && field.accept?.startsWith("video/") && (
-                            <video src={preview} controls className="w-full rounded-md border mt-2" />
+                            <video src={preview} controls className="w-full rounded-md border mt-2"/>
                         )}
                         {preview && field.accept?.startsWith("image/") && (
-                            <img src={preview} alt="preview" className="w-full rounded-md border mt-2" />
+                            <img src={preview} alt="preview" className="w-full rounded-md border mt-2"/>
                         )}
                     </>
                 );
@@ -147,9 +150,10 @@ export function DynamicFormDialog<TFormValues extends FieldValues>({
 
                         <DialogFooter className="flex justify-end gap-2">
                             <Button variant="outline" onClick={() => setOpen(false)}>
-                                {cancelLabel}
+                                {t(Localization("actions", cancelLabel?.toLowerCase() as any))}
                             </Button>
-                            <Button type="submit" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting?"loading...":submitLabel}</Button>
+                            <Button type="submit"
+                                    disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? "loading..." : t(Localization("actions", submitLabel?.toLowerCase() as any))}</Button>
                         </DialogFooter>
                     </form>
                 </Form>

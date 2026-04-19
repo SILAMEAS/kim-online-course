@@ -91,7 +91,9 @@
     "images": "រូបភាព",
     "uploaded_images": "រូបភាពដែលបានអាប់ឡូដ",
     "categories": "ប្រភេទ",
-    "total_categories": "ប្រភេទសរុប"
+    "total_categories": "ប្រភេទសរុប",
+    "manage_all_course": "គ្រប់គ្រងវគ្គសិក្សាទាំងអស់",
+    "manage_category": "គ្រប់គ្រងប្រភេទ"
   },
   "quick_actions": {
     "title": "សកម្មភាពរហ័ស",
@@ -113,7 +115,13 @@
     "delete": "លុប",
     "cancel": "បោះបង់",
     "submit": "ដាក់ស្នើ",
-    "title": "សកម្មភាព"
+    "title": "សកម្មភាព",
+    "add_course": "បន្ថែមវគ្គសិក្សា",
+    "edit_category": "កែសម្រួលប្រភេទ",
+    "add_category": "បន្ថែមប្រភេទ",
+    "update_category_information": "ធ្វើបច្ចុប្បន្នភាពព័ត៌មានប្រភេទ",
+    "create_new_category": "បង្កើតប្រភេទថ្មី",
+    "edit_course": "កែសម្រួលវគ្គសិក្សា"
   },
   "tableHeaders": {
     "firstname": "ឈ្មោះដើម",
@@ -132,7 +140,8 @@
     "course": "វគ្គសិក្សា",
     "amount": "ចំនួន",
     "id": "លេខសម្គាល់",
-    "name": "ឈ្មោះ"
+    "name": "ឈ្មោះ",
+    "Category Name": "ឈ្មោះប្រភេទ"
   },
   "roles": {
     "student": "និស្សិត",
@@ -154,5 +163,9 @@
   },
   "success_message": {
     "success_delete_course": "លុបវគ្គសិក្សាជោគជ័យ"
+  },
+  "info_message": {
+    "delete_item": "លុបធាតុ",
+    "confirm_delete_item": "តើអ្នកប្រាកដថាចង់លុបធាតុនេះមែនទេ? សកម្មភាពនេះមិនអាចត្រឡប់ក្រោយវិញបានទេ។"
   }
 }

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,} from '@/components/ui/dialog.tsx';
+import {Dialog, DialogContent, DialogHeader, DialogTitle,} from '@/components/ui/dialog.tsx';
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from '@/components/ui/form.tsx';
 import {Input} from '@/components/ui/input.tsx';
 import {Textarea} from '@/components/ui/textarea.tsx';
@@ -29,6 +29,8 @@ import {
     priceSchema,
     quantitySchema
 } from "@/lib/validations/global-schema.ts";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 interface CourseDialogProps {
     open: boolean;
@@ -57,12 +59,16 @@ export function AddEditCourseDialog({
                                         selectedCourse,
                                         handleSuccess
                                     }: Readonly<CourseDialogProps>) {
+    const {t} = useTranslation();
     const [preview, setPreview] = useState<string | null>(null);
     const {currentData, refetch, isLoading} = useListTeachersQuery({
         ...DefaultPaginationRequest,
         limit: 100
     }, {skip: !open});
-    const categoriesQuery = useListCategoriesQuery({...DefaultPaginationRequest, limit: 100}, {skip: !open,refetchOnMountOrArgChange: true});
+    const categoriesQuery = useListCategoriesQuery({...DefaultPaginationRequest, limit: 100}, {
+        skip: !open,
+        refetchOnMountOrArgChange: true
+    });
     const teachers = currentData?.contents || [];
     const categories = categoriesQuery?.currentData?.contents || [];
     const [addCourse] = useCreateCourseMutation();
@@ -159,7 +165,6 @@ export function AddEditCourseDialog({
             }
 
             if (isUpdate) {
-                console.log("Updating course with data:", formData);
                 await updateCourse({
                     courseId: Number(selectedCourse?.id),
                     updateCourseRequest: formData as any
@@ -190,10 +195,7 @@ export function AddEditCourseDialog({
         }}>
             <DialogContent className="max-w-2xl ">
                 <DialogHeader>
-                    <DialogTitle>{selectedCourse ? 'Edit Course' : 'Add New Course'}</DialogTitle>
-                    <DialogDescription>
-                        {selectedCourse ? 'Update course information' : 'Create a new course'}
-                    </DialogDescription>
+                    <DialogTitle>{t(Localization('actions', selectedCourse ? "edit_course" : "add_course"))}</DialogTitle>
                 </DialogHeader>
 
                 <Form {...form}>
@@ -262,7 +264,7 @@ export function AddEditCourseDialog({
                                 name="categoryId"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Category</FormLabel>
+                                        <FormLabel>{t(Localization('tableHeaders', 'category'))}</FormLabel>
                                         <FormControl>
                                             <select {...field}
                                                     className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">

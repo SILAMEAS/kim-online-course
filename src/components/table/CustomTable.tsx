@@ -225,9 +225,9 @@ export function CustomTable<T extends Record<string, any>>({
                                                    onLimitChange={limit => setFilter({...filter, limit, page: 1})}/>,
                     modal: <AlertDialog open={Boolean(deleteId)} onOpenChange={() => setDeleteId(null)}>
                         <AlertDialogContent>
-                            <AlertDialogTitle>Delete Item</AlertDialogTitle>
+                            <AlertDialogTitle>{t(Localization('info_message', 'delete_item'))}</AlertDialogTitle>
                             <AlertDialogDescription>
-                                Are you sure you want to delete this item? This action cannot be undone.
+                                {t(Localization('info_message', 'confirm_delete_item'))}
                             </AlertDialogDescription>
 
                             <div className="flex justify-end gap-3">
@@ -252,7 +252,7 @@ export function CustomTable<T extends Record<string, any>>({
                                     {isDeleting && (
                                         <Loader2 className="h-4 w-4 animate-spin mr-2"/>
                                     )}
-                                    Delete
+                                    {t(Localization("actions", "delete"))}
                                 </AlertDialogAction>
                             </div>
                         </AlertDialogContent>

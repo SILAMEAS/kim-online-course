@@ -16,7 +16,7 @@ export function Footer() {
             <div className="flex items-center gap-2 mb-4">
               <BookOpen className="w-6 h-6 text-primary" />
               <span className="font-bold text-lg text-primary">
-                Learning outcomes
+                {t(Localization("footer","learning_outcome"))}
               </span>
             </div>
             <p className="text-sm text-foreground/60">

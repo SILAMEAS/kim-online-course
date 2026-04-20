@@ -39,7 +39,7 @@ export const idSchema = z.number().int().positive();
 export const priceSchema = z
     .coerce
     .number()
-    .min(0, "Price must be positive");
+    .min(10, "Price must be more than 10$");
 
 // Quantity
 export const quantitySchema = z

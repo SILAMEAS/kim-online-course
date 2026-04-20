@@ -41,11 +41,15 @@ export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
                 if (checkedWishlist()) {
                     await removeWishlist({
                         courseId: course.id,
-                    });
+                    }).unwrap();
                 } else {
-                    await addWishlist({
-                        courseId: course.id
-                    });
+                   try {
+                       await addWishlist({
+                           courseId: course.id
+                       }).unwrap();
+                   }catch (e:any) {
+                      return  toast.error("Failed to add course to wishlist :"+e?.data?.message);
+                   }
                 }
                 wishlistQuery.refetch();
                 e.preventDefault();

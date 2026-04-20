@@ -75,19 +75,14 @@ export default function WishlistPage() {
 
                                         {/* Button */}
                                         <Button disabled={currentUser?.role !== EnumRole.STUDENT} variant="outline"
-                                                size="sm" className="gap-2" onClick={async () => {
-                                            w.course.id &&
-                                            w.course?.title &&
-                                            w.course?.imageUrl &&
-                                            w.course?.price &&
-                                            w.course?.instructor?.firstName &&
+                                                size="sm" className="gap-2" onClick={() => {
                                             dispatch(addToCart({
                                                 course_id: `${w.course.id}`,
                                                 course_title: w.course?.title,
                                                 id: `${w.course.id}`,
                                                 price: w.course?.price,
                                                 image: w.course?.imageUrl,
-                                                instructor_name: w.course?.instructor?.firstName,
+                                                instructor_name: `${w.course?.instructor?.firstName} ${w.course?.instructor?.lastName}`,
                                             }))
 
                                         }}>

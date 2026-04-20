@@ -90,7 +90,7 @@ export function AddEditCourseDialog({
             description: "",
             instructorId: 0,
             categoryId: 0,
-            price: 0,
+            price: 10,
             status: "DRAFT",
             level: "BEGINNER",
             file: "",
@@ -331,7 +331,6 @@ export function AddEditCourseDialog({
                                             <SelectContent>
                                                 <SelectItem value="DRAFT">Draft</SelectItem>
                                                 <SelectItem value="PUBLISHED">Published</SelectItem>
-                                                <SelectItem value="ARCHIVED">Archived</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage/>
@@ -382,7 +381,7 @@ export function AddEditCourseDialog({
                         )}
                         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                             {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                            {t(Localization('actions', selectedCourse?"edit_course":"add_course"))}
+                            {t(Localization('actions', selectedCourse ? "edit_course" : "add_course"))}
                         </Button>
                     </form>
                 </Form>

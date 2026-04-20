@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { checkoutSchema, CheckoutFormData } from "@/lib/validations/schemas";
 import { Button } from "@/components/ui/button";
+import {useTranslation} from "react-i18next";
 import {
   Form,
   FormControl,
@@ -22,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import {Localization} from "@/i18n/lang";
 
 interface CheckoutFormProps {
   onSuccess?: () => void;
@@ -31,6 +33,7 @@ interface CheckoutFormProps {
 export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const {t} = useTranslation();
 
   const form = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
@@ -77,7 +80,7 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Personal Information */}
         <div className="space-y-4">
-          <h3 className="font-semibold">Personal Information</h3>
+          <h3 className="font-semibold">{t(Localization("cart","personal_information"))}</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
@@ -85,7 +88,7 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First Name</FormLabel>
+                  <FormLabel>{t(Localization("form","first_name"))}</FormLabel>
                   <FormControl>
                     <Input disabled={isLoading} placeholder="John" {...field} />
                   </FormControl>
@@ -99,7 +102,7 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Last Name</FormLabel>
+                  <FormLabel>{t(Localization("form","last_name"))}</FormLabel>
                   <FormControl>
                     <Input disabled={isLoading} placeholder="Doe" {...field} />
                   </FormControl>
@@ -114,7 +117,7 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email Address</FormLabel>
+                <FormLabel>{t(Localization("form","email_address"))}</FormLabel>
                 <FormControl>
                   <Input
                     disabled={isLoading}
@@ -133,7 +136,7 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone Number</FormLabel>
+                <FormLabel>{t(Localization("form","phone_number"))}</FormLabel>
                 <FormControl>
                   <Input
                     disabled={isLoading}
@@ -149,14 +152,14 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
 
         {/* Billing Address */}
         <div className="space-y-4">
-          <h3 className="font-semibold">Billing Address</h3>
+          <h3 className="font-semibold">{t(Localization("cart","billing_address"))}</h3>
 
           <FormField
             control={form.control}
             name="address"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Street Address</FormLabel>
+                <FormLabel>{t(Localization("cart","street_address"))}</FormLabel>
                 <FormControl>
                   <Input
                     disabled={isLoading}
@@ -175,7 +178,7 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City</FormLabel>
+                  <FormLabel>{t(Localization("cart","city"))}</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isLoading}
@@ -193,7 +196,7 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
               name="state"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>State/Province</FormLabel>
+                  <FormLabel>{t(Localization("cart","state/province"))}</FormLabel>
                   <FormControl>
                     <Input disabled={isLoading} placeholder="CA" {...field} />
                   </FormControl>
@@ -209,7 +212,7 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
               name="zipCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Zip/Postal Code</FormLabel>
+                  <FormLabel>{t(Localization("cart","zip_postal_code"))}</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isLoading}
@@ -227,7 +230,7 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Country</FormLabel>
+                  <FormLabel>{t(Localization("cart","country"))}</FormLabel>
                   <FormControl>
                     <Select
                       value={field.value}
@@ -239,17 +242,17 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="United States">
-                          United States
+                            {t(Localization("cart","city"))}{t(Localization("cart","us"))}
                         </SelectItem>
-                        <SelectItem value="Canada">Canada</SelectItem>
+                        <SelectItem value="Canada">{t(Localization("cart","canada"))}</SelectItem>
                         <SelectItem value="United Kingdom">
-                          United Kingdom
+                            {t(Localization("cart","uk"))}
                         </SelectItem>
-                        <SelectItem value="Australia">Australia</SelectItem>
-                        <SelectItem value="Germany">Germany</SelectItem>
-                        <SelectItem value="France">France</SelectItem>
-                        <SelectItem value="Japan">Japan</SelectItem>
-                        <SelectItem value="India">India</SelectItem>
+                        <SelectItem value="Australia">{t(Localization("cart","australia"))}</SelectItem>
+                        <SelectItem value="Germany">{t(Localization("cart","germany"))}</SelectItem>
+                        <SelectItem value="France">{t(Localization("cart","france"))}</SelectItem>
+                        <SelectItem value="Japan">{t(Localization("cart","japan"))}</SelectItem>
+                        <SelectItem value="India">{t(Localization("cart","india"))}</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -267,7 +270,7 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
         </Button>
 
         <p className="text-xs text-foreground/60 text-center">
-          Your payment information is secure and encrypted
+            {t(Localization("cart","your_payment"))}
         </p>
       </form>
     </Form>

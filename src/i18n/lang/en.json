@@ -23,7 +23,9 @@
     "full_name": "Full Name",
     "email_address": "Email Address",
     "profile": "Profile",
-    "create_account": "Create account"
+    "phone_number": "Phone Number",
+    "create_account": "Create account",
+    "sign_in_review": "Sign in to leave a review"
   },
   "footer": {
     "empowering_learners_worldwide": "Empowering learners worldwide",
@@ -61,6 +63,29 @@
     "proceed_to_checkout": "Proceed to Checkout",
     "continue_shopping": "Continue Shopping",
     "guarantee_on_all_courses": "30-day money-back guarantee on all courses",
-    "order_summary": "Order Summary"
+    "order_summary": "Order Summary",
+    "personal_information": "Personal Information",
+    "billing_address": "Billing Address",
+    "street_address": "Street Address",
+    "city": "City",
+    "state/province": "State/Province",
+    "zip_postal_code": "Zip/Postal Code",
+    "country": "Country",
+    "your_payment": "Your payment information is secure and encrypted",
+    "india": "India",
+    "japan": "Japan",
+    "france": "France",
+    "germany": "Germany",
+    "australia": "Australia",
+    "uk": "United Kingdom",
+    "us": "United States",
+    "canada": "Canada"
+  },
+  "course":{
+    "share_feedback": "Share Your Feedback",
+    "help_sharing_experience": "Help others discover this course by sharing your experience",
+    "rating": "Rating",
+    "your_review": "Your Review",
+    "review_title": "Review Title"
   }
 }

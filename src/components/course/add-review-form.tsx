@@ -19,7 +19,8 @@ import {useParams} from "react-router-dom";
 import {RatingSummary, ReviewCard} from "@/components/course/review-section.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {CustomTable, MODE_TABLE} from "@/components/table/CustomTable.tsx";
-
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 interface AddReviewFormProps {
     courseId: string;
     onReviewAdded?: () => void;
@@ -32,6 +33,7 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
     const stats = ratingQuery?.currentData;
     const currentUser = useAppSelector((state) => state.auth.currentUser);
     const [isLoading, setIsLoading] = useState(false);
+    const {t} = useTranslation();
     const [hoveredRating, setHoveredRating] = useState(0);
     const [addReview] = useCreateReviewsMutation();
     const {
@@ -94,9 +96,9 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
     if (!currentUser) {
         return (
             <div className="bg-secondary/50 border border-border rounded-lg p-6 text-center">
-                <p className="text-foreground/70 mb-4">Sign in to leave a review</p>
+                <p className="text-foreground/70 mb-4">{t(Localization("form","sign_in_review"))}</p>
                 <Button asChild>
-                    <a href="/login">Sign In</a>
+                    <a href="/login">{t(Localization("form","sign_in"))}</a>
                 </Button>
             </div>
         );
@@ -129,9 +131,9 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
                     className="space-y-6 bg-card border border-border rounded-lg p-6"
                 >
                     <div>
-                        <h3 className="text-xl font-semibold mb-4">Share Your Feedback</h3>
+                        <h3 className="text-xl font-semibold mb-4">{t(Localization("course","share_feedback"))}</h3>
                         <p className="text-sm text-foreground/60">
-                            Help others discover this course by sharing your experience
+                            {t(Localization("course","help_sharing_experience"))}
                         </p>
                     </div>
 
@@ -141,7 +143,7 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
                         name="rating"
                         render={({field}) => (
                             <FormItem>
-                                <FormLabel>Rating</FormLabel>
+                                <FormLabel>{t(Localization("course","rating"))}</FormLabel>
                                 <FormControl>
                                     <div className="flex gap-2">
                                         {[1, 2, 3, 4, 5].map((rating) => (
@@ -175,7 +177,7 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
                         name="title"
                         render={({field}) => (
                             <FormItem>
-                                <FormLabel>Review Title</FormLabel>
+                                <FormLabel>{t(Localization("course","review_title"))}</FormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="Summarize your experience..."
@@ -194,7 +196,7 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
                         name="comment"
                         render={({field}) => (
                             <FormItem>
-                                <FormLabel>Your Review</FormLabel>
+                                <FormLabel>{t(Localization("course","your_review"))}</FormLabel>
                                 <FormControl>
                                     <Textarea
                                         placeholder="Share what you learned and what could be improved..."

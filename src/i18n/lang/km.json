@@ -11,18 +11,20 @@
     "already_have_an_account": "មានគណនីរួចហើយមែនទេ?"
   },
   "form": {
-    "form_email": "អ៊ីមែល",
+    "form_email": "អាសយដ្ឋានអ៊ីមែល",
     "form_password": "ពាក្យសម្ងាត់",
     "confirm_password": "បញ្ជាក់ពាក្យសម្ងាត់",
     "sign_up": "ចុះឈ្មោះ",
     "sign_in": "ចូលគណនី",
-    "username": "ឈ្មោះអ្នកប្រើប្រាស់",
+    "username": "ឈ្មោះអ្នកប្រើ",
     "first_name": "នាមខ្លួន",
     "last_name": "នាមត្រកូល",
     "full_name": "ឈ្មោះពេញ",
     "email_address": "អាសយដ្ឋានអ៊ីមែល",
     "profile": "ប្រវត្តិរូប",
-    "create_account": "បង្កើតគណនី"
+    "phone_number": "លេខទូរស័ព្ទ",
+    "create_account": "បង្កើតគណនី",
+    "sign_in_review": "ចូលគណនីដើម្បីផ្តល់មតិយោបល់"
   },
   "footer": {
     "empowering_learners_worldwide": "លើកកម្ពស់អ្នកសិក្សាទូទាំងពិភពលោក",
@@ -60,6 +62,29 @@
     "proceed_to_checkout": "បន្តទៅបង់ប្រាក់",
     "continue_shopping": "បន្តទិញ",
     "guarantee_on_all_courses": "ធានាសងប្រាក់វិញក្នុងរយៈពេល 30 ថ្ងៃសម្រាប់វគ្គសិក្សាទាំងអស់",
-    "order_summary": "សេចក្តីសង្ខេបការបញ្ជាទិញ"
+    "order_summary": "សេចក្តីសង្ខេបការបញ្ជាទិញ",
+    "personal_information": "ព័ត៌មានផ្ទាល់ខ្លួន",
+    "billing_address": "អាសយដ្ឋានបង់ប្រាក់",
+    "street_address": "អាសយដ្ឋានផ្លូវ",
+    "city": "ទីក្រុង",
+    "state/province": "រដ្ឋ/ខេត្ត",
+    "zip_postal_code": "លេខប្រៃសណីយ៍",
+    "country": "ប្រទេស",
+    "your_payment": "ព័ត៌មានការទូទាត់របស់អ្នកមានសុវត្ថិភាព និងបានអ៊ិនគ្រីប",
+    "india": "ឥណ្ឌា",
+    "japan": "ជប៉ុន",
+    "france": "បារាំង",
+    "germany": "អាល្លឺម៉ង់",
+    "australia": "អូស្ត្រាលី",
+    "uk": "ចក្រភពអង់គ្លេស",
+    "us": "សហរដ្ឋអាមេរិក",
+    "canada": "កាណាដា"
+  },
+  "course": {
+    "share_feedback": "ចែករំលែកមតិយោបល់របស់អ្នក",
+    "help_sharing_experience": "ជួយអ្នកផ្សេងឲ្យស្គាល់វគ្គសិក្សានេះដោយចែករំលែកបទពិសោធន៍របស់អ្នក",
+    "rating": "ការវាយតម្លៃ",
+    "your_review": "មតិយោបល់របស់អ្នក",
+    "review_title": "ចំណងជើងមតិយោបល់"
   }
 }

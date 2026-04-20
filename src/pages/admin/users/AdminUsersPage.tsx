@@ -24,7 +24,7 @@ import {
     roleSchema,
     statusSchema
 } from "@/lib/validations/global-schema.ts";
-import {DynamicFormDialog} from "@/components/dialog/DynamicFormDialog.tsx";
+import {CustomDynamicDialog} from "@/components/dialog/CustomDynamicDialog.tsx";
 import {formatWord} from "@/lib/utils/FormatWord.ts";
 import {Badge} from "@/components/ui/badge.tsx";
 import {useSearchParams} from "react-router-dom";
@@ -148,7 +148,7 @@ export default function AdminUsersPage() {
             />
             {/* Dialog */}
 
-            <DynamicFormDialog
+            <CustomDynamicDialog
                 open={open}
                 setOpen={setOpen}
                 title={t(Localization('admin_user', selectedItem ? "edit_user" : "add_user"))}

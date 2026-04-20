@@ -121,7 +121,9 @@
     "add_category": "បន្ថែមប្រភេទ",
     "update_category_information": "ធ្វើបច្ចុប្បន្នភាពព័ត៌មានប្រភេទ",
     "create_new_category": "បង្កើតប្រភេទថ្មី",
-    "edit_course": "កែសម្រួលវគ្គសិក្សា"
+    "edit_course": "កែសម្រួលវគ្គសិក្សា",
+    "add_video":"បញ្ចូលវិឌីអូ",
+    "edit_video": "កែសម្រូលវិឌីអូ"
   },
   "tableHeaders": {
     "firstname": "ឈ្មោះដើម",
@@ -141,7 +143,17 @@
     "amount": "ចំនួន",
     "id": "លេខសម្គាល់",
     "name": "ឈ្មោះ",
-    "Category Name": "ឈ្មោះប្រភេទ"
+    "Category Name": "ឈ្មោះប្រភេទ",
+    "file": "ឯកសារ",
+    "description": "ការពិពណ៌នា",
+    "instructor": "គ្រូបង្រៀន",
+    "image": "រូបភាព",
+    "manage_course_videos": "គម្រប់គ្រងវគ្គសិក្សានៅក្នុងវិដេអូ",
+    "payments": "ការទូទាត់",
+    "manage_payments": "គ្រប់គ្រងការទូទាត់វគ្គសិក្សា",
+    "enrollments": "ការចុះឈ្មោះ",
+    "manage_enrollments": "គ្រប់គ្រងការចុះឈ្មោះសិស្ស",
+    "manage_images": "គ្រប់គ្រងរូបភាពដែលបានអាប់ឡូដ"
   },
   "roles": {
     "student": "និស្សិត",

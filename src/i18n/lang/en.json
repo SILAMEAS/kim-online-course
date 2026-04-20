@@ -126,7 +126,9 @@
     "edit_category": "Edit category",
     "add_category": "Add category",
     "update_category_information": "Update category information",
-    "create_new_category": "Create new category"
+    "create_new_category": "Create new category",
+    "add_video": "Add Video",
+    "edit_video": "Edit Video"
   },
   "tableHeaders": {
     "firstname": "First Name",
@@ -146,7 +148,17 @@
     "amount": "Amount",
     "id": "ID",
     "name": "Name",
-    "Category Name": "Category Name"
+    "Category Name": "Category Name",
+    "file": "File",
+    "description": "Description",
+    "instructor": "Instructor",
+    "image": "Image",
+    "manage_course_videos": "Manage course videos",
+    "payments":"Payments",
+    "manage_payments": "Manage course payments",
+    "enrollments": "Enrollments",
+    "manage_enrollments": "Manage student enrollments",
+    "manage_images": "Manage uploaded images"
   },
   "roles": {
     "student": "Student",

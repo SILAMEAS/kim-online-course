@@ -7,7 +7,7 @@ import {
 } from "@/lib/api/api.generated.ts";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
-import {DynamicFormDialog} from "@/components/dialog/DynamicFormDialog.tsx";
+import {CustomDynamicDialog} from "@/components/dialog/CustomDynamicDialog.tsx";
 import {toast} from "sonner";
 import React from "react";
 import {useForm} from "react-hook-form";
@@ -88,7 +88,7 @@ export default function AdminCategoriesPage() {
                 }}
 
             />
-            <DynamicFormDialog
+            <CustomDynamicDialog
                 open={open}
                 setOpen={setOpen}
                 title={t(Localization('actions', selectedItem ? "update_category_information" : "create_new_category"))}

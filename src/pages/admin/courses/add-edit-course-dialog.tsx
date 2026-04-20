@@ -209,7 +209,7 @@ export function AddEditCourseDialog({
                             name="title"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Course Title</FormLabel>
+                                    <FormLabel>{t(Localization('tableHeaders', 'title'))}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter course title" {...field} />
                                     </FormControl>
@@ -223,7 +223,7 @@ export function AddEditCourseDialog({
                             name="description"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Description</FormLabel>
+                                    <FormLabel>{t(Localization('tableHeaders', 'description'))}</FormLabel>
                                     <FormControl>
                                         <Textarea placeholder="Course description" {...field} />
                                     </FormControl>
@@ -238,7 +238,7 @@ export function AddEditCourseDialog({
                                 name="instructorId"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Instructor</FormLabel>
+                                        <FormLabel>{t(Localization('tableHeaders', 'instructor'))}</FormLabel>
                                         <FormControl>
                                             <select
                                                 {...field}
@@ -283,7 +283,7 @@ export function AddEditCourseDialog({
                                 name="level"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Level</FormLabel>
+                                        <FormLabel>{t(Localization('tableHeaders', 'level'))}</FormLabel>
                                         <FormControl>
                                             <select {...field}
                                                     className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
@@ -307,7 +307,7 @@ export function AddEditCourseDialog({
                                 name="price"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Price</FormLabel>
+                                        <FormLabel>{t(Localization('tableHeaders', 'price'))}</FormLabel>
                                         <FormControl>
                                             <Input type="number" placeholder="99.99" {...field} />
                                         </FormControl>
@@ -321,7 +321,7 @@ export function AddEditCourseDialog({
                                 name="status"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Status</FormLabel>
+                                        <FormLabel>{t(Localization('tableHeaders', 'status'))}</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
@@ -345,7 +345,7 @@ export function AddEditCourseDialog({
                             name="file"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Image</FormLabel>
+                                    <FormLabel>{t(Localization('tableHeaders', 'image'))}</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="file"
@@ -382,7 +382,7 @@ export function AddEditCourseDialog({
                         )}
                         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                             {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                            {selectedCourse ? 'Update Course' : 'Create Course'}
+                            {t(Localization('actions', selectedCourse?"edit_course":"add_course"))}
                         </Button>
                     </form>
                 </Form>

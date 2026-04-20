@@ -196,7 +196,7 @@ export function CheckoutForm({ onSuccess, total }: CheckoutFormProps) {
               name="state"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t(Localization("cart","state/province"))}</FormLabel>
+                  <FormLabel>{t(Localization("cart","state_province"))}</FormLabel>
                   <FormControl>
                     <Input disabled={isLoading} placeholder="CA" {...field} />
                   </FormControl>

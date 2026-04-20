@@ -11,7 +11,9 @@ import {
     Users,
     Video
 } from "lucide-react";
-import Link from "@/components/Link.tsx"; // Example close icon
+import Link from "@/components/Link.tsx";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next"; // Example close icon
 
 interface NavItem {
     href: string;
@@ -70,7 +72,7 @@ const navItemsDefault = [
 export const Sidebar = ({navItems, pathname}: SidebarProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const renderItems = navItems ?? navItemsDefault;
-
+    const {t} = useTranslation();
     return (
         <>
             {/* Drawer toggle button (small screens) */}
@@ -103,8 +105,8 @@ export const Sidebar = ({navItems, pathname}: SidebarProps) => {
                     {/* Header */}
                     <div className="p-6 border-b border-border flex justify-between items-center">
                         <div>
-                            <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
-                            <p className="text-sm text-muted-foreground mt-1">Course Management</p>
+                            <h1 className="text-2xl font-bold text-foreground">{t(Localization("form","admin_panel"))}</h1>
+                            <p className="text-sm text-muted-foreground mt-1">{t(Localization("form","system"))}</p>
                         </div>
                         {/* Close button for small screens */}
 
@@ -140,7 +142,7 @@ export const Sidebar = ({navItems, pathname}: SidebarProps) => {
                     {/* Footer */}
                     <div className="p-4 border-t border-border">
                         <Button variant="outline" className="w-full">
-                            Logout
+                            {t(Localization("loginPage","logout"))}
                         </Button>
                     </div>
                 </div>

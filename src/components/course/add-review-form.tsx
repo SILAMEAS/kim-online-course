@@ -180,7 +180,7 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
                                 <FormLabel>{t(Localization("course","review_title"))}</FormLabel>
                                 <FormControl>
                                     <Input
-                                        placeholder="Summarize your experience..."
+                                        placeholder={`${t(Localization("course","share_feedback"))}`}
                                         disabled={isLoading}
                                         {...field}
                                     />
@@ -199,7 +199,7 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
                                 <FormLabel>{t(Localization("course","your_review"))}</FormLabel>
                                 <FormControl>
                                     <Textarea
-                                        placeholder="Share what you learned and what could be improved..."
+                                        placeholder= {`${t(Localization("course","share_improved"))}`}
                                         disabled={isLoading}
                                         className="min-h-32"
                                         {...field}
@@ -212,7 +212,8 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
 
                     <Button type="submit" disabled={isLoading} className="w-full">
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                        {isLoading ? "Submitting..." : "Submit Review"}
+                        {/*{isLoading ? "Submitting..." : "Submit Review"}*/}
+                        {t(Localization('course', isLoading ? 'submitting' : 'submit_review'))}
                     </Button>
                 </form>
             </Form>

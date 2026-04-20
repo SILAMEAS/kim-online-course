@@ -11,12 +11,14 @@ import {
 import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 import {useAppSelector} from "@/lib/redux/hooks.ts";
 import {cn} from "@/lib/utils.ts";
-
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
     const {currentUser} = useAppSelector(state => state.auth)
     const [addWishlist, reAdd] = useAddToWishlistMutation();
     const [removeWishlist, reRemove] = useRemoveFromWishlistMutation();
+    const {t} = useTranslation();
     const wishlistQuery = useGetUserWishlistQuery({userId: Number(currentUser?.id)}, {skip: !currentUser?.id});
     const levelColors = {
         BEGINNER: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
@@ -137,7 +139,7 @@ export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
 
                     {/* Button */}
                     <Button className="w-full mt-auto" size="sm">
-                        View Course
+                        {t(Localization("course","view_course"))}
                     </Button>
                 </div>
             </Link>

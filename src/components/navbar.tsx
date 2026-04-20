@@ -10,11 +10,13 @@ import {MobileNav} from "./mobile-nav.tsx";
 import TriggerTheme from "@/components/providers/theme/TriggerTheme.tsx";
 import TriggerLanguage from "@/components/providers/i18n/TriggerLanguage.tsx";
 import useRestoreUserByToken from "@/hooks/useRestoreUserByToken.tsx";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const {currentData,isLoading} = useRestoreUserByToken();
-
+  const {t} = useTranslation();
   const cartQuantity = useAppSelector((state) => state.cart.quantity);
 
   if(isLoading){
@@ -39,19 +41,19 @@ export function Navbar() {
             to="/courses"
             className="text-foreground/70 hover:text-foreground transition"
           >
-            Courses
+            {t(Localization("form","course"))}
           </Link>
           <Link
             to="/about"
             className="text-foreground/70 hover:text-foreground transition"
           >
-            About
+            {t(Localization("form","about"))}
           </Link>
           <Link
             to="/contact"
             className="text-foreground/70 hover:text-foreground transition"
           >
-            Contact
+            {t(Localization("footer","contact"))}
           </Link>
         </div>
 
@@ -78,11 +80,11 @@ export function Navbar() {
             <div className="flex gap-2">
               <Link to="/login">
                 <Button variant="outline" size="sm" className="hidden sm:flex">
-                  Login
+                  {t(Localization("loginPage","login"))}
                 </Button>
               </Link>
               <Link to="/register">
-                <Button size="sm">Sign Up</Button>
+                <Button size="sm">{t(Localization("form","sign_up"))}</Button>
               </Link>
             </div>
           )}

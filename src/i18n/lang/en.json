@@ -25,7 +25,14 @@
     "profile": "Profile",
     "phone_number": "Phone Number",
     "create_account": "Create account",
-    "sign_in_review": "Sign in to leave a review"
+    "sign_in_review": "Sign in to leave a review",
+    "course_management": "Course Management",
+    "admin_panel": "Admin Panel",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "system",
+    "course" : "Courses",
+    "about" : "About"
   },
   "footer": {
     "empowering_learners_worldwide": "Empowering learners worldwide",
@@ -60,6 +67,7 @@
   "cart": {
     "tax_10": "Tax (10%)",
     "total": "Total",
+    "subtotal": "Subtotal",
     "proceed_to_checkout": "Proceed to Checkout",
     "continue_shopping": "Continue Shopping",
     "guarantee_on_all_courses": "30-day money-back guarantee on all courses",
@@ -68,7 +76,7 @@
     "billing_address": "Billing Address",
     "street_address": "Street Address",
     "city": "City",
-    "state/province": "State/Province",
+    "state_province": "State/Province",
     "zip_postal_code": "Zip/Postal Code",
     "country": "Country",
     "your_payment": "Your payment information is secure and encrypted",
@@ -82,10 +90,21 @@
     "canada": "Canada"
   },
   "course":{
-    "share_feedback": "Share Your Feedback",
+    "share_feedback": "Share Your Feedback...",
     "help_sharing_experience": "Help others discover this course by sharing your experience",
     "rating": "Rating",
     "your_review": "Your Review",
-    "review_title": "Review Title"
+    "review_title": "Review Title",
+    "share_improved": "Share what you learned and what could be improved...",
+    "summarize_experience":"Summarize your experience...",
+    "submit_review": "Submit Review",
+    "submitting": "Submitting...",
+    "view_course": "View Course",
+    "course_videos": "Course's videos",
+    "search_course": "Search Course",
+    "price_range": "Price Range",
+    "clear_filters": "Clear Filters",
+    "level": "Level"
+
   }
 }

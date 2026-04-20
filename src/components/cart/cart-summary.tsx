@@ -28,7 +28,7 @@ export function CartSummary({
             <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-sm">
           <span className="text-foreground/60">
-            Subtotal ({quantity} course{quantity !== 1 ? "s" : ""})
+            {t(Localization("cart","subtotal"))} ({quantity} course{quantity !== 1 ? "s" : ""})
           </span>
                     <span className="font-medium">${total.toFixed(2)}</span>
                 </div>

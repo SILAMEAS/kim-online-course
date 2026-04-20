@@ -11,6 +11,8 @@ import {useListCategoriesQuery} from "@/lib/api/api.generated.ts";
 import {DefaultPaginationRequest} from "@/lib/types.ts";
 import {Badge} from "@/components/ui/badge.tsx";
 import {Button} from "@/components/ui/button.tsx";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 export function CourseFilters<T>({filters, setFilters}: Readonly<{
     setFilters: Dispatch<SetStateAction<{
@@ -38,6 +40,7 @@ export function CourseFilters<T>({filters, setFilters}: Readonly<{
         levelStatus?: "BEGINNER" | "INTERMEDIATE" | "ADVANCE"
     }
 }>) {
+    const {t} = useTranslation();
     const [searchTerm, setSearchTerm] = useState(filters.search);
     const {currentData} = useListCategoriesQuery(DefaultPaginationRequest, {refetchOnMountOrArgChange: true});
 
@@ -112,13 +115,14 @@ export function CourseFilters<T>({filters, setFilters}: Readonly<{
                 }))
         }
     ].filter(Boolean)
+
     return (
         <div className="space-y-4">
             {/* Search */}
             <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/50"/>
                 <Input
-                    placeholder="Search courses..."
+                    placeholder= {`${t(Localization("course","search_course"))}`}
                     className="pl-10"
                     value={searchTerm} // Use local state here
                     onChange={e => setSearchTerm(e.target.value)} // Update local state immediately
@@ -151,14 +155,14 @@ export function CourseFilters<T>({filters, setFilters}: Readonly<{
                     onClick={handleResetFilters}
                 >
                     <X className="w-4 h-4"/>
-                    Clear Filters
+                    {t(Localization("course","clear_filters"))}
                 </Button>
             )}
 
             <Accordion type="single" collapsible className="w-full">
                 {/* Price Range */}
                 <AccordionItem value="price">
-                    <AccordionTrigger>Price Range</AccordionTrigger>
+                    <AccordionTrigger>{t(Localization("course","price_range"))}</AccordionTrigger>
                     <AccordionContent className="space-y-4">
                         <Slider
                             value={[filters?.minPrice ?? 0, filters?.maxPrice ?? 0]}
@@ -181,7 +185,7 @@ export function CourseFilters<T>({filters, setFilters}: Readonly<{
 
                 {/* Category */}
                 <AccordionItem value="category">
-                    <AccordionTrigger>Category</AccordionTrigger>
+                    <AccordionTrigger>{t(Localization("footer","categories"))}</AccordionTrigger>
                     <AccordionContent className="space-y-3">
                         {currentData?.contents?.map(category => (
                             <div key={category.id} className="flex items-center space-x-2">
@@ -204,7 +208,7 @@ export function CourseFilters<T>({filters, setFilters}: Readonly<{
 
                 {/* Level */}
                 <AccordionItem value="level">
-                    <AccordionTrigger>Level</AccordionTrigger>
+                    <AccordionTrigger>{t(Localization("course","level"))}</AccordionTrigger>
                     <AccordionContent className="space-y-3">
                         {COURSE_LEVELS.map(level => (
                             <div key={level} className="flex items-center space-x-2">
@@ -227,7 +231,7 @@ export function CourseFilters<T>({filters, setFilters}: Readonly<{
 
                 {/* Rating */}
                 <AccordionItem value="rating">
-                    <AccordionTrigger>Rating</AccordionTrigger>
+                    <AccordionTrigger>{t(Localization("course","rating"))}</AccordionTrigger>
                     <AccordionContent className="space-y-3">
                         {[5, 4, 3, 2, 1].map(rating => (
                             <div key={rating} className="flex items-center space-x-2">

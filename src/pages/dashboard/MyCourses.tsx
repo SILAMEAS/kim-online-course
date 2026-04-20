@@ -3,19 +3,38 @@ import {useAppSelector} from "@/lib/redux/hooks";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import {ArrowRight, BookMarked, Loader} from "lucide-react";
-import {useListAllCoursesQuery, useListAllCoursesStudentEnrollmentQuery} from "@/lib/api/api.generated.ts";
+import {
+    CourseResponse,
+    useListAllCoursesQuery,
+    useListAllCoursesStudentEnrollmentQuery
+} from "@/lib/api/api.generated.ts";
 import {EnumRole} from "@/lib/enum.ts";
 import {cn} from "@/lib/utils.ts";
+import {CustomTable, MODE_TABLE} from "@/components/table/CustomTable.tsx";
+import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 
 export default function MyCoursesPage() {
     const currentUser = useAppSelector((state) => state.auth.currentUser);
-    const {currentData: currentDataStudent, isLoading: isLoadingStudent} = useListAllCoursesStudentEnrollmentQuery({id: Number(currentUser?.id)}, {skip: !currentUser?.id || currentUser?.role !== EnumRole.STUDENT})
-    const {currentData: currentDataTeacher, isLoading: isLoadingTeacher} = useListAllCoursesQuery({instructorId: Number(currentUser?.id)}, {skip: !currentUser?.id || currentUser?.role !== EnumRole.INSTRUCTOR})
+    const {
+        setFilter,
+        filter,
+    } = useCustomTable<CourseResponse>();
+    const {
+        currentData: currentDataStudent,
+        isLoading: isLoadingStudent
+    } = useListAllCoursesStudentEnrollmentQuery({
+        ...filter,
+        id: Number(currentUser?.id)
+    }, {skip: !currentUser?.id || currentUser?.role !== EnumRole.STUDENT})
+    const {currentData: currentDataTeacher, isLoading: isLoadingTeacher} = useListAllCoursesQuery({
+        ...filter,
+        instructorId: Number(currentUser?.id)
+    }, {skip: !currentUser?.id || currentUser?.role !== EnumRole.INSTRUCTOR})
     const enrolledCourse = (currentUser?.role === EnumRole.STUDENT ? currentDataStudent?.contents : currentDataTeacher?.contents) ?? [];
 
     const isTeacher = currentUser?.role === EnumRole.INSTRUCTOR;
 
-    const isLoading=isLoadingStudent||isLoadingTeacher;
+    const isLoading = isLoadingStudent || isLoadingTeacher;
     if (isLoading) {
         return <div className="flex justify-center items-center h-screen">
             <Loader/>
@@ -25,8 +44,8 @@ export default function MyCoursesPage() {
         <div className="space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-4xl font-bold mb-2">{`My Courses ${isTeacher ? "to teach.":""}`}</h1>
-                <p className={cn("text-foreground/60",isTeacher&&"hidden")}>
+                <h1 className="text-4xl font-bold mb-2">{`My Courses ${isTeacher ? "to teach." : ""}`}</h1>
+                <p className={cn("text-foreground/60", isTeacher && "hidden")}>
                     {`You have ${enrolledCourse?.length} course(s) enrolled.`}
                 </p>
             </div>
@@ -46,50 +65,58 @@ export default function MyCoursesPage() {
                     </Link>
                 </Card>
             ) : (
-                <div className="grid grid-cols-1 gap-6">
-                    {enrolledCourse?.map((course) => {
-                        return (
-                            <Card
-                                key={course.id}
-                                className="p-6 border border-border hover:shadow-lg transition-shadow overflow-hidden"
-                            >
-                                <div className="flex flex-col md:flex-row gap-6">
-                                    {/* Image */}
-                                    <div
-                                        className="relative w-full md:w-40 h-32 flex-shrink-0 rounded-lg overflow-hidden">
-                                        <img
-                                            src={course.imageUrl}
-                                            alt={course.title}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
+                <CustomTable<CourseResponse>
+                    setFilter={setFilter}
+                    filter={filter}
+                    data={enrolledCourse}
+                    pagination={{
+                        page: filter.page,
+                        limit: filter.limit,
+                        total: currentDataStudent?.total ?? currentDataTeacher?.total ?? 0
+                    }}
+                    isLoading={isLoadingStudent || isLoadingTeacher}
+                    mode={MODE_TABLE.GRID}
+                    customRenderModeContent={(course => <Card
+                        key={course.id}
+                        className="p-6 border border-border hover:shadow-lg transition-shadow overflow-hidden"
+                    >
+                        <div className="flex flex-col md:flex-row gap-6">
+                            {/* Image */}
+                            <div
+                                className="relative w-full md:w-40 h-32 flex-shrink-0 rounded-lg overflow-hidden">
+                                <img
+                                    src={course.imageUrl}
+                                    alt={course.title}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
 
-                                    {/* Content */}
-                                    <div className="flex-1 flex flex-col justify-between">
-                                        <div>
-                                            <h3 className="text-xl font-semibold mb-2">
-                                                {course.title}
-                                            </h3>
-                                            <p className="text-sm text-foreground/60 mb-3">
-                                                by {course.instructor.firstName} {course.instructor.lastName}
-                                            </p>
+                            {/* Content */}
+                            <div className="flex-1 flex flex-col justify-between">
+                                <div>
+                                    <h3 className="text-xl font-semibold mb-2">
+                                        {course.title}
+                                    </h3>
+                                    <p className="text-sm text-foreground/60 mb-3">
+                                        by {course.instructor.firstName} {course.instructor.lastName}
+                                    </p>
 
-                                        </div>
-
-                                        {/* Button */}
-                                        <Link to={`/courses/${course.id}`}>
-                                            <Button variant="outline" size="sm" className="gap-2">
-                                                Continue {isTeacher ? "Teaching" : "Learning"}
-                                                <ArrowRight className="w-4 h-4"/>
-                                            </Button>
-                                        </Link>
-                                    </div>
                                 </div>
-                            </Card>
-                        );
-                    })}
-                </div>
+
+                                {/* Button */}
+                                <Link to={`/courses/${course.id}`}>
+                                    <Button variant="outline" size="sm" className="gap-2">
+                                        Continue {isTeacher ? "Teaching" : "Learning"}
+                                        <ArrowRight className="w-4 h-4"/>
+                                    </Button>
+                                </Link>
+                            </div>
+                        </div>
+                    </Card>)}
+
+                />
             )}
         </div>
     );
 }
+

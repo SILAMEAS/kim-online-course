@@ -1,0 +1,1 @@
+import{i as r}from"./index-WO9EnxXb.js";const t=({type:o,publicId:e})=>{switch(o){case"video":return`https://res.cloudinary.com/${r.CLOUDINARY_NAME}/video/upload/${e}.mp4`;case"image":return`https://res.cloudinary.com/${r.CLOUDINARY_NAME}/image/upload/${e}.jpg`;default:return e}};export{t as p};

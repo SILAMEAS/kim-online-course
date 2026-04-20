@@ -14,6 +14,7 @@ import {useState} from "react";
 import previewCloudinary from "@/components/previewCloudinary.ts";
 import {Localization} from "@/i18n/lang";
 import {useTranslation} from "react-i18next";
+import {PreviewImage} from "@/pages/admin/images/PreviewImage.tsx";
 
 export default function AdminImagesPage() {
     const {t} = useTranslation();
@@ -62,15 +63,15 @@ export default function AdminImagesPage() {
                 <AlertDialogContent>
                     <AlertDialogTitle>View Image</AlertDialogTitle>
                     <AlertDialogDescription>
-                        {
-                            previewImage &&
-                            <img
-                                src={previewCloudinary({publicId: previewImage, type: "image"})}
-                                className="object-cover rounded-md border"
-                                alt={previewImage ?? "Loading"}
-                                loading="eager"
+                        {previewImage && (
+                            <PreviewImage
+                                src={previewCloudinary({
+                                    publicId: previewImage,
+                                    type: "image",
+                                })}
+                                alt={previewImage}
                             />
-                        }
+                        )}
                     </AlertDialogDescription>
 
                     <div className="flex justify-end gap-3">

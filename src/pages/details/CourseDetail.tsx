@@ -45,11 +45,14 @@ export default function CourseDetailPage() {
         courseId: Number(courseId)
     }, {skip: currentUser?.role !== EnumRole.STUDENT})
     const hasBeenEnrollments = enrollmentsByCourseQuery?.currentData?.contents?.find(d => d.course?.id === Number(courseId))
-    const studentInCourseQuery = useListStudentInCourseQuery({courseId: Number(courseId)}, {skip: !courseId || currentUser?.role === EnumRole.STUDENT});
     const {
         setFilter, filter,
     } = useCustomTable<UserResponse>();
     const [modalStudent, setModalStudent] = useState<boolean>(false);
+    const studentInCourseQuery = useListStudentInCourseQuery({
+        ...filter,
+        courseId: Number(courseId)
+    }, {skip: !courseId || currentUser?.role === EnumRole.STUDENT || !modalStudent});
 
 
     if ((courseDetailQuery?.isLoading || courseDetailQuery?.isFetching) && !courseDetailQuery?.currentData) {
@@ -218,7 +221,7 @@ export default function CourseDetailPage() {
                                     )}
 
                                     {
-                                        studentInCourseQuery?.currentData?.contents && currentUser?.role !== EnumRole.STUDENT &&
+                                        currentUser?.role !== EnumRole.STUDENT &&
                                         <Button
                                             variant="outline"
                                             className="w-full"
@@ -268,9 +271,9 @@ export default function CourseDetailPage() {
                             setFilter={setFilter}
                             filter={filter}
                             columns={[
-                                {key: 'firstName', label: 'FirstName', sortable: true},
-                                {key: 'lastName', label: 'LastName', sortable: true},
-                                {key: 'email', label: 'Email', sortable: true},
+                                {key: 'firstName', label: 'FirstName', sortable: false},
+                                {key: 'lastName', label: 'LastName', sortable: false},
+                                {key: 'email', label: 'Email', sortable: false},
                             ]}
                             data={studentInCourseQuery?.currentData?.contents ?? []}
                             pagination={{

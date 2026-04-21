@@ -14,7 +14,7 @@ import {
 import {toast} from "sonner";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import React, {useEffect, useState} from 'react';
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,} from '@/components/ui/dialog';
+import {Dialog, DialogContent, DialogHeader, DialogTitle,} from '@/components/ui/dialog';
 import {Input} from '@/components/ui/input';
 import {useForm} from "react-hook-form";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
@@ -27,9 +27,12 @@ import {useFilePreview} from "@/lib/utils/usePreviewFile.tsx";
 import {getVideoDuration} from "@/lib/utils/getVideoDuration.ts";
 import {useSearchParams} from "react-router-dom";
 import {EnumRole} from "@/lib/enum.ts";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 
 export default function AdminVideosPage() {
+    const {t} = useTranslation();
     const {
         filter,
         setFilter,
@@ -170,14 +173,14 @@ export default function AdminVideosPage() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold">Videos</h1>
-                    <p className="text-muted-foreground mt-1">Manage course videos</p>
+                    <h1 className="text-3xl font-bold">{t(Localization("dashboard", "videos"))}</h1>
+                    <p className="text-muted-foreground mt-1">{t(Localization("tableHeaders", "manage_course_videos"))}</p>
                 </div>
                 <Button onClick={() => {
                     setOpen(true);
                 }}>
                     <Plus className="mr-2 h-4 w-4"/>
-                    Add Video
+                    {t(Localization("actions", "add_video"))}
                 </Button>
             </div>
 
@@ -230,11 +233,9 @@ export default function AdminVideosPage() {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {selectedItem ? 'Edit Video' : 'Add New Video'}
+                            {t(Localization("actions", selectedItem ? "edit_video" : "add_video"))}
                         </DialogTitle>
-                        <DialogDescription>
-                            {selectedItem ? 'Update video information' : 'Create a new video'}
-                        </DialogDescription>
+
                     </DialogHeader>
 
                     <Form {...form}>
@@ -249,7 +250,7 @@ export default function AdminVideosPage() {
                                 name="uploadVideoRequest.title"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Video Title</FormLabel>
+                                        <FormLabel>{t(Localization("dashboard", "videos"))}</FormLabel>
                                         <FormControl>
                                             <Input placeholder="Enter video title" {...field} />
                                         </FormControl>
@@ -262,7 +263,7 @@ export default function AdminVideosPage() {
                                 name="courseId"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Course</FormLabel>
+                                        <FormLabel>{t(Localization("tableHeaders", "course"))}</FormLabel>
                                         <FormControl>
                                             <select
                                                 {...field}
@@ -288,7 +289,7 @@ export default function AdminVideosPage() {
                                 name="uploadVideoRequest.file"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>File</FormLabel>
+                                        <FormLabel>{t(Localization("tableHeaders", "file"))}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 type="file"
@@ -332,7 +333,7 @@ export default function AdminVideosPage() {
                             )}
                             <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                                 {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                {selectedItem ? 'Update video' : 'Create video'}
+                                {t(Localization("actions", selectedItem ? "edit_video" : "add_video"))}
                             </Button>
                         </form>
                     </Form>

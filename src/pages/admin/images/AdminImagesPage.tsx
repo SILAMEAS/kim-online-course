@@ -12,8 +12,12 @@ import {
 } from "@/components/ui/alert-dialog.tsx";
 import {useState} from "react";
 import previewCloudinary from "@/components/previewCloudinary.ts";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
+import {PreviewImage} from "@/pages/admin/images/PreviewImage.tsx";
 
 export default function AdminImagesPage() {
+    const {t} = useTranslation();
     const {
         setFilter,
         filter,
@@ -30,8 +34,8 @@ export default function AdminImagesPage() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold">Images</h1>
-                    <p className="text-muted-foreground mt-1">Manage uploaded images</p>
+                    <h1 className="text-3xl font-bold">{t(Localization("dashboard","images"))}</h1>
+                    <p className="text-muted-foreground mt-1">{t(Localization("tableHeaders","manage_images"))}</p>
                 </div>
             </div>
 
@@ -59,15 +63,15 @@ export default function AdminImagesPage() {
                 <AlertDialogContent>
                     <AlertDialogTitle>View Image</AlertDialogTitle>
                     <AlertDialogDescription>
-                        {
-                            previewImage &&
-                            <img
-                                src={previewCloudinary({publicId: previewImage, type: "image"})}
-                                className="object-cover rounded-md border"
-                                alt={previewImage ?? "Loading"}
-                                loading="eager"
+                        {previewImage && (
+                            <PreviewImage
+                                src={previewCloudinary({
+                                    publicId: previewImage,
+                                    type: "image",
+                                })}
+                                alt={previewImage}
                             />
-                        }
+                        )}
                     </AlertDialogDescription>
 
                     <div className="flex justify-end gap-3">

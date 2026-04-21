@@ -2,12 +2,12 @@
   "loginPage": {
     "welcome": "សូមស្វាគមន៍",
     "login": "ចូលគណនី",
-    "logout": "ចាកចេញ",
-    "welcome_to_learning_outcomes": "សូមស្វាគមន៍មកកាន់ Learning Outcomes",
-    "join_our_website": "ចូលរួមជាមួយសិស្សរាប់ពាន់នាក់ និងអភិវឌ្ឍជំនាញរបស់អ្នកជាមួយវគ្គសិក្សាគុណភាពខ្ពស់ពីអ្នកជំនាញក្នុងវិស័យ",
-    "login_continue_learning": "ចូលគណនីដើម្បីបន្តការសិក្សារបស់អ្នក",
-    "not_have_acc": "មិនទាន់មានគណនីមែនទេ?",
-    "start_your_learning": "ចាប់ផ្តើមដំណើរការសិក្សារបស់អ្នកជាមួយ Learning Outcomes ថ្ងៃនេះ",
+    "logout": "ចាក់ចេញ",
+    "welcome_to_learning_outcomes": "សូមស្វាគមន៍មកកាន់ Learning outcomes",
+    "join_our_website": "ចូលរួមជាមួយសិស្សរាប់ពាន់នាក់ និងបង្កើនជំនាញរបស់អ្នកជាមួយនឹងវគ្គសិក្សាលំដាប់ពិភពលោកពីអ្នកជំនាញក្នុងឧស្សាហកម្ម",
+    "login_continue_learning": "ចូលគណនីរបស់អ្នកដើម្បីបន្តការរៀនសូត្រ",
+    "not_have_acc": "មិនមានគណនីទេ?",
+    "start_your_learning": "ចាប់ផ្តើមដំណើររៀនសូត្ររបស់អ្នកជាមួយនឹងលទ្ធផលសិក្សាថ្ងៃនេះ",
     "already_have_an_account": "មានគណនីរួចហើយមែនទេ?"
   },
   "form": {
@@ -40,7 +40,13 @@
     "about_us": "អំពីយើង",
     "contact": "ទំនាក់ទំនង",
     "categories": "ប្រភេទ",
-    "learning_outcome": "លទ្ធផលនៃការសិក្សា"
+    "learning_outcome": "លទ្ធផលនៃការសិក្សា",
+    "empowering_learners_worldwide": "ផ្តល់ឱកាសដល់អ្នករៀនជាសកល",
+    "quick_links": "តំណភ្ជាប់",
+    "browse_course": "វគ្គសិក្សា",
+    "about_us": "អំពីពួកយើង",
+    "contact": "ទំនាក់ទំនង",
+    "categories": "ប្រភេទនៃមេរៀន"
   },
   "contactPage": {
     "have_questions": "មានសំណួរ? មតិយោបល់? ចង់ក្លាយជាគ្រូបង្រៀន? យើងរីករាយក្នុងការទទួលព័ត៌មានពីអ្នក",
@@ -61,7 +67,9 @@
   },
   "profile": {
     "dashboard": "ផ្ទាំងគ្រប់គ្រង",
-    "my_courses": "វគ្គសិក្សារបស់ខ្ញុំ"
+    "my_courses": "វគ្គសិក្សារបស់ខ្ញុំ",
+    "go_admin": "ទៅជាអ្នកគ្រប់គ្រង",
+    "go_student": "ទៅជាសិស្ស"
   },
   "cart": {
     "tax_10": "ពន្ធ (10%)",
@@ -103,6 +111,131 @@
     "search_course": "ស្វែងរកវគ្គសិក្សា",
     "price_range": "ចន្លោះតម្លៃ",
     "clear_filters": "សម្អាតតម្រង",
-    "level": "កម្រិត"
+    "level": "កម្រិត",
+    "continue_shopping": "បន្តការទិញ",
+    "guarantee_on_all_courses": "ធានាសងប្រាក់វិញក្នុងរយៈពេល 30 ថ្ងៃលើគ្រប់វគ្គសិក្សា",
+    "order_summary": "សង្ខេបការបញ្ជាទិញ"
+  },
+  "admin": {
+    "admin_panel": "ផ្ទាំងអ្នកគ្រប់គ្រង",
+    "course_management": "ការគ្រប់គ្រងវគ្គសិក្សា",
+    "welcome_admin_panel": "សូមស្វាគមន៍មកកាន់ផ្ទាំងអ្នកគ្រប់គ្រង"
+  },
+  "admin_nav": {
+    "Dashboard": "ផ្ទាំងគ្រប់គ្រង",
+    "Users": "អ្នកប្រើប្រាស់",
+    "Courses": "វគ្គសិក្សា",
+    "Videos": "វីដេអូ",
+    "Payments": "ការទូទាត់",
+    "Enrollments": "ការចុះឈ្មោះ",
+    "Images": "រូបភាព",
+    "Categories": "ប្រភេទ"
+  },
+  "dashboard": {
+    "total_users": "អ្នកប្រើប្រាស់សរុប",
+    "active_users": "គណនីអ្នកប្រើសកម្ម",
+    "total_teachers": "គ្រូបង្រៀនសរុប",
+    "teachers_accounts": "គណនីគ្រូបង្រៀន",
+    "total_students": "សិស្សសរុប",
+    "students_accounts": "គណនីសិស្ស",
+    "courses": "វគ្គសិក្សា",
+    "published_courses": "វគ្គសិក្សាដែលបានបោះពុម្ព",
+    "videos": "វីដេអូ",
+    "total_videos": "វីដេអូសរុប",
+    "revenue": "ចំណូល",
+    "completed_payments": "ការទូទាត់បានបញ្ចប់",
+    "enrollments": "ការចុះឈ្មោះ",
+    "active_enrollments": "ការចុះឈ្មោះសកម្ម",
+    "images": "រូបភាព",
+    "uploaded_images": "រូបភាពដែលបានអាប់ឡូដ",
+    "categories": "ប្រភេទ",
+    "total_categories": "ប្រភេទសរុប",
+    "manage_all_course": "គ្រប់គ្រងវគ្គសិក្សាទាំងអស់",
+    "manage_category": "គ្រប់គ្រងប្រភេទ"
+  },
+  "quick_actions": {
+    "title": "សកម្មភាពរហ័ស",
+    "manage_users": "គ្រប់គ្រងអ្នកប្រើប្រាស់",
+    "manage_courses": "គ្រប់គ្រងវគ្គសិក្សា",
+    "view_payments": "មើលការទូទាត់"
+  },
+  "admin_user": {
+    "title": "អ្នកប្រើប្រាស់",
+    "subtitle": "គ្រប់គ្រងអ្នកប្រើប្រាស់ប្រព័ន្ធ",
+    "add_user": "បន្ថែមអ្នកប្រើប្រាស់",
+    "create_new_user_account": "បង្កើតគណនីអ្នកប្រើប្រាស់ថ្មី",
+    "edit_user": "កែសម្រួលអ្នកប្រើប្រាស់",
+    "update_user_information": "ធ្វើបច្ចុប្បន្នភាពព័ត៌មានអ្នកប្រើប្រាស់"
+  },
+  "actions": {
+    "addUser": "បន្ថែមអ្នកប្រើប្រាស់",
+    "edit": "កែប្រែ",
+    "delete": "លុប",
+    "cancel": "បោះបង់",
+    "submit": "ដាក់ស្នើ",
+    "title": "សកម្មភាព",
+    "add_course": "បន្ថែមវគ្គសិក្សា",
+    "edit_category": "កែសម្រួលប្រភេទ",
+    "add_category": "បន្ថែមប្រភេទ",
+    "update_category_information": "ធ្វើបច្ចុប្បន្នភាពព័ត៌មានប្រភេទ",
+    "create_new_category": "បង្កើតប្រភេទថ្មី",
+    "edit_course": "កែសម្រួលវគ្គសិក្សា",
+    "add_video": "បញ្ចូលវិឌីអូ",
+    "edit_video": "កែសម្រូលវិឌីអូ"
+  },
+  "tableHeaders": {
+    "firstname": "ឈ្មោះដើម",
+    "lastname": "ឈ្មោះត្រកូល",
+    "email": "អ៊ីមែល",
+    "role": "តួនាទី",
+    "actions": "សកម្មភាព",
+    "title": "ចំណងជើង",
+    "category": "ប្រភេទ",
+    "level": "កម្រិត",
+    "price": "តម្លៃ",
+    "duration": "រយៈពេល",
+    "students": "សិស្ស",
+    "status": "ស្ថានភាព",
+    "publicid": "លេខសម្គាល់សាធារណៈ",
+    "course": "វគ្គសិក្សា",
+    "amount": "ចំនួន",
+    "id": "លេខសម្គាល់",
+    "name": "ឈ្មោះ",
+    "Category Name": "ឈ្មោះប្រភេទ",
+    "file": "ឯកសារ",
+    "description": "ការពិពណ៌នា",
+    "instructor": "គ្រូបង្រៀន",
+    "image": "រូបភាព",
+    "manage_course_videos": "គម្រប់គ្រងវគ្គសិក្សានៅក្នុងវិដេអូ",
+    "payments": "ការទូទាត់",
+    "manage_payments": "គ្រប់គ្រងការទូទាត់វគ្គសិក្សា",
+    "enrollments": "ការចុះឈ្មោះ",
+    "manage_enrollments": "គ្រប់គ្រងការចុះឈ្មោះសិស្ស",
+    "manage_images": "គ្រប់គ្រងរូបភាពដែលបានអាប់ឡូដ"
+  },
+  "roles": {
+    "student": "និស្សិត",
+    "instructor": "គ្រូបង្រៀន",
+    "admin": "អ្នកគ្រប់គ្រង"
+  },
+  "status": {
+    "active": "សកម្ម"
+  },
+  "pagination": {
+    "page": "ទំព័រ",
+    "of": "នៃ",
+    "prev": "មុន",
+    "next": "បន្ទាប់",
+    "itemsPerPage": "ចំនួនក្នុងមួយទំព័រ: "
+  },
+  "error_message": {
+    "failed_delete_course": "ការលុបវគ្គសិក្សាបរាជ័យ សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ។"
+  },
+  "success_message": {
+    "success_delete_course": "លុបវគ្គសិក្សាជោគជ័យ"
+  },
+  "info_message": {
+    "delete_item": "លុបធាតុ",
+    "confirm_delete_item": "តើអ្នកប្រាកដថាចង់លុបធាតុនេះមែនទេ? សកម្មភាពនេះមិនអាចត្រឡប់ក្រោយវិញបានទេ។"
   }
 }

@@ -77,9 +77,9 @@ export function LoginForm() {
                 navigate("/");
             }
 
-        } catch (error) {
+        } catch (error:any) {
             console.error("Login error:", error);
-            toast.error("Login failed. Please check your credentials.");
+            toast.error("Login error: "+error?.data?.message);
         } finally {
             dispatch(setLoading(false));
         }

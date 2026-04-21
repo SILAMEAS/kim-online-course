@@ -7,7 +7,7 @@ import {
 } from "@/lib/api/api.generated.ts";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
-import {DynamicFormDialog} from "@/components/dialog/DynamicFormDialog.tsx";
+import {CustomDynamicDialog} from "@/components/dialog/CustomDynamicDialog.tsx";
 import {toast} from "sonner";
 import React from "react";
 import {useForm} from "react-hook-form";
@@ -16,8 +16,11 @@ import {firstNameSchema} from "@/lib/validations/global-schema.ts";
 import {z} from "zod";
 import {Button} from "@/components/ui/button.tsx";
 import {Plus} from "lucide-react";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 export default function AdminCategoriesPage() {
+    const {t} = useTranslation()
     const {
         setFilter,
         filter,
@@ -57,14 +60,14 @@ export default function AdminCategoriesPage() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold">Categories</h1>
-                    <p className="text-muted-foreground mt-1">Manage uploaded categories</p>
+                    <h1 className="text-3xl font-bold">{t(Localization("dashboard", "categories"))}</h1>
+                    <p className="text-muted-foreground mt-1">{t(Localization("dashboard", "manage_category"))}</p>
 
                 </div>
-                    <Button onClick={handleAdd}>
-                        <Plus className="mr-2 h-4 w-4"/>
-                        Add Category
-                    </Button>
+                <Button onClick={handleAdd}>
+                    <Plus className="mr-2 h-4 w-4"/>
+                    {t(Localization("actions", "add_course"))}
+                </Button>
             </div>
 
             <CustomTable<Category>
@@ -85,11 +88,10 @@ export default function AdminCategoriesPage() {
                 }}
 
             />
-            <DynamicFormDialog
+            <CustomDynamicDialog
                 open={open}
                 setOpen={setOpen}
-                title={selectedItem ? "Edit User" : "Add User"}
-                description={selectedItem ? "Update user information" : "Create a new user account"}
+                title={t(Localization('actions', selectedItem ? "update_category_information" : "create_new_category"))}
                 form={form}
                 fields={[
                     {name: "name", label: "Category Name", type: "text", placeholder: "web development"},

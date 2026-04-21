@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,} from '@/components/ui/dialog.tsx';
+import {Dialog, DialogContent, DialogHeader, DialogTitle,} from '@/components/ui/dialog.tsx';
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from '@/components/ui/form.tsx';
 import {Input} from '@/components/ui/input.tsx';
 import {Textarea} from '@/components/ui/textarea.tsx';
@@ -29,6 +29,8 @@ import {
     priceSchema,
     quantitySchema
 } from "@/lib/validations/global-schema.ts";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 interface CourseDialogProps {
     open: boolean;
@@ -57,12 +59,16 @@ export function AddEditCourseDialog({
                                         selectedCourse,
                                         handleSuccess
                                     }: Readonly<CourseDialogProps>) {
+    const {t} = useTranslation();
     const [preview, setPreview] = useState<string | null>(null);
     const {currentData, refetch, isLoading} = useListTeachersQuery({
         ...DefaultPaginationRequest,
         limit: 100
     }, {skip: !open});
-    const categoriesQuery = useListCategoriesQuery({...DefaultPaginationRequest, limit: 100}, {skip: !open,refetchOnMountOrArgChange: true});
+    const categoriesQuery = useListCategoriesQuery({...DefaultPaginationRequest, limit: 100}, {
+        skip: !open,
+        refetchOnMountOrArgChange: true
+    });
     const teachers = currentData?.contents || [];
     const categories = categoriesQuery?.currentData?.contents || [];
     const [addCourse] = useCreateCourseMutation();
@@ -84,7 +90,7 @@ export function AddEditCourseDialog({
             description: "",
             instructorId: 0,
             categoryId: 0,
-            price: 0,
+            price: 10,
             status: "DRAFT",
             level: "BEGINNER",
             file: "",
@@ -159,7 +165,6 @@ export function AddEditCourseDialog({
             }
 
             if (isUpdate) {
-                console.log("Updating course with data:", formData);
                 await updateCourse({
                     courseId: Number(selectedCourse?.id),
                     updateCourseRequest: formData as any
@@ -190,10 +195,7 @@ export function AddEditCourseDialog({
         }}>
             <DialogContent className="max-w-2xl ">
                 <DialogHeader>
-                    <DialogTitle>{selectedCourse ? 'Edit Course' : 'Add New Course'}</DialogTitle>
-                    <DialogDescription>
-                        {selectedCourse ? 'Update course information' : 'Create a new course'}
-                    </DialogDescription>
+                    <DialogTitle>{t(Localization('actions', selectedCourse ? "edit_course" : "add_course"))}</DialogTitle>
                 </DialogHeader>
 
                 <Form {...form}>
@@ -207,7 +209,7 @@ export function AddEditCourseDialog({
                             name="title"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Course Title</FormLabel>
+                                    <FormLabel>{t(Localization('tableHeaders', 'title'))}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter course title" {...field} />
                                     </FormControl>
@@ -221,7 +223,7 @@ export function AddEditCourseDialog({
                             name="description"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Description</FormLabel>
+                                    <FormLabel>{t(Localization('tableHeaders', 'description'))}</FormLabel>
                                     <FormControl>
                                         <Textarea placeholder="Course description" {...field} />
                                     </FormControl>
@@ -236,7 +238,7 @@ export function AddEditCourseDialog({
                                 name="instructorId"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Instructor</FormLabel>
+                                        <FormLabel>{t(Localization('tableHeaders', 'instructor'))}</FormLabel>
                                         <FormControl>
                                             <select
                                                 {...field}
@@ -262,7 +264,7 @@ export function AddEditCourseDialog({
                                 name="categoryId"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Category</FormLabel>
+                                        <FormLabel>{t(Localization('tableHeaders', 'category'))}</FormLabel>
                                         <FormControl>
                                             <select {...field}
                                                     className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
@@ -281,7 +283,7 @@ export function AddEditCourseDialog({
                                 name="level"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Level</FormLabel>
+                                        <FormLabel>{t(Localization('tableHeaders', 'level'))}</FormLabel>
                                         <FormControl>
                                             <select {...field}
                                                     className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
@@ -305,7 +307,7 @@ export function AddEditCourseDialog({
                                 name="price"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Price</FormLabel>
+                                        <FormLabel>{t(Localization('tableHeaders', 'price'))}</FormLabel>
                                         <FormControl>
                                             <Input type="number" placeholder="99.99" {...field} />
                                         </FormControl>
@@ -319,7 +321,7 @@ export function AddEditCourseDialog({
                                 name="status"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Status</FormLabel>
+                                        <FormLabel>{t(Localization('tableHeaders', 'status'))}</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
@@ -329,7 +331,6 @@ export function AddEditCourseDialog({
                                             <SelectContent>
                                                 <SelectItem value="DRAFT">Draft</SelectItem>
                                                 <SelectItem value="PUBLISHED">Published</SelectItem>
-                                                <SelectItem value="ARCHIVED">Archived</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage/>
@@ -343,7 +344,7 @@ export function AddEditCourseDialog({
                             name="file"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Image</FormLabel>
+                                    <FormLabel>{t(Localization('tableHeaders', 'image'))}</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="file"
@@ -380,7 +381,7 @@ export function AddEditCourseDialog({
                         )}
                         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                             {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                            {selectedCourse ? 'Update Course' : 'Create Course'}
+                            {t(Localization('actions', selectedCourse ? "edit_course" : "add_course"))}
                         </Button>
                     </form>
                 </Form>

@@ -10,14 +10,9 @@ import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {EnumRole} from "@/lib/enum.ts";
 import {toast} from "sonner";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
-// const paymentSchema = z.object({
-//     userId: z.string().min(1, 'User is required'),
-//     courseId: z.string().min(1, 'Course is required'),
-//     amount: z.coerce.number().min(0.01, 'Amount must be greater than 0'),
-//     paymentMethod: z.enum(['CREDIT_CARD', 'DEBIT_CARD', 'PAYPAL', 'BANK_TRANSFER']),
-//     status: z.enum(['PENDING', 'COMPLETED', 'FAILED', 'REFUNDED']),
-// });
 
 export default function AdminPaymentsPage() {
     const {
@@ -31,6 +26,7 @@ export default function AdminPaymentsPage() {
         isLoading,
         isFetching
     } = useGetAllPaymentsQuery(filter, {refetchOnMountOrArgChange: true,});
+    const {t} = useTranslation();
     const [approve, approveResult] = useApproveMutation();
     const payments = currentData?.contents ?? [];
 
@@ -39,8 +35,8 @@ export default function AdminPaymentsPage() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold">Payments</h1>
-                    <p className="text-muted-foreground mt-1">Manage course payments</p>
+                    <h1 className="text-3xl font-bold">{t(Localization("tableHeaders","payments"))}</h1>
+                    <p className="text-muted-foreground mt-1">{t(Localization("tableHeaders","manage_payments"))}</p>
                 </div>
             </div>
 

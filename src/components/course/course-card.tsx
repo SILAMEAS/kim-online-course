@@ -11,6 +11,8 @@ import {
 import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 import {useAppSelector} from "@/lib/redux/hooks.ts";
 import {cn} from "@/lib/utils.ts";
+import {toast} from "sonner";
+
 import {useTranslation} from "react-i18next";
 import {Localization} from "@/i18n/lang";
 
@@ -36,17 +38,21 @@ export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
             {/* Course Image */}
             <Button variant="outline" className={'absolute left-1 top-1 z-20 bg-green-200'} onClick={async (e) => {
                 if (!currentUser) {
-                    alert("You must be logged in to add courses to your wishlist.");
+                    toast.warning("You must be logged in to add courses to your wishlist.");
                     return;
                 }
                 if (checkedWishlist()) {
                     await removeWishlist({
                         courseId: course.id,
-                    });
+                    }).unwrap();
                 } else {
-                    await addWishlist({
-                        courseId: course.id
-                    });
+                    try {
+                        await addWishlist({
+                            courseId: course.id
+                        }).unwrap();
+                    } catch (e: any) {
+                        return toast.error("Failed to add course to wishlist :" + e?.data?.message);
+                    }
                 }
                 wishlistQuery.refetch();
                 e.preventDefault();
@@ -139,7 +145,7 @@ export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
 
                     {/* Button */}
                     <Button className="w-full mt-auto" size="sm">
-                        {t(Localization("course","view_course"))}
+                        {t(Localization("course", "view_course"))}
                     </Button>
                 </div>
             </Link>

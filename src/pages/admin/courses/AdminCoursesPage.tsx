@@ -15,9 +15,12 @@ import {formatDurationVideo} from "@/lib/utils/formatDurationVideo.ts";
 import {Badge} from "@/components/ui/badge.tsx";
 import {formatWord} from "@/lib/utils/FormatWord.ts";
 import {useNavigate} from "react-router-dom";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 
 export default function AdminCoursesPage() {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const {
         filter,
@@ -43,12 +46,12 @@ export default function AdminCoursesPage() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold">Courses</h1>
-                    <p className="text-muted-foreground mt-1">Manage all courses</p>
+                    <h1 className="text-3xl font-bold">{t(Localization("dashboard", "courses"))}</h1>
+                    <p className="text-muted-foreground mt-1">{t(Localization("dashboard", "manage_all_course"))}</p>
                 </div>
                 <Button onClick={handleAdd}>
                     <Plus className="mr-2 h-4 w-4"/>
-                    Add Course
+                    {t(Localization("actions", "add_course"))}
                 </Button>
             </div>
 

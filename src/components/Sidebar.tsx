@@ -6,7 +6,8 @@ import {
     Image,
     LayoutDashboard,
     PanelLeftClose,
-    PanelLeftOpen, Shapes,
+    PanelLeftOpen,
+    Shapes,
     UserCheck,
     Users,
     Video
@@ -73,6 +74,7 @@ export const Sidebar = ({navItems, pathname}: SidebarProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const renderItems = navItems ?? navItemsDefault;
     const {t} = useTranslation();
+
     return (
         <>
             {/* Drawer toggle button (small screens) */}
@@ -105,8 +107,8 @@ export const Sidebar = ({navItems, pathname}: SidebarProps) => {
                     {/* Header */}
                     <div className="p-6 border-b border-border flex justify-between items-center">
                         <div>
-                            <h1 className="text-2xl font-bold text-foreground">{t(Localization("form","admin_panel"))}</h1>
-                            <p className="text-sm text-muted-foreground mt-1">{t(Localization("form","system"))}</p>
+                            <h1 className="text-2xl font-bold text-foreground">{t(Localization("form", "admin_panel"))}</h1>
+                            <p className="text-sm text-muted-foreground mt-1">{t(Localization("form", "system"))}</p>
                         </div>
                         {/* Close button for small screens */}
 
@@ -132,7 +134,7 @@ export const Sidebar = ({navItems, pathname}: SidebarProps) => {
                                         isActive={pathname === item.href}
                                     >
                                         <Icon className="h-5 w-5"/>
-                                        {item.label}
+                                        {t(Localization("admin_nav", item.label as any))}
                                     </Link>
                                 );
                             })}
@@ -142,7 +144,7 @@ export const Sidebar = ({navItems, pathname}: SidebarProps) => {
                     {/* Footer */}
                     <div className="p-4 border-t border-border">
                         <Button variant="outline" className="w-full">
-                            {t(Localization("loginPage","logout"))}
+                            {t(Localization("loginPage", "logout"))}
                         </Button>
                     </div>
                 </div>

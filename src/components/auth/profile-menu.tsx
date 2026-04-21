@@ -80,7 +80,7 @@ export function ProfileMenu() {
                             className="flex items-center gap-2 cursor-pointer"
                         >
                             <ArrowRightLeft className="w-4 h-4"/>
-                            {`Go to ${isLocalAdmin ? "Student" : "Admin"}`}
+                            {t(Localization("profile", isLocalAdmin ? "go_student" : "go_admin"))}
                         </Link>
                     </DropdownMenuItem>
                 }

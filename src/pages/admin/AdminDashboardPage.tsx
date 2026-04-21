@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {BookOpen, DollarSign, Image as ImageIcon, QrCodeIcon, UserCheck, Users, Video} from 'lucide-react';
 import Link from "@/components/Link.tsx";
@@ -49,8 +49,12 @@ function StatCard({title, value, icon, description, href, isLoading}: Readonly<S
 }
 
 export default function AdminDashboardPage() {
-    const {currentData, isLoading} = useDashboardQuery();
+    const {currentData, isLoading, refetch} = useDashboardQuery();
     const {t} = useTranslation();
+    const loadingValue = (total?: number) => isLoading ? 'Loading...' : total ?? 0;
+    useEffect(() => {
+        refetch()
+    }, [])
     return (
         <div className="space-y-8">
             <div>
@@ -61,7 +65,7 @@ export default function AdminDashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <StatCard
                     title={t(Localization("dashboard", "total_users"))}
-                    value={currentData?.totalUsers || 'Loading...'}
+                    value={loadingValue(currentData?.totalUsers)}
                     icon={<Users className="h-4 w-4"/>}
                     description={`${t(Localization("dashboard", "active_users"))}`}
                     href="/admin/users"
@@ -69,7 +73,7 @@ export default function AdminDashboardPage() {
                 />
                 <StatCard
                     title={t(Localization("dashboard", "total_teachers"))}
-                    value={currentData?.totalTeachers || 'Loading...'}
+                    value={loadingValue(currentData?.totalTeachers)}
                     icon={<Users className="h-4 w-4"/>}
                     description={`${t(Localization("dashboard", "teachers_accounts"))}`}
                     href={`/admin/users?role=${EnumRole.INSTRUCTOR}`}
@@ -77,7 +81,7 @@ export default function AdminDashboardPage() {
                 />
                 <StatCard
                     title={t(Localization("dashboard", "total_students"))}
-                    value={currentData?.totalStudents || 'Loading...'}
+                    value={loadingValue(currentData?.totalStudents)}
                     icon={<Users className="h-4 w-4"/>}
                     description={`${t(Localization("dashboard", "students_accounts"))}`}
                     href={`/admin/users?role=${EnumRole.STUDENT}`}
@@ -85,7 +89,7 @@ export default function AdminDashboardPage() {
                 />
                 <StatCard
                     title={t(Localization("dashboard", "courses"))}
-                    value={currentData?.totalCourses || 'Loading...'}
+                    value={loadingValue(currentData?.totalCourses)}
                     icon={<BookOpen className="h-4 w-4"/>}
                     description={`${t(Localization("dashboard", "published_courses"))}`}
                     href="/admin/courses"
@@ -93,7 +97,7 @@ export default function AdminDashboardPage() {
                 />
                 <StatCard
                     title={t(Localization("dashboard", "videos"))}
-                    value={currentData?.totalVideos || 'Loading...'}
+                    value={loadingValue(currentData?.totalVideos)}
                     icon={<Video className="h-4 w-4"/>}
                     description={`${t(Localization("dashboard", "total_videos"))}`}
                     href="/admin/videos"
@@ -109,7 +113,7 @@ export default function AdminDashboardPage() {
                 />
                 <StatCard
                     title={t(Localization("dashboard", "enrollments"))}
-                    value={currentData?.totalEnrollments || 'Loading...'}
+                    value={loadingValue(currentData?.totalEnrollments)}
                     icon={<UserCheck className="h-4 w-4"/>}
                     description={`${t(Localization("dashboard", "active_enrollments"))}`}
                     href="/admin/enrollments"
@@ -117,7 +121,7 @@ export default function AdminDashboardPage() {
                 />
                 <StatCard
                     title={t(Localization("dashboard", "images"))}
-                    value={currentData?.totalImages || 'Loading...'}
+                    value={loadingValue(currentData?.totalImages)}
                     icon={<ImageIcon className="h-4 w-4"/>}
                     description={`${t(Localization("dashboard", "uploaded_images"))}`}
                     href="/admin/images"
@@ -125,7 +129,7 @@ export default function AdminDashboardPage() {
                 />
                 <StatCard
                     title={t(Localization("dashboard", "categories"))}
-                    value={currentData?.totalCategories || 'Loading...'}
+                    value={loadingValue(currentData?.totalCategories)}
                     icon={<QrCodeIcon className="h-4 w-4"/>}
                     description={`${t(Localization("dashboard", "total_categories"))}`}
                     href="/admin/categories"

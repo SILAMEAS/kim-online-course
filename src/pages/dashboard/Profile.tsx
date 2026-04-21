@@ -97,7 +97,7 @@ export default function ProfilePage() {
             toast.success(`Update password successfully!`);
             formChangePassword.reset(); // Clear form
         } catch (error: any) {
-            alert(error.message);
+            toast.error(error?.data?.message || "Failed to update password");
         }
     };
 

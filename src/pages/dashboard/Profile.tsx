@@ -9,8 +9,14 @@ import {Avatar, AvatarImage} from "@/components/ui/avatar";
 import {toast} from "sonner";
 import {Calendar, Loader2, Mail} from "lucide-react";
 import {z} from "zod";
-import {UserRequest, useUpdateProfileMutation} from "@/lib/api/api.generated.ts";
+import {
+    UpdatePasswordReq,
+    UserRequest,
+    useUpdatePasswordMutation,
+    useUpdateProfileMutation
+} from "@/lib/api/api.generated.ts";
 import useRestoreUserByToken from "@/hooks/useRestoreUserByToken.tsx";
+import {passwordSchema} from "@/lib/validations/global-schema.ts";
 
 const profileUpdateSchema = z.object({
     firstName: z.string().min(2, 'Name must be at least 2 characters').max(50),
@@ -21,8 +27,22 @@ const profileUpdateSchema = z.object({
     ]).optional(),
 });
 
+const updatePasswordSchema = z.object({
+    currentPassword: passwordSchema,
+    newPassword: passwordSchema,
+    confirmPassword: passwordSchema
+}).refine((data) => data.newPassword === data.confirmPassword, {
+    message: "New passwords do not match",
+    path: ["confirmPassword"],
+})
+    .refine((data) => data.currentPassword !== data.newPassword, {
+        message: "New password cannot be the same as your old one",
+        path: ["password"],
+    });
+
 export default function ProfilePage() {
     const {currentData: currentUser, refetch} = useRestoreUserByToken();
+    const [updatePassword] = useUpdatePasswordMutation();
     const [updateProfile] = useUpdateProfileMutation();
     const [preview, setPreview] = useState<string | null>(null);
     const form = useForm<UserRequest>({
@@ -31,6 +51,14 @@ export default function ProfilePage() {
             firstName: "",
             lastName: "",
             file: undefined
+        },
+    });
+    const formChangePassword = useForm<UpdatePasswordReq>({
+        resolver: zodResolver(updatePasswordSchema),
+        defaultValues: {
+            currentPassword: "",
+            newPassword: "",
+            confirmPassword: ""
         },
     });
 
@@ -55,6 +83,23 @@ export default function ProfilePage() {
         form.reset();
         setPreview(null);
     }
+
+    const onSubmitUpdatePassword = async (data: any) => {
+        try {
+            const formData = new FormData();
+
+            formData.append("newPassword", data.newPassword);
+            formData.append("currentPassword", data.currentPassword);
+            await updatePassword({
+                updatePasswordReq: formData as any
+            }).unwrap();
+
+            toast.success(`Update password successfully!`);
+            formChangePassword.reset(); // Clear form
+        } catch (error: any) {
+            alert(error.message);
+        }
+    };
 
     useEffect(() => {
         if (currentUser) {
@@ -110,21 +155,15 @@ export default function ProfilePage() {
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t">
                     <div>
-                        {/*<p className="text-2xl font-bold">*/}
-                        {/*    {currentUser.enrolled_courses.length}*/}
-                        {/*</p>*/}
+
                         <p className="text-sm text-foreground/60">Courses Enrolled</p>
                     </div>
                     <div>
-                        {/*<p className="text-2xl font-bold">*/}
-                        {/*    {currentUser.certificates.length}*/}
-                        {/*</p>*/}
+
                         <p className="text-sm text-foreground/60">Certificates</p>
                     </div>
                     <div>
-                        {/*<p className="text-2xl font-bold">*/}
-                        {/*    {Math.floor(currentUser.enrolled_courses.length * 8.5)}*/}
-                        {/*</p>*/}
+
                         <p className="text-sm text-foreground/60">Learning Hours</p>
                     </div>
                     <div>
@@ -221,7 +260,62 @@ export default function ProfilePage() {
                     <p className="text-sm text-foreground/60 mb-4">
                         Keep your account secure by regularly updating your password
                     </p>
-                    <Button variant="outline">Change Password</Button>
+                    <Form {...formChangePassword}>
+                        <form onSubmit={formChangePassword.handleSubmit(onSubmitUpdatePassword, (errors) => {
+                            // 🔍 Debugging: Log validation errors if submission fails
+                            console.error("Form Validation Failed:", errors);
+                            toast.error("Please check the form for errors.");
+                        })} className="space-y-4">
+                            <FormField
+                                control={formChangePassword.control}
+                                name="currentPassword"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Current Password</FormLabel>
+                                        <FormControl>
+                                            <Input type="password" placeholder="Enter current password" {...field} />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={formChangePassword.control}
+                                name="newPassword"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>New Password</FormLabel>
+                                        <FormControl>
+                                            <Input type="password" placeholder="Enter new password" {...field} />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* File Upload */}
+                            <FormField
+                                control={formChangePassword.control}
+                                name="confirmPassword"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Confirm Password</FormLabel>
+                                        <FormControl>
+                                            <Input type="password" placeholder="Enter confirm password" {...field} />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                            <Button type="submit" className="w-full"
+                                    disabled={formChangePassword.formState.isSubmitting}>
+                                {formChangePassword.formState.isSubmitting &&
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                                <p>Change Password</p>
+                            </Button>
+                        </form>
+                    </Form>
                 </div>
             </Card>
         </div>

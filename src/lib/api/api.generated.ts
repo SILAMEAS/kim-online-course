@@ -1,6 +1,16 @@
 import { apiSlice as api } from "./apiSlice";
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
+    updatePassword: build.mutation<
+      UpdatePasswordApiResponse,
+      UpdatePasswordApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/auths/update-password`,
+        method: "PUT",
+        body: queryArg.updatePasswordReq,
+      }),
+    }),
     getUserByJwtToken: build.query<
       GetUserByJwtTokenApiResponse,
       GetUserByJwtTokenApiArg
@@ -437,6 +447,12 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 export { injectedRtkApi as enhancedApi };
+export type UpdatePasswordApiResponse =
+  /** status 200 Password updated successfully */ GeneralResponse;
+export type UpdatePasswordApiArg = {
+  /** update password */
+  updatePasswordReq: UpdatePasswordReq;
+};
 export type GetUserByJwtTokenApiResponse =
   /** status 200 Profile retrieved successfully */ UserResponse;
 export type GetUserByJwtTokenApiArg = void;
@@ -750,6 +766,15 @@ export type DeleteVideoApiArg = {
   /** Video ID */
   id: number;
 };
+export type GeneralResponse = {
+  message?: string;
+  status?: number;
+};
+export type UpdatePasswordReq = {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword?: string;
+};
 export type UserResponse = {
   id: number;
   firstName: string;
@@ -763,10 +788,6 @@ export type UserRequest = {
   firstName: string;
   lastName: string;
   file?: Blob;
-};
-export type GeneralResponse = {
-  message?: string;
-  status?: number;
 };
 export type UpdateVideoRequest = {
   title?: string;
@@ -1095,6 +1116,7 @@ export type DashboardUserResponse = {
   learningStreak: number;
 };
 export const {
+  useUpdatePasswordMutation,
   useGetUserByJwtTokenQuery,
   useUpdateProfileMutation,
   useUpdateVideoMutation,

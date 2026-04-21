@@ -134,7 +134,7 @@ export default function Home() {
 
                             <div className="bg-card border border-border rounded-lg p-8">
                                 <div className="bg-accent/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                                    <Users className="w-6 h-6 text-accent"/>
+                                    <Users className="w-6 h-6 text-primary"/>
                                 </div>
                                 <h3 className="text-xl font-semibold mb-2">
                                     {t(Localization("home_page", "active_community"))}

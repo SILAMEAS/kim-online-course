@@ -140,13 +140,6 @@ export const Sidebar = ({navItems, pathname}: SidebarProps) => {
                             })}
                         </div>
                     </nav>
-
-                    {/* Footer */}
-                    <div className="p-4 border-t border-border">
-                        <Button variant="outline" className="w-full">
-                            {t(Localization("loginPage", "logout"))}
-                        </Button>
-                    </div>
                 </div>
             </aside>
         </>

@@ -8,8 +8,11 @@ import {CourseResponse, useListAllCoursesQuery} from "@/lib/api/api.generated.ts
 import {CustomTable, MODE_TABLE} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {CourseCard} from "@/components/course/course-card.tsx";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 export default function CoursesPage() {
+    const {t} = useTranslation();
     const {
         filter,
         setFilter,
@@ -19,7 +22,6 @@ export default function CoursesPage() {
         isLoading,
         isFetching
     } = useListAllCoursesQuery({...filter}, {refetchOnMountOrArgChange: true,});
-    // console.log("AdminCoursesPage",listCourseQuery?.data)
     const courses = currentData?.contents || [];
 
 
@@ -31,11 +33,7 @@ export default function CoursesPage() {
                 <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
                     {/* Header */}
                     <div className="mb-8">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-2">All Courses</h1>
-                        <p className="text-lg text-foreground/60">
-                            {/*{filteredCourses.length} course*/}
-                            {/*{filteredCourses.length !== 1 ? "s" : ""} available*/}
-                        </p>
+                        <h1 className="text-4xl md:text-5xl font-bold mb-2">{t(Localization("home_page", "all_courses"))}</h1>
                     </div>
 
                     {/* Layout */}

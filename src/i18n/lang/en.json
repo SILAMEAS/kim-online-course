@@ -229,5 +229,83 @@
   "info_message": {
     "delete_item": "Delete item",
     "confirm_delete_item": "Are you sure you want to delete this item? This action cannot be undone"
+  },
+  "home_page": {
+    "learn_skills_matter": "Learn Skills That Matter",
+    "join_us": "Join thousands of students and advance your career with world-class courses from industry experts.",
+    "explore_courses": "Explore Courses",
+    "learn_more": "Learn More",
+    "active_students": "Active Students",
+    "courses": "Courses",
+    "avg_rating": "Avg. Rating",
+    "success_rate": "Success Rate",
+    "why_choose_us": "Why Choose Learning outcomes?",
+    "advance_your_career": "Everything you need to advance your career and achieve your goals",
+    "expert_instructor": "Expert Instructors",
+    "hand_experience": "Learn from industry professionals with years of hands-on experience.",
+    "active_community": "Active Community",
+    "connect_with_learner": "Connect with thousands of learners and grow together.",
+    "certificates": "Certificates",
+    "earn_completion": "Earn recognized certificates upon course completion.",
+    "featured_courses": "Featured Courses",
+    "popular_courses": "Start with our most popular courses",
+    "view_all": "View All",
+    "ready_to_start_learning": "Ready to Start Learning?",
+    "cta_description": "Join millions of students learning on Learning outcomes. Start your first course today for free.",
+    "explore_all_courses": "Explore All Courses",
+    "all_courses": "All Courses"
+  },
+  "about_page": {
+    "title": "About Our Platform",
+    "subtitle": "We believe learning should be accessible, engaging, and life-changing. Join thousands of learners building better futures every day.",
+
+    "mission_title": "Our Mission",
+    "mission_description": "To empower people everywhere with high-quality, affordable education that helps them achieve their personal and professional goals — no matter where they are in life.",
+
+    "vision_title": "Our Vision",
+    "vision_description": "A world where anyone with an internet connection can access world-class learning and unlock their full potential.",
+
+    "core_values_title": "Our Core Values",
+
+    "quality_first_title": "Quality First",
+    "quality_first_description": "Every course is reviewed and improved continuously.",
+
+    "learner_centered_title": "Learner-Centered",
+    "learner_centered_description": "Your success and experience drive every decision.",
+
+    "excellence_title": "Excellence",
+    "excellence_description": "We partner only with top instructors and experts.",
+
+    "inclusivity_title": "Inclusivity",
+    "inclusivity_description": "Education should be open to everyone.",
+
+    "results_driven_title": "Results-Driven",
+    "results_driven_description": "We focus on real-world skills and outcomes.",
+
+    "journey_title": "Our Journey So Far",
+
+    "happy_learners": "Happy Learners",
+    "quality_courses": "Quality Courses",
+    "expert_instructors": "Expert Instructors",
+
+    "cta_button": "Start Learning Today"
+  },
+  "cart_page": {
+    "title": "Shopping Cart",
+    "items_in_cart": " courses in cart",
+    "empty_title": "Your cart is empty",
+    "empty_description": "Explore our courses and add them to your cart to get started.",
+    "continue_shopping": "Continue Shopping",
+    "tab_cart_items": "Cart Items ",
+    "tab_checkout": "Checkout",
+    "tab_payment": "Payment ",
+    "order_summary_title": "Order Summary",
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "total": "Total",
+    "payment_note": "you must pay with this QR before you click payment",
+    "contact_us": "contact us ",
+    "payment_button": "Payment"
+
   }
 }

@@ -28,8 +28,11 @@ import {
     AlertDialogDescription,
     AlertDialogTitle
 } from "@/components/ui/alert-dialog.tsx";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 export default function CartPage() {
+    const {t} = useTranslation();
     const [submitPayment, {isLoading: paymentLoading}] = useSubmitPaymentMutation();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -89,22 +92,22 @@ export default function CartPage() {
                     <div className="mb-8">
                         <h1 className="text-4xl md:text-5xl font-bold mb-2 flex items-center gap-3">
                             <ShoppingCart className="w-8 h-8"/>
-                            Shopping Cart
+                            {t(Localization("cart_page","title"))}
                         </h1>
                         <p className="text-lg text-foreground/60">
-                            {cart.quantity} course{cart.quantity !== 1 ? "s" : ""} in cart
+                            {cart.quantity}  {t(Localization("cart_page","items_in_cart"))}
                         </p>
                     </div>
                     <div className="text-center py-12">
                         <ShoppingCart className="w-16 h-16 mx-auto text-foreground/30 mb-4"/>
                         <h2 className="text-2xl font-semibold mb-2">
-                            Your cart is empty
+                            {t(Localization("cart_page","empty_title"))}
                         </h2>
                         <p className="text-foreground/60 mb-6">
-                            Explore our courses and add them to your cart to get started.
+                            {t(Localization("cart_page","empty_description"))}
                         </p>
                         <Button onClick={() => navigate("/courses")} size="lg">
-                            Continue Shopping
+                            {t(Localization("cart_page","continue_shopping"))}
                         </Button>
                     </div>
                     <Tabs

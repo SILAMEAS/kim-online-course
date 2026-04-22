@@ -269,7 +269,7 @@ export default function CourseDetailPage() {
                 setModalStudent(false)
             }}>
                 <AlertDialogContent className="w-[90vw] max-w-6xl">
-                    <AlertDialogTitle>List students</AlertDialogTitle>
+                    <AlertDialogTitle>{t(Localization("course_detail","list_student"))}</AlertDialogTitle>
                     <AlertDialogDescription>
                         <CustomTable<UserResponse>
                             setFilter={setFilter}

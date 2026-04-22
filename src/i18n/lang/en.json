@@ -314,7 +314,9 @@
     "to_teach": "to teach.",
     "wishlist_empty_message": "Your wishlist is empty",
     "save_course_to_learn": "Save courses you want to learn later",
-    "add_course_to_wishlist": "Add course to wishlist"
+    "add_course_to_wishlist": "Add course to wishlist",
+    "verify_payment": "Are you sure you ready pay this QR ?",
+    "verify_payment_title": "Verify Payment"
   },
   "sidebar": {
     "my_courses": "My Courses",

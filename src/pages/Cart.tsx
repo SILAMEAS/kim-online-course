@@ -22,7 +22,6 @@ import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -222,7 +221,10 @@ export default function CartPage() {
                                    href={"https://t.me/moeurkkimsour"}> https://t.me/moeurkkimsour</a></p>
                             <Button onClick={() => setVerifyPayment(true)}
 
-                                    disabled={currentUser?.role !== EnumRole.STUDENT || cart?.items?.length === 0}> {paymentLoading ? "Payment..." : "Payment"}</Button>
+                                    disabled={currentUser?.role !== EnumRole.STUDENT || cart?.items?.length === 0}
+                            >
+
+                                {t(Localization("cart_page", "payment_button"))} {paymentLoading ? "..." : ""}</Button>
                         </TabsContent>
 
                         {/*    Payments Tab*/}
@@ -231,7 +233,6 @@ export default function CartPage() {
                                 setFilter={setFilter}
                                 filter={filter}
                                 columns={[
-                                    {key: 'id', label: 'ID', sortable: true},
                                     {
                                         key: 'user', label: 'Email', sortable: false, render: (r) => {
                                             const user = (r as UserResponse);
@@ -243,7 +244,7 @@ export default function CartPage() {
                                             return <p> {(r as CourseResponse)?.title}</p>
                                         }
                                     },
-                                    {key: 'amount', label: 'Amount', sortable: true},
+                                    {key: 'amount', label: 'price', sortable: true},
                                     {key: 'status', label: 'Status', sortable: true},
                                 ]}
                                 data={payments}
@@ -262,15 +263,16 @@ export default function CartPage() {
 
             <AlertDialog open={verifyPayment} onOpenChange={() => setVerifyPayment(false)}>
                 <AlertDialogContent>
-                    <AlertDialogTitle>Verify Payment</AlertDialogTitle>
+                    <AlertDialogTitle> {t(Localization('cart_page', 'verify_payment_title'))}</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you ready pay this QR ?
+                        {t(Localization('cart_page', 'verify_payment'))}
                     </AlertDialogDescription>
 
-                    <div className="flex justify-end gap-3">
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <div className="flex justify-end gap-3 items-center">
+                        <AlertDialogCancel
+                            className="h-full text-red-500">{t(Localization('actions', 'cancel'))}</AlertDialogCancel>
 
-                        <AlertDialogAction
+                        <AlertDialogCancel
                             onClick={async () => {
                                 try {
                                     if (!cart?.items) return;
@@ -290,11 +292,9 @@ export default function CartPage() {
                                 }
                             }
                             }
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
-
-                            Yes
-                        </AlertDialogAction>
+                            {t(Localization('actions', 'submit'))}
+                        </AlertDialogCancel>
                     </div>
                 </AlertDialogContent>
             </AlertDialog>

@@ -32,8 +32,11 @@ import {
 } from "@/components/ui/alert-dialog.tsx";
 import {CustomTable} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 export default function CourseDetailPage() {
+    const {t} = useTranslation();
     const dispatch = useAppDispatch();
     const currentUser = useSelector((state: RootState) => state.auth.currentUser);
     const {id: courseId} = useParams<{ id: string }>();
@@ -110,13 +113,13 @@ export default function CourseDetailPage() {
                       {courseDetailQuery?.currentData?.rating}
                     </span>
                                         <span className="text-foreground/60">
-                      ({courseDetailQuery?.currentData?.reviewsCount} reviews)
+                      ({courseDetailQuery?.currentData?.reviewsCount}) {t(Localization("course_detail","reviews"))}
                     </span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Users className="w-4 h-4"/>
                                         <span>
-                      {courseDetailQuery?.currentData?.studentsCount} students
+                          {courseDetailQuery?.currentData?.studentsCount} {t(Localization("course_detail","students"))}
                     </span>
                                     </div>
                                     <div className="flex items-center gap-2">
@@ -128,7 +131,7 @@ export default function CourseDetailPage() {
 
                             {/* Instructor */}
                             <div className="bg-card border border-border rounded-lg p-6">
-                                <h3 className="text-lg font-semibold mb-4">Instructor</h3>
+                                <h3 className="text-lg font-semibold mb-4">{t(Localization("tableHeaders", "instructor"))}</h3>
                                 <div className="flex items-center gap-4">
                                     <Avatar className="h-16 w-16">
                                         <AvatarImage
@@ -182,14 +185,15 @@ export default function CourseDetailPage() {
                                             ${courseDetailQuery?.currentData?.price?.toFixed(2)}
                                         </p>
                                         <p className="text-sm text-foreground/60">
-                                            One-time payment
+                                            {t(Localization("course_detail","one_time_payment"))}
+
                                         </p>
                                     </div>
 
                                     {hasBeenEnrollments ? (
                                         <Button className="w-full" disabled>
                                             <BookMarked className="w-4 h-4 mr-2"/>
-                                            Already Enrolled
+                                            {t(Localization("course_detail","already_enrolled"))}
                                         </Button>
                                     ) : (
                                         <Button
@@ -228,28 +232,28 @@ export default function CourseDetailPage() {
                                             onClick={() => setModalStudent(true)}
                                         >
                                             <User className="w-4 h-4"/>
-                                            <span>View students</span>
+                                            <span>{t(Localization("course_detail","view_students"))}</span>
                                         </Button>
                                     }
 
                                     <div className="space-y-3 text-sm">
                                         <div className="flex items-start gap-3">
                                             <Clock className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary"/>
-                                            <span>{formatDurationVideo(Number(courseDetailQuery?.currentData?.duration))} of content</span>
+                                            <span>{formatDurationVideo(Number(courseDetailQuery?.currentData?.duration))} {t(Localization("course_detail","content_duration"))}</span>
                                         </div>
                                         <div className="flex items-start gap-3">
                                             <Star className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary"/>
-                                            <span>Certificate of completion</span>
+                                            <span>{t(Localization("course_detail","certificate_of_completion"))}</span>
                                         </div>
                                         <div className="flex items-start gap-3">
                                             <Users className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary"/>
-                                            <span>Access on mobile and desktop</span>
+                                            <span>{t(Localization("course_detail","access_on_mobile_and_desktop"))}</span>
                                         </div>
                                     </div>
 
                                     <div className="border-t pt-6">
                                         <p className="text-xs text-foreground/60 text-center">
-                                            30-day money-back guarantee
+                                            {t(Localization("course_detail","money_back_guarantee"))}
                                         </p>
                                     </div>
                                 </div>

@@ -8,9 +8,12 @@ import {addToCart} from "@/lib/redux/slices/cart.slice.ts";
 import {EnumRole} from "@/lib/enum.ts";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {CustomTable, MODE_TABLE} from "@/components/table/CustomTable.tsx";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 export default function WishlistPage() {
     const currentUser = useAppSelector((state) => state.auth.currentUser);
+    const {t} = useTranslation();
     const {
         setFilter,
         filter,
@@ -31,9 +34,9 @@ export default function WishlistPage() {
         <div className="space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-4xl font-bold mb-2">Wishlist</h1>
+                <h1 className="text-4xl font-bold mb-2">{t(Localization("sidebar","wishlist"))}</h1>
                 <p className="text-foreground/60">
-                    Save courses you want to learn later
+                    {t(Localization("cart_page","wishlist_empty_message"))}
                 </p>
             </div>
 
@@ -41,13 +44,13 @@ export default function WishlistPage() {
                 <Card className="p-12 border border-border text-center">
                     <Heart className="w-16 h-16 mx-auto text-foreground/30 mb-4"/>
                     <h2 className="text-2xl font-semibold mb-2">
-                        Your wishlist is empty
+                        {t(Localization("cart_page","empty_state_title"))}
                     </h2>
                     <p className="text-foreground/60 mb-6">
-                        Add courses to your wishlist to save them for later
+                        {t(Localization("cart_page","add_course_to_wishlist"))}
                     </p>
                     <Link to="/courses">
-                        <Button size="lg">Browse Courses</Button>
+                        <Button size="lg">{t(Localization('footer','browse_course'))}</Button>
                     </Link>
                 </Card>
             ) : (

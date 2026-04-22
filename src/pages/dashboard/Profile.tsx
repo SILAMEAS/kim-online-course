@@ -17,6 +17,8 @@ import {
 } from "@/lib/api/api.generated.ts";
 import useRestoreUserByToken from "@/hooks/useRestoreUserByToken.tsx";
 import {passwordSchema} from "@/lib/validations/global-schema.ts";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 const profileUpdateSchema = z.object({
     firstName: z.string().min(2, 'Name must be at least 2 characters').max(50),
@@ -41,6 +43,7 @@ const updatePasswordSchema = z.object({
     });
 
 export default function ProfilePage() {
+    const {t} = useTranslation();
     const {currentData: currentUser, refetch} = useRestoreUserByToken();
     const [updatePassword] = useUpdatePasswordMutation();
     const [updateProfile] = useUpdateProfileMutation();
@@ -122,19 +125,17 @@ export default function ProfilePage() {
         <div className="space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-4xl font-bold mb-2">Profile Settings</h1>
-                <p className="text-foreground/60">Manage your account information</p>
+                <h1 className="text-4xl font-bold mb-2">{t(Localization("profile_details","profile_settings"))}</h1>
+                <p className="text-foreground/60">{t(Localization("profile_details","manage_account"))}</p>
             </div>
 
             {/* Profile Overview */}
             <Card className="p-6 border border-border">
-                <h3 className="text-xl font-semibold mb-6">Account Information</h3>
+                <h3 className="text-xl font-semibold mb-6">{t(Localization("profile_details","account_information"))}</h3>
 
                 <div className="flex items-center gap-6 mb-8">
                     <Avatar className="h-20 w-20">
-                        {preview && <AvatarImage src={preview} alt={name}/>
-                        }
-                        {/*<AvatarFallback>{initials}</AvatarFallback>*/}
+                        {preview && <AvatarImage src={preview} alt={name}/>}
                     </Avatar>
                     <div>
                         <p className="text-lg font-semibold">{name}</p>
@@ -144,10 +145,7 @@ export default function ProfilePage() {
                         </p>
                         <p className="text-sm text-foreground/60 flex items-center gap-2 mt-1">
                             <Calendar className="w-4 h-4"/>
-                            Member since{" "}
-                            {/*{formatDistanceToNow(new Date(currentUser.created_at), {*/}
-                            {/*    addSuffix: true,*/}
-                            {/*})}*/}
+                            {t(Localization("profile_details","member_since"))}
                         </p>
                     </div>
                 </div>
@@ -156,26 +154,24 @@ export default function ProfilePage() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t">
                     <div>
 
-                        <p className="text-sm text-foreground/60">Courses Enrolled</p>
+                        <p className="text-sm text-foreground/60">{t(Localization("profile_details","courses_enrolled"))}</p>
                     </div>
                     <div>
 
-                        <p className="text-sm text-foreground/60">Certificates</p>
+                        <p className="text-sm text-foreground/60">{t(Localization("profile_details","certificates"))}</p>
                     </div>
                     <div>
 
-                        <p className="text-sm text-foreground/60">Learning Hours</p>
-                    </div>
-                    <div>
+                        <p className="text-sm text-foreground/60">{t(Localization("profile_details","learning_hours"))}</p>
                         <p className="text-2xl font-bold">4.7</p>
-                        <p className="text-sm text-foreground/60">Avg. Rating</p>
+                        <p className="text-sm text-foreground/60">{t(Localization("profile_details","avg_rating"))}</p>
                     </div>
                 </div>
             </Card>
 
             {/* Edit Profile */}
             <Card className="p-6 border border-border">
-                <h3 className="text-xl font-semibold mb-6">Edit Profile</h3>
+                <h3 className="text-xl font-semibold mb-6">{t(Localization("profile_details","edit_profile"))}</h3>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit, (errors) => {
                         // 🔍 Debugging: Log validation errors if submission fails
@@ -187,9 +183,9 @@ export default function ProfilePage() {
                             name="firstName"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>First Name</FormLabel>
+                                    <FormLabel>{t(Localization("profile_details","first_name"))}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter course title" {...field} />
+                                        <Input placeholder="Enter first name" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -201,9 +197,9 @@ export default function ProfilePage() {
                             name="lastName"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Last Name</FormLabel>
+                                    <FormLabel>{t(Localization("profile_details","last_name"))}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter course title" {...field} />
+                                        <Input placeholder="Enter last name" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -216,7 +212,7 @@ export default function ProfilePage() {
                             name="file"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Image</FormLabel>
+                                    <FormLabel>{t(Localization("profile_details","image"))}</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="file"
@@ -246,7 +242,7 @@ export default function ProfilePage() {
                         />
                         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                             {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                            <p>Update Profile</p>
+                            <p>{t(Localization("profile_details","update_profile"))}</p>
                         </Button>
                     </form>
                 </Form>
@@ -254,11 +250,11 @@ export default function ProfilePage() {
 
             {/* Security */}
             <Card className="p-6 border border-border">
-                <h3 className="text-xl font-semibold mb-6">Security</h3>
+                <h3 className="text-xl font-semibold mb-6">{t(Localization("profile_details","security"))}</h3>
 
                 <div className="space-y-4">
                     <p className="text-sm text-foreground/60 mb-4">
-                        Keep your account secure by regularly updating your password
+                        {t(Localization("profile_details","security_subtitle"))}
                     </p>
                     <Form {...formChangePassword}>
                         <form onSubmit={formChangePassword.handleSubmit(onSubmitUpdatePassword, (errors) => {
@@ -271,7 +267,7 @@ export default function ProfilePage() {
                                 name="currentPassword"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Current Password</FormLabel>
+                                        <FormLabel>{t(Localization("profile_details","current_password"))}</FormLabel>
                                         <FormControl>
                                             <Input type="password" placeholder="Enter current password" {...field} />
                                         </FormControl>
@@ -285,7 +281,7 @@ export default function ProfilePage() {
                                 name="newPassword"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>New Password</FormLabel>
+                                        <FormLabel>{t(Localization("profile_details","new_password"))}</FormLabel>
                                         <FormControl>
                                             <Input type="password" placeholder="Enter new password" {...field} />
                                         </FormControl>
@@ -300,7 +296,7 @@ export default function ProfilePage() {
                                 name="confirmPassword"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Confirm Password</FormLabel>
+                                        <FormLabel>{t(Localization("profile_details","confirm_password"))}</FormLabel>
                                         <FormControl>
                                             <Input type="password" placeholder="Enter confirm password" {...field} />
                                         </FormControl>
@@ -312,7 +308,7 @@ export default function ProfilePage() {
                                     disabled={formChangePassword.formState.isSubmitting}>
                                 {formChangePassword.formState.isSubmitting &&
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                <p>Change Password</p>
+                                <p>{t(Localization("profile_details","change_password"))}</p>
                             </Button>
                         </form>
                     </Form>

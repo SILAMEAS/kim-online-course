@@ -6,16 +6,18 @@ import {Link, useNavigate} from "react-router-dom";
 import {useListAllCoursesStudentEnrollmentQuery} from "@/lib/api/api.generated.ts";
 import {useEffect} from "react";
 import {EnumRole} from "@/lib/enum.ts";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 export default function DashboardOverview() {
     const currentUser = useAppSelector((state) => state.auth.currentUser);
     const {currentData} = useListAllCoursesStudentEnrollmentQuery({id: Number(currentUser?.id)}, {skip: !currentUser?.id});
     const navigate = useNavigate();
-
+    const {t} = useTranslation();
     const stats = [
         {
             id: "courseTotal",
-            label: "Courses Enrolled",
+            label: t(Localization("profile_details", "courses_enrolled")),
             value: currentData?.total ?? 0,
             icon: BookMarked,
             color: "text-blue-500",
@@ -35,10 +37,10 @@ export default function DashboardOverview() {
             {/* Welcome Section */}
             <div>
                 <h1 className="text-4xl font-bold mb-2">
-                    Welcome back, {currentUser?.name}!
+                    {t(Localization("loginPage", "welcome"))}, {currentUser?.name}!
                 </h1>
                 <p className="text-foreground/60">
-                    Keep up your learning momentum and continue growing
+                    {t(Localization("profile", "keep_learning"))}
                 </p>
             </div>
 
@@ -63,38 +65,28 @@ export default function DashboardOverview() {
             {/* Quick Links */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card className="p-6 border border-border">
-                    <h3 className="text-xl font-semibold mb-2">Continue Learning</h3>
+                    <h3 className="text-xl font-semibold mb-2">{t(Localization("course", "continue_learning"))}</h3>
                     <p className="text-foreground/60 mb-4">
                         {currentData?.total && (currentData?.total > 0)
                             ? "Pick up where you left off"
                             : "Start your first course today"}
                     </p>
                     <Link to="/dashboard/my-courses">
-                        <Button>View My Courses</Button>
+                        <Button>{t(Localization("course", "view_my_courses"))}</Button>
                     </Link>
                 </Card>
 
                 <Card className="p-6 border border-border">
-                    <h3 className="text-xl font-semibold mb-2">Explore More Courses</h3>
+                    <h3 className="text-xl font-semibold mb-2">{t(Localization("course", "explore_more_courses"))}</h3>
                     <p className="text-foreground/60 mb-4">
-                        Discover new skills and expand your knowledge
+                        {t(Localization("course", "discover_new_skill"))}
                     </p>
                     <Link to="/courses">
-                        <Button variant="outline">Browse Courses</Button>
+                        <Button variant="outline">{t(Localization("footer", "browse_course"))}</Button>
                     </Link>
                 </Card>
             </div>
 
-            {/* Recent Activity */}
-            <Card className="p-6 border border-border">
-                <h3 className="text-xl font-semibold mb-4">Recent Activity</h3>
-                <div className="space-y-3 text-sm text-foreground/60">
-                    <p>✓ Completed lesson in React: The Complete Guide</p>
-                    <p>✓ Earned certificate in Web Design Fundamentals</p>
-                    <p>✓ Started learning Node.js and Express.js</p>
-                    <p>✓ Left a 5-star review on Python for Data Science</p>
-                </div>
-            </Card>
         </div>
     );
 }

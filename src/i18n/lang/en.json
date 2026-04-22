@@ -40,7 +40,8 @@
     "about_us": "About Us",
     "contact": "Contact",
     "categories": "Categories",
-    "learning_outcome": "Learning Outcome"
+    "learning_outcome": "Learning Outcome",
+    "course": "Courses"
   },
   "contactPage": {
     "have_questions": "Have questions? Feedback? Want to become an instructor? We'd love to hear from you.",
@@ -63,7 +64,10 @@
     "dashboard": "Dashboard",
     "my_courses": "My Courses",
     "go_admin": "Go to Admin",
-    "go_student": "Go to Student"
+    "go_student": "Go to Student",
+    "keep_learning": " Keep up your learning momentum and continue growing",
+    "continue_learning": "Continue Learning",
+    "continue_teaching": "Continue Teaching"
   },
   "cart": {
     "tax_10": "Tax (10%)",
@@ -105,8 +109,13 @@
     "search_course": "Search Course",
     "price_range": "Price Range",
     "clear_filters": "Clear Filters",
+    "filters": "Filters",
     "level": "Level",
-    "order_summary": "Order Summary"
+    "order_summary": "Order Summary",
+    "continue_learning": "Continue Learning",
+    "discover_new_skill": "Discover new skills and expand your knowledge",
+    "explore_more_courses": "Explore More Courses",
+    "view_my_courses": "View My Courses"
   },
   "admin": {
     "admin_panel": "Admin Panel",
@@ -258,36 +267,25 @@
   "about_page": {
     "title": "About Our Platform",
     "subtitle": "We believe learning should be accessible, engaging, and life-changing. Join thousands of learners building better futures every day.",
-
     "mission_title": "Our Mission",
     "mission_description": "To empower people everywhere with high-quality, affordable education that helps them achieve their personal and professional goals — no matter where they are in life.",
-
     "vision_title": "Our Vision",
     "vision_description": "A world where anyone with an internet connection can access world-class learning and unlock their full potential.",
-
     "core_values_title": "Our Core Values",
-
     "quality_first_title": "Quality First",
     "quality_first_description": "Every course is reviewed and improved continuously.",
-
     "learner_centered_title": "Learner-Centered",
     "learner_centered_description": "Your success and experience drive every decision.",
-
     "excellence_title": "Excellence",
     "excellence_description": "We partner only with top instructors and experts.",
-
     "inclusivity_title": "Inclusivity",
     "inclusivity_description": "Education should be open to everyone.",
-
     "results_driven_title": "Results-Driven",
     "results_driven_description": "We focus on real-world skills and outcomes.",
-
     "journey_title": "Our Journey So Far",
-
     "happy_learners": "Happy Learners",
     "quality_courses": "Quality Courses",
     "expert_instructors": "Expert Instructors",
-
     "cta_button": "Start Learning Today"
   },
   "cart_page": {
@@ -305,7 +303,66 @@
     "total": "Total",
     "payment_note": "you must pay with this QR before you click payment",
     "contact_us": "contact us ",
-    "payment_button": "Payment"
-
+    "payment_button": "Payment",
+    "my_course": "My Courses",
+    "enrollment_count": "You have {{number}} course(s) enrolled.",
+    "empty_state_title": "No courses yet",
+    "empty_state_subtitle": "Start learning by enrolling in your first course",
+    "button_text": "Browse Courses",
+    "to_teach": "to teach.",
+    "wishlist_empty_message": "Your wishlist is empty",
+    "save_course_to_learn": "Save courses you want to learn later",
+    "add_course_to_wishlist": "Add course to wishlist"
+  },
+  "sidebar": {
+    "my_courses": "My Courses",
+    "wishlist": "Wishlist",
+    "profile": "Profile",
+    "dashboard": "Dashboard"
+  },
+  "profile_details": {
+    "my_courses": "My Courses",
+    "manage_account": "Manage your account information",
+    "wishlist": "Wishlist",
+    "profile_settings": "Profile Settings",
+    "enrollment_count": "You have 0 course(s) enrolled.",
+    "no_courses_yet": "No courses yet",
+    "start_learning": "Start learning by enrolling in your first course",
+    "browse_courses": "Browse Courses",
+    "wishlist_empty": "Your wishlist is empty",
+    "wishlist_description": "Save courses you want to learn later",
+    "account_information": "Account Information",
+    "member_since": "Member since",
+    "courses_enrolled": "Courses Enrolled",
+    "certificates": "Certificates",
+    "learning_hours": "Learning Hours",
+    "avg_rating": "Avg. Rating",
+    "edit_profile": "Edit Profile",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "image": "Image",
+    "choose_file": "Choose File",
+    "no_file_chosen": "No file chosen",
+    "update_profile": "Update Profile",
+    "security": "Security",
+    "security_subtitle": "Keep your account secure by regularly updating your password",
+    "current_password": "Current Password",
+    "new_password": "New Password",
+    "confirm_password": "Confirm Password",
+    "enter_current_password": "Enter current password",
+    "enter_new_password": "Enter new password",
+    "enter_confirm_password": "Enter confirm password",
+    "change_password": "Change Password"
+  },
+  "course_detail": {
+    "one_time_payment": "One-time payment",
+    "already_enrolled": "Already Enrolled",
+    "content_duration": "of content",
+    "certificate_of_completion": "Certificate of completion",
+    "access_on_mobile_and_desktop": "Access on mobile and desktop",
+    "money_back_guarantee": "30-day money-back guarantee",
+    "view_students": "View Students",
+    "reviews": "Reviews",
+    "students": "Students"
   }
 }

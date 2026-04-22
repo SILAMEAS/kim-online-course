@@ -1,16 +1,19 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button.tsx";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 interface MobileNavProps {
   isAuthenticated: boolean;
   onClose: () => void;
 }
 
-export function MobileNav({ isAuthenticated, onClose }: MobileNavProps) {
+export function MobileNav({ isAuthenticated, onClose }: Readonly<MobileNavProps>) {
+  const {t}=useTranslation();
   const navItems = [
-    { to: "/courses", label: "Courses" },
-    { to: "/about", label: "About" },
-    { to: "/contact", label: "Contact" },
+    { to: "/courses", label: "course" },
+    { to: "/about", label: "about_us" },
+    { to: "/contact", label: "contact" },
   ];
 
   return (
@@ -22,7 +25,7 @@ export function MobileNav({ isAuthenticated, onClose }: MobileNavProps) {
           onClick={onClose}
           className="px-4 py-2 text-foreground/70 hover:text-foreground transition"
         >
-          {item.label}
+          {t(Localization("footer",item.label as any))}
         </Link>
       ))}
 

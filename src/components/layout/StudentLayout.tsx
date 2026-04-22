@@ -6,6 +6,8 @@ import {cn} from "@/lib/utils.ts";
 import {EnumRole} from "@/lib/enum.ts";
 import {useAppSelector} from "@/lib/redux/hooks.ts";
 import CustomLayout from "@/components/layout/CustomLayout.tsx";
+import {useTranslation} from "react-i18next";
+import {Localization} from "@/i18n/lang";
 
 interface ISidebarItem {
     to: string,
@@ -17,25 +19,25 @@ interface ISidebarItem {
 const SIDEBAR_ITEMS: Array<ISidebarItem> = [
     {
         to: "/dashboard",
-        label: "Dashboard",
+        label: "dashboard",
         icon: LayoutDashboard,
         rolesAccess: [EnumRole.STUDENT]
     },
     {
         to: "/dashboard/my-courses",
-        label: "My Courses",
+        label: "my_courses",
         icon: BookMarked,
         rolesAccess: [EnumRole.ADMIN, EnumRole.INSTRUCTOR, EnumRole.STUDENT]
     },
     {
         to: "/dashboard/wishlist",
-        label: "Wishlist",
+        label: "wishlist",
         icon: Heart,
         rolesAccess: [EnumRole.ADMIN, EnumRole.INSTRUCTOR, EnumRole.STUDENT]
     },
     {
         to: "/dashboard/profile",
-        label: "Profile",
+        label: "profile",
         icon: User,
         rolesAccess: [EnumRole.ADMIN, EnumRole.INSTRUCTOR, EnumRole.STUDENT]
     }
@@ -45,6 +47,7 @@ const SIDEBAR_ITEMS: Array<ISidebarItem> = [
 
 export default function StudentLayout() {
     const {currentUser} = useAppSelector(state => state.auth);
+    const {t}=useTranslation();
 
     return (
         <CustomLayout>
@@ -64,7 +67,7 @@ export default function StudentLayout() {
                                                     className="w-full justify-start gap-3"
                                                 >
                                                     <Icon className="w-5 h-5"/>
-                                                    <span>{item.label}</span>
+                                                    <span>{t(Localization('sidebar',item.label as any))}</span>
                                                 </Button>
                                             </Link>
                                         );

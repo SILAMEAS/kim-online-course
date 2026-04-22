@@ -90,7 +90,7 @@ export default function CartPage() {
                 <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
                     {/* Header */}
                     <div className="mb-8">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-2 flex items-center gap-3">
+                        <h1 className="text-4xl md:text-4xl font-bold mb-2 flex items-center gap-3">
                             <ShoppingCart className="w-8 h-8"/>
                             {t(Localization("cart_page","title"))}
                         </h1>

@@ -12,9 +12,12 @@ import {EnumRole} from "@/lib/enum.ts";
 import {cn} from "@/lib/utils.ts";
 import {CustomTable, MODE_TABLE} from "@/components/table/CustomTable.tsx";
 import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 export default function MyCoursesPage() {
     const currentUser = useAppSelector((state) => state.auth.currentUser);
+    const {t} = useTranslation();
     const {
         setFilter,
         filter,
@@ -44,22 +47,22 @@ export default function MyCoursesPage() {
         <div className="space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-4xl font-bold mb-2">{`My Courses ${isTeacher ? "to teach." : ""}`}</h1>
+                <h1 className="text-4xl font-bold mb-2">{`${t(Localization("cart_page","my_course"))} ${isTeacher ? t(Localization("cart_page","to_teach")) : ""}`}</h1>
                 <p className={cn("text-foreground/60", isTeacher && "hidden")}>
-                    {`You have ${enrolledCourse?.length} course(s) enrolled.`}
+                    {t(Localization("cart_page", "enrollment_count"), {number: enrolledCourse?.length})}
                 </p>
             </div>
 
             {enrolledCourse?.length === 0 ? (
                 <Card className="p-12 border border-border text-center">
                     <BookMarked className="w-16 h-16 mx-auto text-foreground/30 mb-4"/>
-                    <h2 className="text-2xl font-semibold mb-2">No courses yet</h2>
+                    <h2 className="text-2xl font-semibold mb-2"> {t(Localization("cart_page","empty_state_title"))}</h2>
                     <p className="text-foreground/60 mb-6">
-                        Start learning by enrolling in your first course
+                        {t(Localization("cart_page","empty_state_subtitle"))}
                     </p>
                     <Link to="/courses">
                         <Button size="lg">
-                            Browse Courses
+                            {t(Localization("footer","browse_course"))}
                             <ArrowRight className="w-4 h-4 ml-2"/>
                         </Button>
                     </Link>
@@ -106,7 +109,7 @@ export default function MyCoursesPage() {
                                 {/* Button */}
                                 <Link to={`/courses/${course.id}`}>
                                     <Button variant="outline" size="sm" className="gap-2">
-                                        Continue {isTeacher ? "Teaching" : "Learning"}
+                                        {t(Localization("profile", isTeacher ? "continue_teaching" : "continue_learning"))}
                                         <ArrowRight className="w-4 h-4"/>
                                     </Button>
                                 </Link>

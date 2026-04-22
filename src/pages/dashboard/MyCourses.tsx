@@ -47,7 +47,7 @@ export default function MyCoursesPage() {
         <div className="space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-4xl font-bold mb-2">{`${t(Localization("cart_page","my_course"))} ${isTeacher ? t(Localization("cart_page","to_teach")) : ""}`}</h1>
+                <h1 className="text-xl font-bold mb-2">{`${t(Localization("cart_page","my_course"))} ${isTeacher ? t(Localization("cart_page","to_teach")) : ""}`}</h1>
                 <p className={cn("text-foreground/60", isTeacher && "hidden")}>
                     {t(Localization("cart_page", "enrollment_count"), {number: enrolledCourse?.length})}
                 </p>

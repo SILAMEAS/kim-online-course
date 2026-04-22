@@ -92,7 +92,8 @@
     "australia": "Australia",
     "uk": "United Kingdom",
     "us": "United States",
-    "canada": "Canada"
+    "canada": "Canada",
+    "must_pay_with_qr": "you must pay with this QR before you click payment"
   },
   "course": {
     "share_feedback": "Share Your Feedback...",
@@ -296,7 +297,8 @@
     "continue_shopping": "Continue Shopping",
     "tab_cart_items": "Cart Items ",
     "tab_checkout": "Checkout",
-    "tab_payment": "Payment ",
+    "tab_cart": "Cart Item({{count}})",
+    "tab_payment": "Payment({{count}}) ",
     "order_summary_title": "Order Summary",
     "subtotal": "Subtotal",
     "tax": "Tax",

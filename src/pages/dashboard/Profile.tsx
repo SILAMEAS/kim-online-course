@@ -125,7 +125,7 @@ export default function ProfilePage() {
         <div className="space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-4xl font-bold mb-2">{t(Localization("profile_details","profile_settings"))}</h1>
+                <h1 className="text-xl font-bold mb-2">{t(Localization("profile_details","profile_settings"))}</h1>
                 <p className="text-foreground/60">{t(Localization("profile_details","manage_account"))}</p>
             </div>
 

@@ -38,7 +38,7 @@ export default function Home() {
                         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
 
                             <div className="flex-1">
-                                <h1 className="text-4xl md:text-4xl font-bold text-balance mb-4">
+                                <h1 className="text-xl md:text-4xl font-bold text-balance mb-4">
                                     {t(Localization("home_page", "learn_skills_matter"))}
                                 </h1>
 
@@ -109,7 +109,7 @@ export default function Home() {
                     <div className="max-w-7xl mx-auto px-4 md:px-6">
 
                         <div className="text-center mb-12">
-                            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                            <h2 className="text-xl md:text-4xl font-bold mb-4">
                                 {t(Localization("home_page", "why_choose_us"))}
                             </h2>
 
@@ -166,7 +166,7 @@ export default function Home() {
 
                         <div className="flex items-center justify-between mb-12">
                             <div>
-                                <h2 className="text-3xl md:text-4xl font-bold mb-2">
+                                <h2 className="text-xl md:text-4xl font-bold mb-2">
                                     {t(Localization("home_page", "featured_courses"))}
                                 </h2>
                                 <p className="text-foreground/60">
@@ -202,7 +202,7 @@ export default function Home() {
                 <section className="py-12 md:py-20 bg-primary text-primary-foreground">
                     <div className="max-w-7xl mx-auto px-4 md:px-6 text-center">
 
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                        <h2 className="text-xl md:text-4xl font-bold mb-4">
                             {t(Localization("home_page", "ready_to_start_learning"))}
                         </h2>
 

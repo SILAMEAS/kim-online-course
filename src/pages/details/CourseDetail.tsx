@@ -98,7 +98,7 @@ export default function CourseDetailPage() {
                                     <Badge>{courseDetailQuery?.currentData?.category?.name}</Badge>
                                     <Badge variant="secondary">{courseDetailQuery?.currentData?.level}</Badge>
                                 </div>
-                                <h1 className="text-4xl font-bold mb-4">
+                                <h1 className="text-xl md:text-4xl font-bold mb-4">
                                     {courseDetailQuery?.currentData?.title}
                                 </h1>
                                 <p className="text-lg text-foreground/70 mb-6">

@@ -33,7 +33,7 @@ export default function CoursesPage() {
                 <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
                     {/* Header */}
                     <div className="mb-8">
-                        <h1 className="text-4xl md:text-4xl font-bold mb-2">{t(Localization("home_page", "all_courses"))}</h1>
+                        <h1 className="text-xl md:text-4xl font-bold mb-2">{t(Localization("home_page", "all_courses"))}</h1>
                     </div>
 
                     {/* Layout */}

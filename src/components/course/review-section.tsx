@@ -10,7 +10,7 @@ export function RatingSummary({average, total, breakdown}: Readonly<CourseRating
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-secondary/10 p-6 rounded-xl">
             <div>
-                <div className="text-4xl font-extrabold mb-2">{average}</div>
+                <div className="text-xl font-extrabold mb-2">{average}</div>
                 <div className="flex items-center gap-1 mb-2">
                     <StarRating rating={Number(average)} size="w-5 h-5"/>
                 </div>

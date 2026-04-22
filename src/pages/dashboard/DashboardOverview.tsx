@@ -36,7 +36,7 @@ export default function DashboardOverview() {
         <div className="space-y-8">
             {/* Welcome Section */}
             <div>
-                <h1 className="text-4xl font-bold mb-2">
+                <h1 className="text-xl font-bold mb-2">
                     {t(Localization("loginPage", "welcome"))}, {currentUser?.name}!
                 </h1>
                 <p className="text-foreground/60">

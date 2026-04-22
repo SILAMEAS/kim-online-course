@@ -17,7 +17,7 @@ export default function AboutPage() {
 
                     {/* Hero */}
                     <div className="text-center mb-12 md:mb-16">
-                        <h1 className="text-4xl md:text-4xl font-bold mb-3">
+                        <h1 className="text-xl md:text-4xl font-bold mb-3">
                             {t(Localization("about_page", "title"))}
                         </h1>
 
@@ -57,7 +57,7 @@ export default function AboutPage() {
 
                     {/* Values */}
                     <div className="mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
+                        <h2 className="text-xl md:text-4xl font-bold text-center mb-10">
                             {t(Localization("about_page", "core_values_title"))}
                         </h2>
 
@@ -118,14 +118,14 @@ export default function AboutPage() {
 
                     {/* Stats */}
                     <div className="text-center space-y-6 mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold">
+                        <h2 className="text-xl md:text-4xl font-bold">
                             {t(Localization("about_page", "journey_title"))}
                         </h2>
 
                         <div className="grid sm:grid-cols-3 gap-8 max-w-4xl mx-auto pt-6">
 
                             <div>
-                                <p className="text-4xl md:text-4xl font-bold text-primary">
+                                <p className="text-xl md:text-4xl font-bold text-primary">
                                     85k+
                                 </p>
                                 <p className="text-lg text-foreground/70 mt-2">
@@ -134,7 +134,7 @@ export default function AboutPage() {
                             </div>
 
                             <div>
-                                <p className="text-4xl md:text-4xl font-bold text-primary">
+                                <p className="text-xl md:text-4xl font-bold text-primary">
                                     420+
                                 </p>
                                 <p className="text-lg text-foreground/70 mt-2">
@@ -143,7 +143,7 @@ export default function AboutPage() {
                             </div>
 
                             <div>
-                                <p className="text-4xl md:text-4xl font-bold text-primary">
+                                <p className="text-xl md:text-4xl font-bold text-primary">
                                     60+
                                 </p>
                                 <p className="text-lg text-foreground/70 mt-2">

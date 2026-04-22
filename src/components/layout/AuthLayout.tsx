@@ -17,7 +17,7 @@ export default function AuthLayout() {
                 </Link>
 
                 <div>
-                    <h1 className="text-4xl font-bold mb-4">
+                    <h1 className="text-xl font-bold mb-4">
                         {t(Localization("loginPage","welcome_to_learning_outcomes"))}
                     </h1>
                     <p className="text-lg opacity-90">

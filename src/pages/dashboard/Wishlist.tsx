@@ -34,7 +34,7 @@ export default function WishlistPage() {
         <div className="space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-4xl font-bold mb-2">{t(Localization("sidebar","wishlist"))}</h1>
+                <h1 className="text-xl font-bold mb-2">{t(Localization("sidebar","wishlist"))}</h1>
                 <p className="text-foreground/60">
                     {t(Localization("cart_page","wishlist_empty_message"))}
                 </p>

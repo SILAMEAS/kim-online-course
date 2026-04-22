@@ -90,24 +90,24 @@ export default function CartPage() {
                 <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
                     {/* Header */}
                     <div className="mb-8">
-                        <h1 className="text-4xl md:text-4xl font-bold mb-2 flex items-center gap-3">
+                        <h1 className="text-xl md:text-4xl font-bold mb-2 flex items-center gap-3">
                             <ShoppingCart className="w-8 h-8"/>
-                            {t(Localization("cart_page","title"))}
+                            {t(Localization("cart_page", "title"))}
                         </h1>
-                        <p className="text-lg text-foreground/60">
-                            {cart.quantity}  {t(Localization("cart_page","items_in_cart"))}
+                        <p className="text-sm md:text-lg text-foreground/60">
+                            {cart.quantity} {t(Localization("cart_page", "items_in_cart"))}
                         </p>
                     </div>
                     <div className="text-center py-12">
                         <ShoppingCart className="w-16 h-16 mx-auto text-foreground/30 mb-4"/>
                         <h2 className="text-2xl font-semibold mb-2">
-                            {t(Localization("cart_page","empty_title"))}
+                            {t(Localization("cart_page", "empty_title"))}
                         </h2>
                         <p className="text-foreground/60 mb-6">
-                            {t(Localization("cart_page","empty_description"))}
+                            {t(Localization("cart_page", "empty_description"))}
                         </p>
                         <Button onClick={() => navigate("/courses")} size="lg">
-                            {t(Localization("cart_page","continue_shopping"))}
+                            {t(Localization("cart_page", "continue_shopping"))}
                         </Button>
                     </div>
                     <Tabs
@@ -116,17 +116,18 @@ export default function CartPage() {
                         className="w-full"
                     >
                         <TabsList className="grid w-full max-w-xs grid-cols-3 mb-8">
-                            <TabsTrigger value="cart">{`Cart Items (${cart?.items?.length})`}</TabsTrigger>
+                            <TabsTrigger
+                                value="cart">{t(Localization("cart_page", "tab_cart"), {count: cart?.items?.length ?? 0})}</TabsTrigger>
                             <TabsTrigger
                                 value="checkout"
                             >
-                                Checkout
+                                {t(Localization("cart_page", "tab_checkout"))}
 
                             </TabsTrigger>
                             <TabsTrigger
                                 value="payments"
                             >
-                                {`Payment (${currentData?.total ?? 0})`}
+                                {t(Localization("cart_page", "tab_payment"), {count: currentData?.total ?? 0})}
                             </TabsTrigger>
                         </TabsList>
 
@@ -172,9 +173,9 @@ export default function CartPage() {
 
                                 {/* Order Summary */}
 
-                                <div className="bg-card border border-border rounded-lg p-6 h-fit sticky top-24">
+                                <div className="bg-card border border-border rounded-lg p-6 h-fit  top-24">
                                     <h3 className="text-xl font-semibold mb-6">
-                                        Order Summary
+                                        {t(Localization("cart_page", "order_summary_title"))}
                                     </h3>
 
                                     <div className="space-y-3 mb-6 pb-6 border-b">
@@ -195,17 +196,14 @@ export default function CartPage() {
 
                                     <div className="space-y-2 mb-6">
                                         <div className="flex justify-between text-sm">
-                                            <span className="text-foreground/60">Subtotal</span>
+                                            <span
+                                                className="text-foreground/60">{t(Localization("cart_page", "subtotal"))}</span>
                                             <span>${cart.total.toFixed(2)}</span>
-                                        </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-foreground/60">Tax (10%)</span>
-                                            <span>${tax.toFixed(2)}</span>
                                         </div>
                                     </div>
 
                                     <div className="border-t pt-4 flex justify-between">
-                                        <span className="font-semibold">Total</span>
+                                        <span className="font-semibold">{t(Localization("cart", 'total'))}</span>
                                         <span className="text-2xl font-bold text-primary">
                         ${finalTotal.toFixed(2)}
                       </span>
@@ -217,11 +215,9 @@ export default function CartPage() {
                                 </div>
 
                             </div>
-                            <p className={'text-gray-500 text-sm'}> you must pay with this QR before you
-                                click
-                                payment</p>
+                            <p className={'text-gray-500 text-sm'}> {t(Localization("cart", 'must_pay_with_qr'))}</p>
                             <p className={'text-gray-500 text-sm'}>
-                                contact us :
+                                {t(Localization("footer", 'contact'))} :
                                 <a className={'text-blue-500'}
                                    href={"https://t.me/moeurkkimsour"}> https://t.me/moeurkkimsour</a></p>
                             <Button onClick={() => setVerifyPayment(true)}

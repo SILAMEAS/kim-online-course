@@ -159,7 +159,8 @@
     "title": "Quick actions",
     "manage_users": "Manage users",
     "manage_courses": "Manage courses",
-    "view_payments": "View payments"
+    "view_payments": "View payments",
+    "view_image": "View image"
   },
   "admin_user": {
     "title": "Users",

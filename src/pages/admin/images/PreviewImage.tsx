@@ -5,10 +5,10 @@ export function PreviewImage({src, alt}: Readonly<{ src: string; alt: string }>)
     const [error, setError] = useState(false);
 
     return (
-        <div className="relative w-full flex justify-center">
+        <div className="relative w-full flex justify-center min-h-40">
             {loading && (
                 <div className="absolute inset-0 flex items-center justify-center py-2">
-                    <div className="animate-pulse w-72 h-40 bg-muted rounded-md" />
+                    <div className="animate-pulse w-72 h-40 bg-muted rounded-md"/>
                 </div>
             )}
 

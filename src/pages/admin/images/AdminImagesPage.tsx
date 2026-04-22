@@ -61,7 +61,7 @@ export default function AdminImagesPage() {
                 setPreviewImage(null)
             }}>
                 <AlertDialogContent>
-                    <AlertDialogTitle>View Image</AlertDialogTitle>
+                    <AlertDialogTitle>{t(Localization('quick_actions', 'view_image'))}</AlertDialogTitle>
                     <AlertDialogDescription>
                         {previewImage && (
                             <PreviewImage

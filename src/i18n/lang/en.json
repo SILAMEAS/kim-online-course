@@ -364,6 +364,7 @@
     "view_students": "View Students",
     "reviews": "Reviews",
     "students": "Students",
-    "list_student": "List students"
+    "list_student": "List students",
+    "based_on_reviews": "Based on {{count}} review"
   }
 }

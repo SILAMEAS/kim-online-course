@@ -366,6 +366,7 @@
     "view_students": "មើលចំនួនសិស្ស",
     "reviews": "ការវាយតម្លៃ",
     "students": "សិស្ស",
-    "list_student": "រាយឈ្មោះសិស្ស"
+    "list_student": "រាយឈ្មោះសិស្ស",
+    "based_on_reviews": "វាយតម្លៃចំនួន {{count}}"
   }
 }

@@ -82,7 +82,7 @@ export default function CourseDetailPage() {
                     <img
                         src={courseDetailQuery?.currentData?.imageUrl}
                         alt={`${courseDetailQuery?.currentData?.title}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                     />
                     <div className="absolute inset-0 bg-black/40"/>
                 </section>

@@ -2,8 +2,11 @@ import {Star} from 'lucide-react';
 import {formatDistanceToNow} from 'date-fns';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {CourseRatingDto} from "@/lib/api/api.generated.ts";
+import {Localization} from "@/i18n/lang";
+import {useTranslation} from "react-i18next";
 
 export function RatingSummary({average, total, breakdown}: Readonly<CourseRatingDto>) {
+    const {t}=useTranslation();
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-secondary/10 p-6 rounded-xl">
             <div>
@@ -12,7 +15,9 @@ export function RatingSummary({average, total, breakdown}: Readonly<CourseRating
                     <StarRating rating={Number(average)} size="w-5 h-5"/>
                 </div>
                 <p className="text-sm text-foreground/60">
-                    Based on {total} {total === 1 ? 'review' : 'reviews'}
+                    {/*Based on {total} {total === 1 ? 'review' : 'reviews'}*/}
+
+                    {t(Localization("course_detail","based_on_reviews"),{count:total})}
                 </p>
             </div>
 

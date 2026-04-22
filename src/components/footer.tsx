@@ -126,13 +126,13 @@ export function Footer() {
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-foreground/60">
           <p>&copy; {currentYear} Learning outcomes. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
-            <Link to="/privacy" className="hover:text-primary transition">
+            <Link to="#" className="hover:text-primary transition">
               Privacy Policy
             </Link>
-            <Link to="/terms" className="hover:text-primary transition">
+            <Link to="#" className="hover:text-primary transition">
               Terms of Service
             </Link>
-            <Link to="/cookies" className="hover:text-primary transition">
+            <Link to="#" className="hover:text-primary transition">
               Cookie Policy
             </Link>
           </div>

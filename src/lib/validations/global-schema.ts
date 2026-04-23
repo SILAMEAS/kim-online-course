@@ -79,8 +79,8 @@ export const videoFileSchema = fileSchema
     .refine(file => !file || file.type.startsWith("video/"), {
         message: "Only videos allowed",
     })
-    .refine(file => !file || file.size <= 50 * 1024 * 1024, {
-        message: "Max size 50MB",
+    .refine(file => !file || file.size <= 100 * 1024 * 1024, {
+        message: "Max size 100MB",
     });
 
 // Optional file (edit mode)

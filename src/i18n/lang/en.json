@@ -371,5 +371,10 @@
     "students": "Students",
     "list_student": "List students",
     "based_on_reviews": "Based on {{count}} review"
+  },
+  "duration_format": {
+    "h": "hours",
+    "m": "minutes",
+    "s": "seconds"
   }
 }

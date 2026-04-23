@@ -100,7 +100,7 @@ export function CourseCard({course}: Readonly<{ course: CourseResponse }>) {
                     </h3>
 
                     {/* Description */}
-                    <p className="text-sm text-foreground/60 line-clamp-2 mb-4">
+                    <p className="text-sm text-foreground/60 line-clamp-2 mb-4 hidden">
                         {course.description}
                     </p>
 

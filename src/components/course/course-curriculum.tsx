@@ -28,11 +28,11 @@ export function CourseCurriculum({curriculum}: Readonly<CourseCurriculumProps>) 
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg border border-border">
-                <h3 className="font-semibold">{t(Localization("course","view_course"))}</h3>
+                <h3 className="font-semibold">{t(Localization("course", "view_course"))}</h3>
                 <div className="flex items-center gap-2 text-sm text-foreground/60">
                     <Clock className="w-4 h-4"/>
                     <span>
-            {formatDurationVideo(totalSeconds)} • {curriculum.length} lessons
+            {formatDurationVideo(totalSeconds)} • {curriculum.length} {t(Localization("course_detail", "lessons"))}
           </span>
                 </div>
             </div>

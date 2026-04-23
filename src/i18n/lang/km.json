@@ -366,13 +366,14 @@
     "already_enrolled": "បានចុះឈ្មោះរួចហើយ",
     "content_duration": "នៃមាតិកាមេរៀន",
     "certificate_of_completion": "វិញ្ញាបនបត្របញ្ចប់ការសិក្សា",
-    "access_on_mobile_and_desktop": "ចូលរៀនបានតាមរយៈទូរសព្ទ និងកុំព្យូទ័រ",
+    "access_on_mobile_and_desktop": "ចូលរៀនបានតាមរយៈទូរសព្ទ៍ និងកុំព្យូទ័រ",
     "money_back_guarantee": "ធានាសងប្រាក់វិញក្នុងរយៈពេល ៣០ ថ្ងៃ",
     "view_students": "មើលចំនួនសិស្ស",
     "reviews": "ការវាយតម្លៃ",
     "students": "សិស្ស",
     "list_student": "រាយឈ្មោះសិស្ស",
-    "based_on_reviews": "វាយតម្លៃចំនួន {{count}}"
+    "based_on_reviews": "វាយតម្លៃចំនួន {{count}}",
+    "lessons": "មេរៀន"
   },
   "duration_format": {
     "h": "ម៉ោង",

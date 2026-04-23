@@ -370,7 +370,8 @@
     "reviews": "Reviews",
     "students": "Students",
     "list_student": "List students",
-    "based_on_reviews": "Based on {{count}} review"
+    "based_on_reviews": "Based on {{count}} review",
+    "lessons": "Lessons"
   },
   "duration_format": {
     "h": "hours",

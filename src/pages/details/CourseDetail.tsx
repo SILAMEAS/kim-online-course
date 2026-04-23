@@ -225,7 +225,7 @@ export default function CourseDetailPage() {
                                     )}
 
                                     {
-                                        currentUser?.role !== EnumRole.STUDENT &&
+                                        currentUser?.role !== EnumRole.STUDENT &&currentUser&&
                                         <Button
                                             variant="outline"
                                             className="w-full"

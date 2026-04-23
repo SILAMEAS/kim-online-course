@@ -16,7 +16,7 @@ import {Localization} from "@/i18n/lang";
 export default function Home() {
     const dispatch = useDispatch();
     const {t} = useTranslation();
-    const {currentData} = useListAllCoursesQuery(DefaultPaginationRequest);
+    const {currentData,isLoading} = useListAllCoursesQuery(DefaultPaginationRequest);
     const courses = currentData?.contents || [];
     const featuredCourses = courses.slice(0, 6);
 
@@ -191,7 +191,7 @@ export default function Home() {
                         ) : (
                             <div className="text-center py-12">
                                 <p className="text-foreground/60">
-                                    Loading courses...
+                                    {isLoading ? "loading ..." : "no courses found"}
                                 </p>
                             </div>
                         )}

@@ -46,7 +46,7 @@ export default function CourseDetailPage() {
     const videosByCourseIdQuery = useGetVideosByCourseIdQuery({
         ...DefaultPaginationRequest,
         courseId: Number(courseId)
-    }, {skip: currentUser?.role !== EnumRole.STUDENT})
+    }, {skip: !currentUser})
     const hasBeenEnrollments = enrollmentsByCourseQuery?.currentData?.contents?.find(d => d.course?.id === Number(courseId))
     const {
         setFilter, filter,

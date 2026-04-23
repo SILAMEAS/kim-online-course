@@ -6,7 +6,7 @@ import {Localization} from "@/i18n/lang";
 import {useTranslation} from "react-i18next";
 
 export function RatingSummary({average, total, breakdown}: Readonly<CourseRatingDto>) {
-    const {t}=useTranslation();
+    const {t} = useTranslation();
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-secondary/10 p-6 rounded-xl">
             <div>
@@ -17,7 +17,7 @@ export function RatingSummary({average, total, breakdown}: Readonly<CourseRating
                 <p className="text-sm text-foreground/60">
                     {/*Based on {total} {total === 1 ? 'review' : 'reviews'}*/}
 
-                    {t(Localization("course_detail","based_on_reviews"),{count:total})}
+                    {t(Localization("course_detail", "based_on_reviews"), {count: total})}
                 </p>
             </div>
 
@@ -41,7 +41,7 @@ export function RatingSummary({average, total, breakdown}: Readonly<CourseRating
 }
 
 export function ReviewCard({review}: Readonly<{ review: any }>) {
-    const userName = review?.user?.firstName ?? "Anonymous";
+    const userName = `${review?.user?.firstName} ${review?.user?.lastName}`;
     const dateLabel = review?.createdAt
         ? formatDistanceToNow(new Date(review.createdAt), {addSuffix: true})
         : "";

@@ -13,7 +13,8 @@ import {
     ReviewResponse,
     useCreateReviewsMutation,
     useGetRatingQuery,
-    useListReviewsQuery
+    useListReviewsQuery,
+    useUpdateReviewsMutation
 } from "@/lib/api/api.generated.ts";
 import {useParams} from "react-router-dom";
 import {RatingSummary, ReviewCard} from "@/components/course/review-section.tsx";
@@ -21,13 +22,16 @@ import useCustomTable from "@/components/table/hooks/useCustomTable.tsx";
 import {CustomTable, MODE_TABLE} from "@/components/table/CustomTable.tsx";
 import {useTranslation} from "react-i18next";
 import {Localization} from "@/i18n/lang";
+
 interface AddReviewFormProps {
     courseId: string;
     onReviewAdded?: () => void;
     onSuccess: () => void;
 }
 
-export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormProps>) {
+export function AddReviewForm({onReviewAdded, onSuccess}: Readonly<AddReviewFormProps>) {
+    const [updateReview] = useUpdateReviewsMutation();
+    const [reviewId, setReviewId] = useState<number | null>(null);
     const {id: courseId} = useParams<{ id: string }>();
     const ratingQuery = useGetRatingQuery({courseId: Number(courseId)}, {skip: !courseId})
     const stats = ratingQuery?.currentData;
@@ -40,7 +44,7 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
         filter,
         setFilter,
     } = useCustomTable<ReviewResponse>();
-    const {currentData, isLoading: isLoadingList, refetch:refetchListReview} = useListReviewsQuery({
+    const {currentData, isLoading: isLoadingList, refetch: refetchListReview} = useListReviewsQuery({
         ...filter,
         courseId: Number(courseId),
     }, {skip: !courseId, refetchOnMountOrArgChange: true});
@@ -72,10 +76,22 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
             formData.append("comment", data.comment);
             // Simulate API call
             // await new Promise((resolve) => setTimeout(resolve, 800));
-            courseId && await addReview({
-                courseId: Number(courseId),
-                reviewRequest: formData as any
-            });
+            if (courseId) {
+
+                if (reviewId) {
+                    await updateReview({
+                        reviewId,
+                        reviewRequest: formData as any
+                    }).unwrap();
+                } else {
+
+                    await addReview({
+                        courseId: Number(courseId),
+                        reviewRequest: formData as any
+                    }).unwrap();
+                }
+            }
+
 
             console.log("Submitting review with rating:", data);
 
@@ -96,9 +112,9 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
     if (!currentUser) {
         return (
             <div className="bg-secondary/50 border border-border rounded-lg p-6 text-center">
-                <p className="text-foreground/70 mb-4">{t(Localization("form","sign_in_review"))}</p>
+                <p className="text-foreground/70 mb-4">{t(Localization("form", "sign_in_review"))}</p>
                 <Button asChild>
-                    <a href="/login">{t(Localization("form","sign_in"))}</a>
+                    <a href="/login">{t(Localization("form", "sign_in"))}</a>
                 </Button>
             </div>
         );
@@ -122,7 +138,13 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
                 data={reviews}
                 pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
                 isLoading={isLoading || isLoadingList}
-                customRenderModeContent={review => <ReviewCard key={review.id} review={review}/>}
+                customRenderModeContent={review => <ReviewCard key={review.id} review={review} setReviewId={setReviewId}
+                                                               form={form}
+                                                               refetchListReview={() => {
+                                                                   refetchListReview();
+                                                                   ratingQuery.refetch();
+                                                                   onSuccess()
+                                                               }}/>}
 
             />
             <Form {...form}>
@@ -131,9 +153,9 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
                     className="space-y-6 bg-card border border-border rounded-lg p-6"
                 >
                     <div>
-                        <h3 className="text-xl font-semibold mb-4">{t(Localization("course","share_feedback"))}</h3>
+                        <h3 className="text-xl font-semibold mb-4">{t(Localization("course", "share_feedback"))}</h3>
                         <p className="text-sm text-foreground/60">
-                            {t(Localization("course","help_sharing_experience"))}
+                            {t(Localization("course", "help_sharing_experience"))}
                         </p>
                     </div>
 
@@ -143,7 +165,7 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
                         name="rating"
                         render={({field}) => (
                             <FormItem>
-                                <FormLabel>{t(Localization("course","rating"))}</FormLabel>
+                                <FormLabel>{t(Localization("course", "rating"))}</FormLabel>
                                 <FormControl>
                                     <div className="flex gap-2">
                                         {[1, 2, 3, 4, 5].map((rating) => (
@@ -177,10 +199,10 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
                         name="title"
                         render={({field}) => (
                             <FormItem>
-                                <FormLabel>{t(Localization("course","review_title"))}</FormLabel>
+                                <FormLabel>{t(Localization("course", "review_title"))}</FormLabel>
                                 <FormControl>
                                     <Input
-                                        placeholder={`${t(Localization("course","share_feedback"))}`}
+                                        placeholder={`${t(Localization("course", "share_feedback"))}`}
                                         disabled={isLoading}
                                         {...field}
                                     />
@@ -196,10 +218,10 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
                         name="comment"
                         render={({field}) => (
                             <FormItem>
-                                <FormLabel>{t(Localization("course","your_review"))}</FormLabel>
+                                <FormLabel>{t(Localization("course", "your_review"))}</FormLabel>
                                 <FormControl>
                                     <Textarea
-                                        placeholder= {`${t(Localization("course","share_improved"))}`}
+                                        placeholder={`${t(Localization("course", "share_improved"))}`}
                                         disabled={isLoading}
                                         className="min-h-32"
                                         {...field}
@@ -212,8 +234,7 @@ export function AddReviewForm({onReviewAdded,onSuccess}: Readonly<AddReviewFormP
 
                     <Button type="submit" disabled={isLoading} className="w-full">
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                        {/*{isLoading ? "Submitting..." : "Submit Review"}*/}
-                        {t(Localization('course', isLoading ? 'submitting' : 'submit_review'))}
+                        {t(Localization('course', isLoading ? 'submitting' : reviewId ? 'submit_review_update' : 'submit_review'))}
                     </Button>
                 </form>
             </Form>

@@ -47,6 +47,16 @@ const injectedRtkApi = api.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    updateReviews: build.mutation<
+      UpdateReviewsApiResponse,
+      UpdateReviewsApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/reviews/${queryArg.reviewId}`,
+        method: "PUT",
+        body: queryArg.reviewRequest,
+      }),
+    }),
     getCourseDetail: build.query<
       GetCourseDetailApiResponse,
       GetCourseDetailApiArg
@@ -443,6 +453,15 @@ const injectedRtkApi = api.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    deleteReviews: build.mutation<
+      DeleteReviewsApiResponse,
+      DeleteReviewsApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/reviews/${queryArg.courseId}/${queryArg.reviewId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -479,6 +498,12 @@ export type DeleteUserApiResponse =
 export type DeleteUserApiArg = {
   /** ID of the user to delete */
   id: number;
+};
+export type UpdateReviewsApiResponse =
+  /** status 200 course retrieved successfully */ ReviewResponse;
+export type UpdateReviewsApiArg = {
+  reviewId: number;
+  reviewRequest: ReviewRequest;
 };
 export type GetCourseDetailApiResponse =
   /** status 200 Course details retrieved successfully */ CourseDetailResponse;
@@ -766,6 +791,12 @@ export type DeleteVideoApiArg = {
   /** Video ID */
   id: number;
 };
+export type DeleteReviewsApiResponse =
+  /** status 200 course deleted successfully */ GeneralResponse;
+export type DeleteReviewsApiArg = {
+  reviewId: number;
+  courseId: number;
+};
 export type GeneralResponse = {
   message?: string;
   status?: number;
@@ -801,6 +832,25 @@ export type UpdateUserRequest = {
   lastName: string;
   role?: "STUDENT" | "INSTRUCTOR" | "ADMIN";
   status?: "ACTIVE" | "INACTIVE";
+};
+export type ListCourseResponse = {
+  id?: number;
+  title?: string;
+  price?: number;
+};
+export type ReviewResponse = {
+  id: number;
+  user: UserResponse;
+  title: string;
+  comment: string;
+  course: ListCourseResponse;
+  rating: number;
+  createdAt: string;
+};
+export type ReviewRequest = {
+  rating?: number;
+  title?: string;
+  comment?: string;
 };
 export type Category = {
   createdAt?: string;
@@ -913,20 +963,6 @@ export type CreateUserRequest = {
   lastName: string;
   role: "STUDENT" | "INSTRUCTOR" | "ADMIN";
 };
-export type ListCourseResponse = {
-  id?: number;
-  title?: string;
-  price?: number;
-};
-export type ReviewResponse = {
-  id: number;
-  user: UserResponse;
-  title: string;
-  comment: string;
-  course: ListCourseResponse;
-  rating: number;
-  createdAt: string;
-};
 export type ReviewsPageResponse = {
   contents?: ReviewResponse[];
   page?: number;
@@ -942,11 +978,6 @@ export type ResponsePaginationHandlerReviewResponse = {
   totalPage?: number;
   total?: number;
   hasNext?: boolean;
-};
-export type ReviewRequest = {
-  rating?: number;
-  title?: string;
-  comment?: string;
 };
 export type EnrollmentResponse = {
   id?: number;
@@ -1124,6 +1155,7 @@ export const {
   useUpdateVideoMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useUpdateReviewsMutation,
   useGetCourseDetailQuery,
   useUpdateCourseMutation,
   useDeleteCourseByIdMutation,
@@ -1163,4 +1195,5 @@ export const {
   useDashboardStudentQuery,
   useListAllCoursesStudentEnrollmentQuery,
   useDeleteVideoMutation,
+  useDeleteReviewsMutation,
 } = injectedRtkApi;

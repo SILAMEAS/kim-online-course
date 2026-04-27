@@ -1,9 +1,14 @@
-import {Star} from 'lucide-react';
+import {Edit, Loader2, Star, Trash2} from 'lucide-react';
 import {formatDistanceToNow} from 'date-fns';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import {CourseRatingDto} from "@/lib/api/api.generated.ts";
+import {CourseRatingDto, ReviewResponse, useDeleteReviewsMutation} from "@/lib/api/api.generated.ts";
 import {Localization} from "@/i18n/lang";
 import {useTranslation} from "react-i18next";
+import {Button} from "@/components/ui/button.tsx";
+import {useAppSelector} from "@/lib/redux/hooks.ts";
+import {EnumRole} from "@/lib/enum.ts";
+import {UseFormReturn} from "react-hook-form";
+import {Dispatch, SetStateAction} from "react";
 
 export function RatingSummary({average, total, breakdown}: Readonly<CourseRatingDto>) {
     const {t} = useTranslation();
@@ -15,7 +20,6 @@ export function RatingSummary({average, total, breakdown}: Readonly<CourseRating
                     <StarRating rating={Number(average)} size="w-5 h-5"/>
                 </div>
                 <p className="text-sm text-foreground/60">
-                    {/*Based on {total} {total === 1 ? 'review' : 'reviews'}*/}
 
                     {t(Localization("course_detail", "based_on_reviews"), {count: total})}
                 </p>
@@ -40,11 +44,31 @@ export function RatingSummary({average, total, breakdown}: Readonly<CourseRating
     );
 }
 
-export function ReviewCard({review}: Readonly<{ review: any }>) {
+export function ReviewCard({review, refetchListReview, setReviewId,form}: Readonly<{
+    review: ReviewResponse,
+    refetchListReview: any,
+    setReviewId: Dispatch<SetStateAction<number | null>>,
+    form: UseFormReturn<{
+        rating: number
+        title: string
+        comment: string
+    }, any, {
+        rating: number
+        title: string
+        comment: string
+    }>
+
+}>) {
+    const {currentUser} = useAppSelector((state) => state.auth);
+    const canAction = (currentUser?.role === EnumRole.ADMIN || review.user?.id === Number(currentUser?.id));
     const userName = `${review?.user?.firstName} ${review?.user?.lastName}`;
     const dateLabel = review?.createdAt
         ? formatDistanceToNow(new Date(review.createdAt), {addSuffix: true})
         : "";
+
+    const [deleteReview, deleteReviewRes] = useDeleteReviewsMutation();
+
+
 
     return (
         <div className="border border-border rounded-xl p-6 hover:shadow-sm transition-shadow">
@@ -66,6 +90,39 @@ export function ReviewCard({review}: Readonly<{ review: any }>) {
 
                     <p className="font-bold text-sm mb-1">{review.title}</p>
                     <p className="text-sm text-foreground/80 leading-relaxed">{review.comment}</p>
+
+                    <div className={'flex items-end justify-end '}>
+                        {
+                            canAction &&
+                            <Button variant="outline" onClick={async () => {
+                                review.course.id && await deleteReview({
+                                    reviewId: review.id,
+                                    courseId: review.course.id
+                                }).unwrap();
+                                refetchListReview()
+                            }}
+                                    className="mt-2">
+                                {
+                                    deleteReviewRes.isLoading
+                                        ? <Loader2 className="h-4 w-4 animate-spin"/>
+                                        : <Trash2 className="h-4 w-4"/>
+                                }
+                            </Button>
+                        }
+                        {
+                            canAction &&
+                            <Button variant="outline"
+                                onClick={ () => {
+                                    setReviewId(review.id);
+                                    form.setValue('rating', review.rating);
+                                    form.setValue('title', review.title);
+                                    form.setValue('comment', review.comment);
+                                } }
+                            >
+                                <Edit className="w-4 h-4 mr-2"/>
+                            </Button>
+                        }
+                    </div>
                 </div>
             </div>
         </div>

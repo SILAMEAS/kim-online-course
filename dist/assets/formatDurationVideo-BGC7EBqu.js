@@ -1,0 +1,1 @@
+import{i as a}from"./index-BtY37vs1.js";import{L as n}from"./utils-p0znjkQR.js";const c=t=>{const i=a.t(n("duration_format","m")),$=a.t(n("duration_format","h")),o=a.t(n("duration_format","s"));if(!t)return`0 ${o}`;const f=Math.floor(t/3600),r=Math.floor(t%3600/60),m=Math.floor(t%60);return f>0?`${f} ${$} ${r} ${i}`:r>0?`${r} ${i} ${m} ${o}`:`${m} ${o}`};export{c as f};

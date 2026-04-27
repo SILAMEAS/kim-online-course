@@ -19,6 +19,7 @@ import useRestoreUserByToken from "@/hooks/useRestoreUserByToken.tsx";
 import {passwordSchema} from "@/lib/validations/global-schema.ts";
 import {useTranslation} from "react-i18next";
 import {Localization} from "@/i18n/lang";
+import {formatDistanceToNow} from "date-fns";
 
 const profileUpdateSchema = z.object({
     firstName: z.string().min(2, 'Name must be at least 2 characters').max(50),
@@ -145,13 +146,14 @@ export default function ProfilePage() {
                         </p>
                         <p className="text-sm text-foreground/60 flex items-center gap-2 mt-1">
                             <Calendar className="w-4 h-4"/>
-                            {t(Localization("profile_details","member_since"))}
+                            {`${t(Localization("profile_details","member_since"))} ${formatDistanceToNow(new Date(currentUser.createdAt), { addSuffix: true })}`}
+
                         </p>
                     </div>
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t">
+                <div className="grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t hidden">
                     <div>
 
                         <p className="text-sm text-foreground/60">{t(Localization("profile_details","courses_enrolled"))}</p>

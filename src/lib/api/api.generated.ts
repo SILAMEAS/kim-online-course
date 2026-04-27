@@ -783,6 +783,8 @@ export type UserResponse = {
   role: "STUDENT" | "INSTRUCTOR" | "ADMIN";
   imageUrl: string;
   status: "ACTIVE" | "INACTIVE";
+  createdAt: string;
+  updatedAt: string;
 };
 export type UserRequest = {
   firstName: string;

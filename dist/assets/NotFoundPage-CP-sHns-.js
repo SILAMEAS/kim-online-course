@@ -1,0 +1,1 @@
+import{j as e}from"./ui-vendor-Bw974icb.js";import"./router-vendor-C3CjdVJT.js";const l=()=>e.jsxs("div",{className:"flex flex-col items-center justify-center h-screen",children:[e.jsx("h1",{className:"text-xl md:text-4xl font-bold",children:"404"}),e.jsx("p",{className:"text-lg mt-2",children:"Page Not Found"})]});export{l as default};

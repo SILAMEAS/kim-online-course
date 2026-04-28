@@ -80,6 +80,7 @@ export function AddReviewForm({onReviewAdded, onSuccess}: Readonly<AddReviewForm
 
                 if (reviewId) {
                     await updateReview({
+                        courseId: Number(courseId),
                         reviewId,
                         reviewRequest: formData as any
                     }).unwrap();

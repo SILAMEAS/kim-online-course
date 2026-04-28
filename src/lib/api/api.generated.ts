@@ -52,9 +52,18 @@ const injectedRtkApi = api.injectEndpoints({
       UpdateReviewsApiArg
     >({
       query: (queryArg) => ({
-        url: `/api/reviews/${queryArg.reviewId}`,
+        url: `/api/reviews/${queryArg.courseId}/${queryArg.reviewId}`,
         method: "PUT",
         body: queryArg.reviewRequest,
+      }),
+    }),
+    deleteReviews: build.mutation<
+      DeleteReviewsApiResponse,
+      DeleteReviewsApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/reviews/${queryArg.courseId}/${queryArg.reviewId}`,
+        method: "DELETE",
       }),
     }),
     getCourseDetail: build.query<
@@ -453,15 +462,6 @@ const injectedRtkApi = api.injectEndpoints({
         method: "DELETE",
       }),
     }),
-    deleteReviews: build.mutation<
-      DeleteReviewsApiResponse,
-      DeleteReviewsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/api/reviews/${queryArg.courseId}/${queryArg.reviewId}`,
-        method: "DELETE",
-      }),
-    }),
   }),
   overrideExisting: false,
 });
@@ -502,8 +502,15 @@ export type DeleteUserApiArg = {
 export type UpdateReviewsApiResponse =
   /** status 200 course retrieved successfully */ ReviewResponse;
 export type UpdateReviewsApiArg = {
+  courseId: number;
   reviewId: number;
   reviewRequest: ReviewRequest;
+};
+export type DeleteReviewsApiResponse =
+  /** status 200 course deleted successfully */ GeneralResponse;
+export type DeleteReviewsApiArg = {
+  reviewId: number;
+  courseId: number;
 };
 export type GetCourseDetailApiResponse =
   /** status 200 Course details retrieved successfully */ CourseDetailResponse;
@@ -790,12 +797,6 @@ export type DeleteVideoApiArg = {
   publicId: string;
   /** Video ID */
   id: number;
-};
-export type DeleteReviewsApiResponse =
-  /** status 200 course deleted successfully */ GeneralResponse;
-export type DeleteReviewsApiArg = {
-  reviewId: number;
-  courseId: number;
 };
 export type GeneralResponse = {
   message?: string;
@@ -1156,6 +1157,7 @@ export const {
   useUpdateUserMutation,
   useDeleteUserMutation,
   useUpdateReviewsMutation,
+  useDeleteReviewsMutation,
   useGetCourseDetailQuery,
   useUpdateCourseMutation,
   useDeleteCourseByIdMutation,
@@ -1195,5 +1197,4 @@ export const {
   useDashboardStudentQuery,
   useListAllCoursesStudentEnrollmentQuery,
   useDeleteVideoMutation,
-  useDeleteReviewsMutation,
 } = injectedRtkApi;

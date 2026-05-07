@@ -136,11 +136,14 @@ export default function AdminUsersPage() {
 
                         }
                     } catch (e: any) {
-                        if (e?.originalStatus !== 200) {
-                            toast.error(`${t(Localization('error_message', "failed_delete_course"))}` + e?.data?.message);
+                        if (e?.originalStatus !== 200||e.statusCode===409) {
+
+                            toast.error(`${t(Localization('error_message', "failed_user_course"))}`);
+                            toast.error(e?.data?.message);
+                        }else {
+                            toast.success(`${t(Localization('success_message', "success_delete_course"))}`);
+                            refetch();
                         }
-                        toast.success(`${t(Localization('success_message', "success_delete_course"))}`);
-                        refetch();
                     }
                 }}
                 isLoading={isLoading || isFetching}

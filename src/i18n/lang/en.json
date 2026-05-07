@@ -233,7 +233,8 @@
     "itemsPerPage": "Items per page: "
   },
   "error_message": {
-    "failed_delete_course": "Failed to delete course. Please try again later."
+    "failed_delete_course": "Failed to delete course. Please try again later.",
+    "failed_user_course": "Failed to delete user. Please try again later."
   },
   "success_message": {
     "success_delete_course": "Success to delete course"

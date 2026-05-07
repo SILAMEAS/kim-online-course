@@ -48,9 +48,9 @@ export function RegisterForm() {
             toast.success("Account created successfully!");
             navigate("/login");
 
-        } catch (error) {
+        } catch (error:any) {
             console.error(error);
-            toast.error("Registration failed");
+            toast.error(error?.data?.message);
         }
     }
 

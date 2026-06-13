@@ -11,9 +11,10 @@ export default function AdminEnrollmentsPage() {
     } = useCustomTable<EnrollmentResponse>();
     const {t} = useTranslation();
     const {currentData} = useGetAllEnrollmentsQuery(filter, {refetchOnMountOrArgChange: true,});
-    const enrollments = currentData?.contents ?? [];
-
-
+    const enrollments =  (currentData?.contents ?? []).map((item, index) => ({
+        ...item,
+        displayId: index + 1
+    }));
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -28,7 +29,7 @@ export default function AdminEnrollmentsPage() {
                 setFilter={setFilter}
                 filter={filter}
                 columns={[
-                    {key: 'id', label: 'ID', sortable: true},
+                    {key: 'displayId', label: 'no', sortable: false},
                     {key: 'status', label: 'Status', sortable: true},
                     {
                         key: 'course', label: 'Course', render: (r) => {

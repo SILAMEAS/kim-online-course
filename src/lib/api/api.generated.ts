@@ -860,6 +860,7 @@ export type Category = {
   updatedBy?: number;
   id: number;
   name: string;
+  displayId?: number;
 };
 export type CourseResponse = {
   id: number;
@@ -981,6 +982,7 @@ export type ResponsePaginationHandlerReviewResponse = {
   hasNext?: boolean;
 };
 export type EnrollmentResponse = {
+  displayId: number;
   id?: number;
   status?: "ACTIVE" | "FAILED";
   course?: ListCourseResponse;

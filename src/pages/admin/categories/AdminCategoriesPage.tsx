@@ -36,12 +36,16 @@ export default function AdminCategoriesPage() {
     }, {refetchOnMountOrArgChange: true});
     const [createCategory] = useCreateCategoryMutation();
     const [updateCategory] = useUpdateCategoryMutation();
-    const images = currentData?.contents ?? [];
-    const form = useForm<CreateCategoryRequest>({
+    const tableData = (currentData?.contents ?? []).map((item, index) => ({
+        ...item,
+        displayId: index + 1
+    }));    const form = useForm<CreateCategoryRequest>({
         resolver: zodResolver(z.object({
             name: firstNameSchema
         }))
     });
+    // Calculate the row numbers using the current page and limit
+
 
     React.useEffect(() => {
         if (selectedItem) {
@@ -74,19 +78,21 @@ export default function AdminCategoriesPage() {
                 filter={filter}
                 setFilter={setFilter}
                 columns={[
-                    {key: 'id', label: 'Id', sortable: true},
-                    {key: 'name', label: 'Name', sortable: true},
+                    { key: 'displayId', label: 'No', sortable: false },
+                    { key: 'name', label: 'Name', sortable: true },
                 ]}
-                data={images}
-                pagination={{page: filter.page, limit: filter.limit, total: currentData?.total ?? 0}}
-
+                data={tableData}
+                pagination={{
+                    page: filter.page,
+                    limit: filter.limit,
+                    total: currentData?.total ?? 0
+                }}
                 isLoading={isLoading || isFetching}
                 isDeleting={false}
-                onEdit={async (course) => {
-                    setSelectedItem(course);
+                onEdit={async (item) => {
+                    setSelectedItem(item);
                     setOpen(true);
                 }}
-
             />
             <CustomDynamicDialog
                 open={open}

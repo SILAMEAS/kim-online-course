@@ -204,6 +204,7 @@
     "course": "Course",
     "amount": "Amount",
     "id": "ID",
+    "no": "No",
     "name": "Name",
     "Category Name": "Category Name",
     "file": "File",
@@ -237,7 +238,7 @@
     "failed_user_course": "Failed to delete user. Please try again later."
   },
   "success_message": {
-    "success_delete_course": "Success to delete course"
+    "success_delete_course": "delete successfully"
   },
   "info_message": {
     "delete_item": "Delete item",

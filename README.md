@@ -377,3 +377,4 @@ For questions or issues, please refer to the documentation or create an issue in
 **Built with ❤️ using React, Next.js, and Tailwind CSS**
 
 # kim-online-course
+# OnlineCourse
